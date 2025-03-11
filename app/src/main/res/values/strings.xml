@@ -1,0 +1,54 @@
+<resources>
+    <!-- 기본 정보 -->
+    <string name="app_name">DisasterAlert</string>
+
+    <!-- 로그인 관련 -->
+    <string name="login">로그인</string>
+    <string name="login_title">원활한 이용을 위해\n로그인 해주세요</string>
+    <string name="keep_login">로그인 유지하기</string>
+    <string name="find_id">아이디 찾기</string>
+    <string name="find_pw">비밀번호 찾기</string>
+
+    <!-- 회원가입 관련 -->
+    <string name="join">회원이 아니신가요?</string>
+    <string name="join_title">회원가입</string>
+    <string name="next">다음</string>
+
+    <!-- 입력 필드 힌트 -->
+    <string name="email_hint">아이디</string>
+    <string name="password_hint">비밀번호</string>
+    <string name="password_confirm_hint">비밀번호 확인</string>
+    <string name="name_hint">성명</string>
+    <string name="address_hint">주소</string>
+
+    <!-- 재난정보 수신 유형 -->
+    <string name="receive_disaster_info">재난정보 수신 유형</string>
+    <string name="natural_disaster">자연재난</string>
+    <string name="social_disaster">사회재난</string>
+    <string name="safety_info">제보정보</string>
+
+    <string name="apply_selected_filter">선택한 필터 적용</string>
+    <string name="applied_filter_none">적용된 필터: 없음</string>
+    <string name="report_history">제보 내역</string>
+    <string name="filter_close">필터 닫기</string>
+    <string name="filter_open">필터 열기</string>
+
+    <string name="disaster_selection_title">소식을 받을 재난 유형을 선택해주세요</string>
+    <string name="disaster_selection_subtitle">해당 선택은 환경설정에서 변경할 수 있어요.</string>
+
+    <!-- 재난 중분류 -->
+    <string name="checkbox_all">전체</string>
+    <string name="checkbox_typhoon">풍수해</string>
+    <string name="checkbox_weather">기상재난</string>
+    <string name="checkbox_news">기사</string>
+    <string name="checkbox_earthquake">지질재난</string>
+    <string name="checkbox_epidemic">감염병</string>
+    <string name="checkbox_special_report">특보</string>
+    <string name="checkbox_fire">화재/폭발</string>
+    <string name="checkbox_fine_dust">미세먼지</string>
+    <string name="checkbox_report">제보</string>
+    <string name="btn_skip">지금은 건너뛸래요</string>
+
+    <!-- 기타 -->
+    <string name="line"> | </string>
+</resources>

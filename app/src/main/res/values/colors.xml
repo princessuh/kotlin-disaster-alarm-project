@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Global Colors -->
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+
+    <!-- Grey Scale -->
+    <color name="grey_10">#F4F4F4</color>
+    <color name="grey_20">#E9E9E9</color>
+    <color name="grey_30">#D9D9D9</color>
+    <color name="grey_40">#C4C4C4</color>
+    <color name="grey_50">#9E9E9E</color>
+    <color name="grey_60">#757575</color>
+    <color name="grey_70">#595959</color>
+    <color name="grey_80">#424242</color>
+    <color name="grey_90">#212121</color>
+    <color name="grey_100">#171717</color>
+
+    <!-- Green Colors -->
+    <color name="green_10">#E0F7E9</color>
+    <color name="green_20">#C6F1D8</color>
+    <color name="green_30">#A2E9C3</color>
+    <color name="green_40">#76DFAA</color>
+    <color name="green_50">#41C486</color>
+    <color name="green_60">#22A76B</color>
+    <color name="green_70">#168A55</color>
+    <color name="green_80">#0E6C40</color>
+    <color name="green_90">#064F2E</color>
+    <color name="green_100">#023A20</color>
+
+    <!-- Red Colors -->
+    <color name="red_10">#FFE7E3</color>
+    <color name="red_20">#FFC8C3</color>
+    <color name="red_30">#FFA59E</color>
+    <color name="red_40">#FF7A74</color>
+    <color name="red_50">#FF523A</color>
+    <color name="red_60">#E03D2B</color>
+    <color name="red_70">#B82F1F</color>
+    <color name="red_80">#92271A</color>
+    <color name="red_90">#731F15</color>
+    <color name="red_100">#541810</color>
+
+    <!-- Blue Colors -->
+    <color name="blue_10">#E3F2FF</color>
+    <color name="blue_20">#C5E4FF</color>
+    <color name="blue_30">#8BC6FF</color>
+    <color name="blue_40">#58A7FF</color>
+    <color name="blue_50">#007AFF</color>
+    <color name="blue_60">#0063E0</color>
+    <color name="blue_70">#004CB8</color>
+    <color name="blue_80">#003892</color>
+    <color name="blue_90">#002970</color>
+    <color name="blue_100">#001D4A</color>
+
+    <!-- Yellow Colors -->
+    <color name="yellow_10">#FFF7D9</color>
+    <color name="yellow_20">#FFEDAB</color>
+    <color name="yellow_30">#FFD876</color>
+    <color name="yellow_40">#FFBA4A</color>
+    <color name="yellow_50">#E09C2E</color>
+    <color name="yellow_60">#C07D1A</color>
+    <color name="yellow_70">#9E6211</color>
+    <color name="yellow_80">#7A4B0D</color>
+    <color name="yellow_90">#5C3A0B</color>
+    <color name="yellow_100">#432A08</color>
+
+</resources>

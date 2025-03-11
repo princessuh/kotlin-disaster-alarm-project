@@ -1,0 +1,125 @@
+<html>
+<head>
+<title>Join.kt</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #ff7aad;}
+.s1 { color: #d2d8d9;}
+.s2 { color: #a2a9aa;}
+.s3 { color: #a4d964;}
+.s4 { color: #be8df2;}
+</style>
+</head>
+<body bgcolor="#151d20">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Join.kt</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">com</span><span class="s2">.</span><span class="s1">example</span><span class="s2">.</span><span class="s1">disasteralert</span>
+
+<span class="s1">import android</span><span class="s2">.</span><span class="s1">content</span><span class="s2">.</span><span class="s1">Intent</span>
+<span class="s1">import android</span><span class="s2">.</span><span class="s1">os</span><span class="s2">.</span><span class="s1">Bundle</span>
+<span class="s1">import android</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">Patterns</span>
+<span class="s1">import android</span><span class="s2">.</span><span class="s1">widget</span><span class="s2">.*</span>
+<span class="s1">import androidx</span><span class="s2">.</span><span class="s1">appcompat</span><span class="s2">.</span><span class="s1">app</span><span class="s2">.</span><span class="s1">AppCompatActivity</span>
+
+<span class="s0">class </span><span class="s1">Join </span><span class="s2">: </span><span class="s1">AppCompatActivity</span><span class="s2">() {</span>
+
+    <span class="s1">private lateinit </span><span class="s0">var </span><span class="s1">email</span><span class="s2">: </span><span class="s1">EditText</span>
+    <span class="s1">private lateinit </span><span class="s0">var </span><span class="s1">password</span><span class="s2">: </span><span class="s1">EditText</span>
+    <span class="s1">private lateinit </span><span class="s0">var </span><span class="s1">confirmPassword</span><span class="s2">: </span><span class="s1">EditText</span>
+    <span class="s1">private lateinit </span><span class="s0">var </span><span class="s1">name</span><span class="s2">: </span><span class="s1">EditText</span>
+    <span class="s1">private lateinit </span><span class="s0">var </span><span class="s1">nickname</span><span class="s2">: </span><span class="s1">EditText</span>
+    <span class="s1">private lateinit </span><span class="s0">var </span><span class="s1">address</span><span class="s2">: </span><span class="s1">EditText</span>
+    <span class="s1">private lateinit </span><span class="s0">var </span><span class="s1">joinBtn</span><span class="s2">: </span><span class="s1">Button</span>
+    <span class="s1">private lateinit </span><span class="s0">var </span><span class="s1">loginBtn</span><span class="s2">: </span><span class="s1">Button</span>
+    <span class="s1">private lateinit </span><span class="s0">var </span><span class="s1">cbNaturalDisaster</span><span class="s2">: </span><span class="s1">CheckBox</span>
+    <span class="s1">private lateinit </span><span class="s0">var </span><span class="s1">cbSocialDisaster</span><span class="s2">: </span><span class="s1">CheckBox</span>
+    <span class="s1">private lateinit </span><span class="s0">var </span><span class="s1">cbSafetyInfo</span><span class="s2">: </span><span class="s1">CheckBox</span>
+
+    <span class="s1">override </span><span class="s0">fun </span><span class="s1">onCreate</span><span class="s2">(</span><span class="s1">savedInstanceState</span><span class="s2">: </span><span class="s1">Bundle</span><span class="s2">?) {</span>
+        <span class="s0">super</span><span class="s2">.</span><span class="s1">onCreate</span><span class="s2">(</span><span class="s1">savedInstanceState</span><span class="s2">)</span>
+        <span class="s1">setContentView</span><span class="s2">(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">layout</span><span class="s2">.</span><span class="s1">activity_join</span><span class="s2">) // 파일명이 맞는지 확인!</span>
+
+        <span class="s2">// 📌 UI 요소 초기화</span>
+        <span class="s1">email </span><span class="s2">= </span><span class="s1">findViewById</span><span class="s2">(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">id</span><span class="s2">.</span><span class="s1">et_join_email</span><span class="s2">)</span>
+        <span class="s1">password </span><span class="s2">= </span><span class="s1">findViewById</span><span class="s2">(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">id</span><span class="s2">.</span><span class="s1">et_join_password</span><span class="s2">)</span>
+        <span class="s1">confirmPassword </span><span class="s2">= </span><span class="s1">findViewById</span><span class="s2">(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">id</span><span class="s2">.</span><span class="s1">et_join_confirm_password</span><span class="s2">)</span>
+        <span class="s1">name </span><span class="s2">= </span><span class="s1">findViewById</span><span class="s2">(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">id</span><span class="s2">.</span><span class="s1">et_join_name</span><span class="s2">)</span>
+        <span class="s1">nickname </span><span class="s2">= </span><span class="s1">findViewById</span><span class="s2">(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">id</span><span class="s2">.</span><span class="s1">et_join_nickname</span><span class="s2">)</span>
+        <span class="s1">address </span><span class="s2">= </span><span class="s1">findViewById</span><span class="s2">(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">id</span><span class="s2">.</span><span class="s1">et_join_address</span><span class="s2">)</span>
+        <span class="s1">joinBtn </span><span class="s2">= </span><span class="s1">findViewById</span><span class="s2">(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">id</span><span class="s2">.</span><span class="s1">btn_join</span><span class="s2">)</span>
+        <span class="s1">loginBtn </span><span class="s2">= </span><span class="s1">findViewById</span><span class="s2">(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">id</span><span class="s2">.</span><span class="s1">btn_login</span><span class="s2">)</span>
+        <span class="s1">cbNaturalDisaster </span><span class="s2">= </span><span class="s1">findViewById</span><span class="s2">(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">id</span><span class="s2">.</span><span class="s1">cb_natural_disaster</span><span class="s2">)</span>
+        <span class="s1">cbSocialDisaster </span><span class="s2">= </span><span class="s1">findViewById</span><span class="s2">(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">id</span><span class="s2">.</span><span class="s1">cb_social_disaster</span><span class="s2">)</span>
+        <span class="s1">cbSafetyInfo </span><span class="s2">= </span><span class="s1">findViewById</span><span class="s2">(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">id</span><span class="s2">.</span><span class="s1">cb_safety_info</span><span class="s2">)</span>
+
+        <span class="s2">// 📌 회원가입 버튼 클릭 이벤트</span>
+        <span class="s1">joinBtn</span><span class="s2">.</span><span class="s1">setOnClickListener </span><span class="s2">{</span>
+            <span class="s1">join</span><span class="s2">()</span>
+        <span class="s2">}</span>
+
+        <span class="s2">// 📌 로그인 버튼 클릭 이벤트 (로그인 화면으로 이동)</span>
+        <span class="s1">loginBtn</span><span class="s2">.</span><span class="s1">setOnClickListener </span><span class="s2">{</span>
+            <span class="s0">val </span><span class="s1">intent </span><span class="s2">= </span><span class="s1">Intent</span><span class="s2">(</span><span class="s0">this</span><span class="s2">, </span><span class="s1">Login</span><span class="s2">::</span><span class="s0">class</span><span class="s2">.</span><span class="s1">java</span><span class="s2">)</span>
+            <span class="s1">startActivity</span><span class="s2">(</span><span class="s1">intent</span><span class="s2">)</span>
+            <span class="s1">finish</span><span class="s2">()</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+    <span class="s2">// 📌 회원가입 유효성 검사 및 처리</span>
+    <span class="s1">private </span><span class="s0">fun </span><span class="s1">join</span><span class="s2">() {</span>
+        <span class="s0">val </span><span class="s1">emailInput </span><span class="s2">= </span><span class="s1">email</span><span class="s2">.</span><span class="s1">text</span><span class="s2">.</span><span class="s1">toString</span><span class="s2">().</span><span class="s1">trim</span><span class="s2">()</span>
+        <span class="s0">val </span><span class="s1">passwordInput </span><span class="s2">= </span><span class="s1">password</span><span class="s2">.</span><span class="s1">text</span><span class="s2">.</span><span class="s1">toString</span><span class="s2">().</span><span class="s1">trim</span><span class="s2">()</span>
+        <span class="s0">val </span><span class="s1">confirmPasswordInput </span><span class="s2">= </span><span class="s1">confirmPassword</span><span class="s2">.</span><span class="s1">text</span><span class="s2">.</span><span class="s1">toString</span><span class="s2">().</span><span class="s1">trim</span><span class="s2">()</span>
+        <span class="s0">val </span><span class="s1">nameInput </span><span class="s2">= </span><span class="s1">name</span><span class="s2">.</span><span class="s1">text</span><span class="s2">.</span><span class="s1">toString</span><span class="s2">().</span><span class="s1">trim</span><span class="s2">()</span>
+        <span class="s0">val </span><span class="s1">nicknameInput </span><span class="s2">= </span><span class="s1">nickname</span><span class="s2">.</span><span class="s1">text</span><span class="s2">.</span><span class="s1">toString</span><span class="s2">().</span><span class="s1">trim</span><span class="s2">()</span>
+        <span class="s0">val </span><span class="s1">addressInput </span><span class="s2">= </span><span class="s1">address</span><span class="s2">.</span><span class="s1">text</span><span class="s2">.</span><span class="s1">toString</span><span class="s2">().</span><span class="s1">trim</span><span class="s2">()</span>
+
+        <span class="s2">// ✅ 모든 필드 입력 확인</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">emailInput</span><span class="s2">.</span><span class="s1">isEmpty</span><span class="s2">() || </span><span class="s1">passwordInput</span><span class="s2">.</span><span class="s1">isEmpty</span><span class="s2">() || </span><span class="s1">confirmPasswordInput</span><span class="s2">.</span><span class="s1">isEmpty</span><span class="s2">()</span>
+            <span class="s2">|| </span><span class="s1">nameInput</span><span class="s2">.</span><span class="s1">isEmpty</span><span class="s2">() || </span><span class="s1">nicknameInput</span><span class="s2">.</span><span class="s1">isEmpty</span><span class="s2">() || </span><span class="s1">addressInput</span><span class="s2">.</span><span class="s1">isEmpty</span><span class="s2">()) {</span>
+            <span class="s1">showToast</span><span class="s2">(</span><span class="s3">&quot;모든 필드를 입력하세요.&quot;</span><span class="s2">)</span>
+            <span class="s0">return</span>
+        <span class="s2">}</span>
+
+        <span class="s2">// ✅ 이메일 형식 확인</span>
+        <span class="s0">if </span><span class="s2">(!</span><span class="s1">Patterns</span><span class="s2">.</span><span class="s1">EMAIL_ADDRESS</span><span class="s2">.</span><span class="s1">matcher</span><span class="s2">(</span><span class="s1">emailInput</span><span class="s2">).</span><span class="s1">matches</span><span class="s2">()) {</span>
+            <span class="s1">showToast</span><span class="s2">(</span><span class="s3">&quot;유효한 이메일 주소를 입력하세요.&quot;</span><span class="s2">)</span>
+            <span class="s0">return</span>
+        <span class="s2">}</span>
+
+        <span class="s2">// ✅ 비밀번호 길이 확인 (최소 8자)</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">passwordInput</span><span class="s2">.</span><span class="s1">length </span><span class="s2">&lt; </span><span class="s4">8</span><span class="s2">) {</span>
+            <span class="s1">showToast</span><span class="s2">(</span><span class="s3">&quot;비밀번호는 최소 8자 이상이어야 합니다.&quot;</span><span class="s2">)</span>
+            <span class="s0">return</span>
+        <span class="s2">}</span>
+
+        <span class="s2">// ✅ 비밀번호 일치 여부 확인</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">passwordInput </span><span class="s2">!= </span><span class="s1">confirmPasswordInput</span><span class="s2">) {</span>
+            <span class="s1">showToast</span><span class="s2">(</span><span class="s3">&quot;비밀번호가 일치하지 않습니다.&quot;</span><span class="s2">)</span>
+            <span class="s0">return</span>
+        <span class="s2">}</span>
+
+        <span class="s2">// ✅ 최소 하나의 재난정보 수신 유형이 선택되었는지 확인</span>
+        <span class="s0">if </span><span class="s2">(!</span><span class="s1">cbNaturalDisaster</span><span class="s2">.</span><span class="s1">isChecked </span><span class="s2">&amp;&amp; !</span><span class="s1">cbSocialDisaster</span><span class="s2">.</span><span class="s1">isChecked </span><span class="s2">&amp;&amp; !</span><span class="s1">cbSafetyInfo</span><span class="s2">.</span><span class="s1">isChecked</span><span class="s2">) {</span>
+            <span class="s1">showToast</span><span class="s2">(</span><span class="s3">&quot;적어도 하나의 재난정보 수신 유형을 선택해야 합니다.&quot;</span><span class="s2">)</span>
+            <span class="s0">return</span>
+        <span class="s2">}</span>
+
+        <span class="s2">// 📌 회원가입 성공 처리</span>
+        <span class="s1">showToast</span><span class="s2">(</span><span class="s3">&quot;회원가입 성공! 로그인 페이지로 이동합니다.&quot;</span><span class="s2">)</span>
+        <span class="s0">val </span><span class="s1">intent </span><span class="s2">= </span><span class="s1">Intent</span><span class="s2">(</span><span class="s0">this</span><span class="s2">, </span><span class="s1">Login</span><span class="s2">::</span><span class="s0">class</span><span class="s2">.</span><span class="s1">java</span><span class="s2">)</span>
+        <span class="s1">startActivity</span><span class="s2">(</span><span class="s1">intent</span><span class="s2">)</span>
+        <span class="s1">finish</span><span class="s2">()</span>
+    <span class="s2">}</span>
+
+    <span class="s2">// 📌 Toast 메시지 출력 함수</span>
+    <span class="s1">private </span><span class="s0">fun </span><span class="s1">showToast</span><span class="s2">(</span><span class="s1">message</span><span class="s2">: </span><span class="s1">String</span><span class="s2">) {</span>
+        <span class="s1">Toast</span><span class="s2">.</span><span class="s1">makeText</span><span class="s2">(</span><span class="s0">this</span><span class="s2">, </span><span class="s1">message</span><span class="s2">, </span><span class="s1">Toast</span><span class="s2">.</span><span class="s1">LENGTH_SHORT</span><span class="s2">).</span><span class="s1">show</span><span class="s2">()</span>
+    <span class="s2">}</span>
+<span class="s2">}</span>
+</pre>
+</body>
+</html>
