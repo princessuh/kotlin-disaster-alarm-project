@@ -48,32 +48,32 @@
         <Button
             android:id="@+id/btn_typhoon"
             style="@style/DisasterButton"
-            android:text="@string/disaster_typhoon"/>
+            android:text="@string/typhoon"/>
 
         <Button
             android:id="@+id/btn_weather"
             style="@style/DisasterButton"
-            android:text="@string/disaster_weather"/>
+            android:text="@string/weather"/>
 
         <Button
             android:id="@+id/btn_earthquake"
             style="@style/DisasterButton"
-            android:text="@string/disaster_geology"/>
+            android:text="@string/earthquake"/>
 
         <Button
             android:id="@+id/btn_epidemic"
             style="@style/DisasterButton"
-            android:text="@string/disaster_epidemic"/>
+            android:text="@string/epidemic"/>
 
         <Button
             android:id="@+id/btn_fire"
             style="@style/DisasterButton"
-            android:text="@string/disaster_fire"/>
+            android:text="@string/fire"/>
 
         <Button
             android:id="@+id/btn_fine_dust"
             style="@style/DisasterButton"
-            android:text="@string/disaster_fine_dust"/>
+            android:text="@string/fine_dust"/>
     </LinearLayout>
 
     <!-- 필터 버튼 -->

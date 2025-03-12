@@ -38,17 +38,19 @@
 
     <!-- 재난 중분류 -->
     <string name="checkbox_all">전체</string>
-    <string name="checkbox_typhoon">풍수해</string>
-    <string name="checkbox_weather">기상재난</string>
-    <string name="checkbox_news">기사</string>
-    <string name="checkbox_earthquake">지질재난</string>
-    <string name="checkbox_epidemic">감염병</string>
-    <string name="checkbox_special_report">특보</string>
-    <string name="checkbox_fire">화재/폭발</string>
-    <string name="checkbox_fine_dust">미세먼지</string>
-    <string name="checkbox_report">제보</string>
+    <string name="typhoon">풍수해</string>
+    <string name="weather">기상재난</string>
+    <string name="news">기사</string>
+    <string name="earthquake">지질재난</string>
+    <string name="epidemic">감염병</string>
+    <string name="special_report">특보</string>
+    <string name="fire">화재/폭발</string>
+    <string name="fine_dust">미세먼지</string>
+    <string name="report">제보</string>
     <string name="btn_skip">지금은 건너뛸래요</string>
 
     <!-- 기타 -->
     <string name="line"> | </string>
+    <string name="default_nickname">사용자 닉네임</string>
+    <string name="default_join_date">가입일: 2024-03-12</string>
 </resources>
