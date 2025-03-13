@@ -4,6 +4,7 @@
 
     <!-- 로그인 관련 -->
     <string name="login">로그인</string>
+    <string name="logout">로그아웃</string>
     <string name="login_title">원활한 이용을 위해\n로그인 해주세요</string>
     <string name="keep_login">로그인 유지하기</string>
     <string name="find_id">아이디 찾기</string>
@@ -20,6 +21,7 @@
     <string name="password_confirm_hint">비밀번호 확인</string>
     <string name="name_hint">성명</string>
     <string name="address_hint">주소</string>
+    <string name="phone_number_hint">전화번호</string>
 
     <!-- 재난정보 수신 유형 -->
     <string name="receive_disaster_info">재난정보 수신 유형</string>
@@ -53,4 +55,5 @@
     <string name="line"> | </string>
     <string name="default_nickname">사용자 닉네임</string>
     <string name="default_join_date">가입일: 2024-03-12</string>
+    <string name="edit_title">회원 정보 수정</string>
 </resources>

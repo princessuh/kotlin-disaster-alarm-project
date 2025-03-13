@@ -11,10 +11,10 @@
 
     <!-- 회원가입 제목 -->
     <TextView
-        android:id="@+id/tv_join_title"
+        android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/join_title"
+        android:text="@string/edit_title"
         android:textSize="22sp"
         android:textStyle="bold"
         android:textColor="@color/blue_90"
@@ -26,23 +26,23 @@
     <!-- 아이디 입력 -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/email_layout"
-        android:layout_width="0dp"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:hint="@string/email_hint"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_join_title"
-        android:layout_marginTop="24dp">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_title">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_join_email"
+            android:id="@+id/et_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
             android:autofillHints="emailAddress"
-            android:textColor="@color/grey_90"
-            android:minHeight="48dp"/>
+            android:inputType="textEmailAddress"
+            android:minHeight="48dp"
+            android:textColor="@color/grey_90" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- 비밀번호 입력 -->
@@ -59,7 +59,7 @@
         android:layout_marginTop="12dp">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_join_password"
+            android:id="@+id/et_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
@@ -82,7 +82,7 @@
         android:layout_marginTop="12dp">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_join_confirm_password"
+            android:id="@+id/et_confirm_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
@@ -104,31 +104,10 @@
         android:layout_marginTop="12dp">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_join_name"
+            android:id="@+id/et_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
-            android:textColor="@color/grey_90"
-            android:minHeight="48dp"/>
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <!-- 전화번호 입력 -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/phone_number_layout"
-        android:layout_width="0dp"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_height="wrap_content"
-        android:hint="@string/phone_number_hint"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/name_layout"
-        android:layout_marginTop="12dp">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_phone_number"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="phone"
             android:textColor="@color/grey_90"
             android:minHeight="48dp"/>
     </com.google.android.material.textfield.TextInputLayout>
@@ -140,7 +119,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/phone_number_layout"
+        app:layout_constraintTop_toBottomOf="@id/name_layout"
         android:layout_marginTop="16dp">
 
         <CheckBox
@@ -169,10 +148,10 @@
 
     <!-- 회원가입 버튼 -->
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_join"
+        android:id="@+id/btn_finish"
         android:layout_width="0dp"
         android:layout_height="56dp"
-        android:text="@string/next"
+        android:text="수정 완료"
         android:backgroundTint="@color/blue_60"
         android:textColor="@color/white"
         app:cornerRadius="24dp"
@@ -183,14 +162,14 @@
 
     <!-- 로그인 버튼 -->
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_login"
+        android:id="@+id/btn_logout"
         android:layout_width="0dp"
         android:layout_height="56dp"
-        android:text="@string/login"
+        android:text="@string/logout"
         android:backgroundTint="@color/blue_10"
         android:textColor="@color/blue_60"
         app:cornerRadius="24dp"
-        app:layout_constraintTop_toBottomOf="@id/btn_join"
+        app:layout_constraintTop_toBottomOf="@id/btn_finish"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="12dp"/>
