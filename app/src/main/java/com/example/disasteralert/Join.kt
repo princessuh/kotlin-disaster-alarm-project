@@ -1,9 +1,10 @@
 package com.example.disasteralert
 
+import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
-//import android.util.Patterns
 import android.widget.*
+import java.util.Calendar
 import androidx.appcompat.app.AppCompatActivity
 
 class Join : AppCompatActivity() {
@@ -12,6 +13,8 @@ class Join : AppCompatActivity() {
     private lateinit var password: EditText
     private lateinit var confirmPassword: EditText
     private lateinit var name: EditText
+    private lateinit var birthdate: EditText
+    private lateinit var spinnerGender: Spinner
     private lateinit var joinBtn: Button
     private lateinit var loginBtn: Button
     private lateinit var cbNaturalDisaster: CheckBox
@@ -27,11 +30,34 @@ class Join : AppCompatActivity() {
         password = findViewById(R.id.et_join_password)
         confirmPassword = findViewById(R.id.et_join_confirm_password)
         name = findViewById(R.id.et_join_name)
+        birthdate = findViewById(R.id.et_birthdate)
+        spinnerGender = findViewById(R.id.spinner_gender)
         joinBtn = findViewById(R.id.btn_join)
         loginBtn = findViewById(R.id.btn_login)
         cbNaturalDisaster = findViewById(R.id.cb_natural_disaster)
         cbSocialDisaster = findViewById(R.id.cb_social_disaster)
         cbSafetyInfo = findViewById(R.id.cb_safety_info)
+
+        // 📌 성별 선택 스피너 설정
+        val genderOptions = arrayOf("선택 안 함", "남성", "여성", "기타")
+        val genderAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, genderOptions)
+        spinnerGender.adapter = genderAdapter
+
+        // 📌 생년월일 선택 기능 추가
+        birthdate.setOnClickListener {
+            val calendar = Calendar.getInstance()
+            val year = calendar.get(Calendar.YEAR)
+            val month = calendar.get(Calendar.MONTH)
+            val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+            val datePickerDialog = DatePickerDialog(this,
+                { _, selectedYear, selectedMonth, selectedDay ->
+                    val formattedDate = "$selectedYear-${selectedMonth + 1}-$selectedDay"
+                    birthdate.setText(formattedDate)
+                }, year, month, day)
+
+            datePickerDialog.show()
+        }
 
         // 📌 회원가입 버튼 클릭 이벤트
 //        joinBtn.setOnClickListener {

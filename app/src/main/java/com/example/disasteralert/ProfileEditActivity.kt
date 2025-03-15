@@ -1,7 +1,9 @@
 package com.example.disasteralert
 
+import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
+import java.util.Calendar
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 
@@ -11,6 +13,8 @@ class ProfileEditActivity : AppCompatActivity() {
     private lateinit var password: EditText
     private lateinit var confirmPassword: EditText
     private lateinit var name: EditText
+    private lateinit var birthdate: EditText
+    private lateinit var spinnerGender: Spinner
     private lateinit var finishBtn: Button
     private lateinit var logoutBtn: Button
     private lateinit var cbNaturalDisaster: CheckBox
@@ -26,11 +30,29 @@ class ProfileEditActivity : AppCompatActivity() {
         password = findViewById(R.id.et_password)
         confirmPassword = findViewById(R.id.et_confirm_password)
         name = findViewById(R.id.et_name)
+        birthdate = findViewById(R.id.et_birthdate)
+        spinnerGender = findViewById(R.id.spinner_gender)
         finishBtn = findViewById(R.id.btn_finish)
         logoutBtn = findViewById(R.id.btn_logout)
         cbNaturalDisaster = findViewById(R.id.cb_natural_disaster)
         cbSocialDisaster = findViewById(R.id.cb_social_disaster)
         cbSafetyInfo = findViewById(R.id.cb_safety_info)
+
+        // 📌 생년월일 선택 기능 추가
+        birthdate.setOnClickListener {
+            val calendar = Calendar.getInstance()
+            val year = calendar.get(Calendar.YEAR)
+            val month = calendar.get(Calendar.MONTH)
+            val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+            val datePickerDialog = DatePickerDialog(this,
+                { _, selectedYear, selectedMonth, selectedDay ->
+                    val formattedDate = "$selectedYear-${selectedMonth + 1}-$selectedDay"
+                    birthdate.setText(formattedDate)
+                }, year, month, day)
+
+            datePickerDialog.show()
+        }
 
         // 📌 회원가입 버튼 클릭 이벤트
 //        joinBtn.setOnClickListener {

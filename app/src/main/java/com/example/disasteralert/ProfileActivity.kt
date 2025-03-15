@@ -35,7 +35,7 @@ class ProfileActivity : AppCompatActivity() {
 
         // 개인정보 수정 화면으로 이동
         btnEditProfile.setOnClickListener {
-            val intent = Intent(this, Login::class.java)
+            val intent = Intent(this, ProfileEditActivity::class.java)
             startActivity(intent)
         }
 
