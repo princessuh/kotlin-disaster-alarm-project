@@ -36,10 +36,9 @@
         app:layout_constraintTop_toBottomOf="@id/tv_title">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_email"
+            android:id="@+id/et_user_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:autofillHints="emailAddress"
             android:inputType="text"
             android:minHeight="48dp"
             android:textColor="@color/grey_90" />

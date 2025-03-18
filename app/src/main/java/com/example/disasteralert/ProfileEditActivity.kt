@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 
 class ProfileEditActivity : AppCompatActivity() {
 
-    private lateinit var email: EditText
+    private lateinit var userId: EditText
     private lateinit var password: EditText
     private lateinit var confirmPassword: EditText
     private lateinit var name: EditText
@@ -26,7 +26,7 @@ class ProfileEditActivity : AppCompatActivity() {
         setContentView(R.layout.activity_profile_edit)
 
         // UI 요소 초기화
-        email = findViewById(R.id.et_email)
+        userId = findViewById(R.id.et_user_id)
         password = findViewById(R.id.et_password)
         confirmPassword = findViewById(R.id.et_confirm_password)
         name = findViewById(R.id.et_name)
