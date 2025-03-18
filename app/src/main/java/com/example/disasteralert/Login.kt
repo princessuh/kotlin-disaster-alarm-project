@@ -14,7 +14,7 @@ class Login : AppCompatActivity() {
 
     // 📌 UI 요소를 `lateinit`으로 선언 (가독성 향상)
     private lateinit var tvTitle: TextView
-    private lateinit var etEmail: TextInputEditText
+    private lateinit var etUserId: TextInputEditText
     private lateinit var etPassword: TextInputEditText
     private lateinit var btnLogin: Button
     private lateinit var cbKeepLogin: CheckBox
@@ -28,7 +28,7 @@ class Login : AppCompatActivity() {
 
         // 📌 UI 요소 초기화
         tvTitle = findViewById(R.id.tv_title)
-        etEmail = findViewById(R.id.et_email)
+        etUserId = findViewById(R.id.et_user_id)
         etPassword = findViewById(R.id.et_password)
         btnLogin = findViewById(R.id.btn_login)
         cbKeepLogin = findViewById(R.id.cb_keep_login)
@@ -55,11 +55,11 @@ class Login : AppCompatActivity() {
 
         // 로그인 버튼 클릭 이벤트
         btnLogin.setOnClickListener {
-            val email = etEmail.text.toString().trim()
+            val id = etUserId.text.toString().trim()
             val password = etPassword.text.toString().trim()
 
-            if (email.isEmpty()) {
-                etEmail.error = "아이디를 입력하세요."
+            if (id.isEmpty()) {
+                etUserId.error = "아이디를 입력하세요."
                 return@setOnClickListener
             }
 

@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 
 class Join : AppCompatActivity() {
 
-    private lateinit var email: EditText
+    private lateinit var userId: EditText
     private lateinit var password: EditText
     private lateinit var confirmPassword: EditText
     private lateinit var name: EditText
@@ -26,7 +26,7 @@ class Join : AppCompatActivity() {
         setContentView(R.layout.activity_join)
 
         // UI 요소 초기화
-        email = findViewById(R.id.et_join_email)
+        userId = findViewById(R.id.et_join_user_id)
         password = findViewById(R.id.et_join_password)
         confirmPassword = findViewById(R.id.et_join_confirm_password)
         name = findViewById(R.id.et_join_name)
@@ -94,12 +94,6 @@ class Join : AppCompatActivity() {
 //        if (emailInput.isEmpty() || passwordInput.isEmpty() || confirmPasswordInput.isEmpty()
 //            || nameInput.isEmpty() || nicknameInput.isEmpty() || addressInput.isEmpty()) {
 //            showToast("모든 필드를 입력하세요.")
-//            return false
-//        }
-//
-//        // 이메일 형식 확인
-//        if (!Patterns.EMAIL_ADDRESS.matcher(emailInput).matches()) {
-//            showToast("유효한 이메일 주소를 입력하세요.")
 //            return false
 //        }
 //

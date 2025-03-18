@@ -32,7 +32,7 @@ Login.kt</font>
 
     <span class="s2">// 📌 UI 요소를 `lateinit`으로 선언 (가독성 향상)</span>
     <span class="s1">private lateinit </span><span class="s0">var </span><span class="s1">tvTitle</span><span class="s2">: </span><span class="s1">TextView</span>
-    <span class="s1">private lateinit </span><span class="s0">var </span><span class="s1">etEmail</span><span class="s2">: </span><span class="s1">TextInputEditText</span>
+    <span class="s1">private lateinit </span><span class="s0">var </span><span class="s1">etUserId</span><span class="s2">: </span><span class="s1">TextInputEditText</span>
     <span class="s1">private lateinit </span><span class="s0">var </span><span class="s1">etPassword</span><span class="s2">: </span><span class="s1">TextInputEditText</span>
     <span class="s1">private lateinit </span><span class="s0">var </span><span class="s1">btnLogin</span><span class="s2">: </span><span class="s1">Button</span>
     <span class="s1">private lateinit </span><span class="s0">var </span><span class="s1">cbKeepLogin</span><span class="s2">: </span><span class="s1">CheckBox</span>
@@ -46,7 +46,7 @@ Login.kt</font>
 
         <span class="s2">// 📌 UI 요소 초기화</span>
         <span class="s1">tvTitle </span><span class="s2">= </span><span class="s1">findViewById</span><span class="s2">(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">id</span><span class="s2">.</span><span class="s1">tv_title</span><span class="s2">)</span>
-        <span class="s1">etEmail </span><span class="s2">= </span><span class="s1">findViewById</span><span class="s2">(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">id</span><span class="s2">.</span><span class="s1">et_email</span><span class="s2">)</span>
+        <span class="s1">etUserId </span><span class="s2">= </span><span class="s1">findViewById</span><span class="s2">(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">id</span><span class="s2">.</span><span class="s1">et_email</span><span class="s2">)</span>
         <span class="s1">etPassword </span><span class="s2">= </span><span class="s1">findViewById</span><span class="s2">(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">id</span><span class="s2">.</span><span class="s1">et_password</span><span class="s2">)</span>
         <span class="s1">btnLogin </span><span class="s2">= </span><span class="s1">findViewById</span><span class="s2">(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">id</span><span class="s2">.</span><span class="s1">btn_login</span><span class="s2">)</span>
         <span class="s1">cbKeepLogin </span><span class="s2">= </span><span class="s1">findViewById</span><span class="s2">(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">id</span><span class="s2">.</span><span class="s1">cb_keep_login</span><span class="s2">)</span>
@@ -73,11 +73,11 @@ Login.kt</font>
 
         <span class="s2">// 📌 로그인 버튼 클릭 이벤트</span>
         <span class="s1">btnLogin</span><span class="s2">.</span><span class="s1">setOnClickListener </span><span class="s2">{</span>
-            <span class="s0">val </span><span class="s1">email </span><span class="s2">= </span><span class="s1">etEmail</span><span class="s2">.</span><span class="s1">text</span><span class="s2">.</span><span class="s1">toString</span><span class="s2">().</span><span class="s1">trim</span><span class="s2">()</span>
+            <span class="s0">val </span><span class="s1">email </span><span class="s2">= </span><span class="s1">etUserId</span><span class="s2">.</span><span class="s1">text</span><span class="s2">.</span><span class="s1">toString</span><span class="s2">().</span><span class="s1">trim</span><span class="s2">()</span>
             <span class="s0">val </span><span class="s1">password </span><span class="s2">= </span><span class="s1">etPassword</span><span class="s2">.</span><span class="s1">text</span><span class="s2">.</span><span class="s1">toString</span><span class="s2">().</span><span class="s1">trim</span><span class="s2">()</span>
 
             <span class="s0">if </span><span class="s2">(</span><span class="s1">email</span><span class="s2">.</span><span class="s1">isEmpty</span><span class="s2">()) {</span>
-                <span class="s1">etEmail</span><span class="s2">.</span><span class="s1">error </span><span class="s2">= </span><span class="s3">&quot;아이디 또는 전화 번호를 입력하세요.&quot;</span>
+                <span class="s1">etUserId</span><span class="s2">.</span><span class="s1">error </span><span class="s2">= </span><span class="s3">&quot;아이디 또는 전화 번호를 입력하세요.&quot;</span>
                 <span class="s0">return</span><span class="s1">@setOnClickListener</span>
             <span class="s2">}</span>
 
