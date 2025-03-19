@@ -38,7 +38,7 @@ class ProfileEditActivity : AppCompatActivity() {
         cbSocialDisaster = findViewById(R.id.cb_social_disaster)
         cbSafetyInfo = findViewById(R.id.cb_safety_info)
 
-        // 📌 생년월일 선택 기능 추가
+        // 📌 생년월일 선택 기능
         birthdate.setOnClickListener {
             val calendar = Calendar.getInstance()
             val year = calendar.get(Calendar.YEAR)

@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 class DisasterSelectionActivity : AppCompatActivity() {
 
     private lateinit var cbAll: CheckBox
-    private lateinit var checkBoxList: List<CheckBox>
+    private lateinit var disasterCheckBoxes: List<CheckBox>
     private lateinit var tvSkip: TextView
     private lateinit var btnComplete: Button
 
@@ -21,7 +21,7 @@ class DisasterSelectionActivity : AppCompatActivity() {
 
         // 체크박스 초기화
         cbAll = findViewById(R.id.cb_all)
-        checkBoxList = listOf(
+        disasterCheckBoxes = listOf(
             findViewById(R.id.cb_typhoon),
             findViewById(R.id.cb_weather),
             findViewById(R.id.cb_news),
@@ -36,7 +36,7 @@ class DisasterSelectionActivity : AppCompatActivity() {
         btnComplete = findViewById(R.id.btn_complete)
 
         // 체크박스 UI 숨기기
-        checkBoxList.forEach { checkBox ->
+        disasterCheckBoxes.forEach { checkBox ->
             checkBox.setButtonDrawable(android.R.color.transparent) // 기본 체크박스 제거
             checkBox.setOnCheckedChangeListener { _, isChecked ->
                 updateCheckBoxStyle(checkBox, isChecked)
@@ -49,7 +49,7 @@ class DisasterSelectionActivity : AppCompatActivity() {
 
         // "전체" 체크박스 클릭 시 모든 항목 선택/해제 + 스타일 업데이트
         cbAll.setOnCheckedChangeListener { _, isChecked ->
-            checkBoxList.forEach { checkBox ->
+            disasterCheckBoxes.forEach { checkBox ->
                 checkBox.setOnCheckedChangeListener(null) // 리스너 임시 해제
                 checkBox.isChecked = isChecked
                 updateCheckBoxStyle(checkBox, isChecked) // 스타일 업데이트 추가
@@ -85,10 +85,10 @@ class DisasterSelectionActivity : AppCompatActivity() {
     // "전체" 체크박스 상태 업데이트 (무한 루프 방지 적용)
     private fun updateAllCheckBox() {
         cbAll.setOnCheckedChangeListener(null) // 리스너 해제
-        cbAll.isChecked = checkBoxList.all { it.isChecked }
+        cbAll.isChecked = disasterCheckBoxes.all { it.isChecked }
 
         // ⭐️ 모든 체크박스 스타일 업데이트 추가
-        checkBoxList.forEach { checkBox ->
+        disasterCheckBoxes.forEach { checkBox ->
             updateCheckBoxStyle(checkBox, checkBox.isChecked)
         }
 
@@ -96,7 +96,7 @@ class DisasterSelectionActivity : AppCompatActivity() {
         updateCheckBoxStyle(cbAll, cbAll.isChecked)
 
         cbAll.setOnCheckedChangeListener { _, isChecked ->
-            checkBoxList.forEach { checkBox ->
+            disasterCheckBoxes.forEach { checkBox ->
                 checkBox.setOnCheckedChangeListener(null)
                 checkBox.isChecked = isChecked
                 updateCheckBoxStyle(checkBox, isChecked) // ⭐️ 스타일 업데이트 추가

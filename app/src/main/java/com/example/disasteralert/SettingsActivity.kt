@@ -1,6 +1,7 @@
 package com.example.disasteralert
 
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.os.Bundle
 import android.widget.CheckBox
 import android.widget.SeekBar
@@ -50,6 +51,15 @@ class SettingsActivity : AppCompatActivity() {
             checkBox.isChecked = sharedPrefs.getBoolean("disaster_$index", true)
         }
 
+        // 체크박스 UI 숨기기
+        disasterCheckBoxes.forEach { checkBox ->
+            checkBox.setButtonDrawable(android.R.color.transparent) // 기본 체크박스 제거
+            checkBox.setOnCheckedChangeListener { _, isChecked ->
+                updateCheckBoxStyle(checkBox, isChecked)
+                updateAllCheckBox()
+            }
+        }
+
         // "전체" 체크박스 UI 숨기기
         cbAll.setButtonDrawable(android.R.color.transparent)
 
@@ -83,6 +93,36 @@ class SettingsActivity : AppCompatActivity() {
             }
         })
     }
+    // 체크박스 스타일 업데이트 함수 (전체 체크박스도 변경 가능)
+    private fun updateCheckBoxStyle(checkBox: CheckBox, isChecked: Boolean) {
+        checkBox.setBackgroundResource(R.drawable.checkbox_selector)
+        checkBox.setTextColor(if (isChecked) Color.parseColor("#007AFF") else Color.parseColor("#757575"))
+    }
 
+    // "전체" 체크박스 상태 업데이트 (무한 루프 방지 적용)
+    private fun updateAllCheckBox() {
+        cbAll.setOnCheckedChangeListener(null) // 리스너 해제
+        cbAll.isChecked = disasterCheckBoxes.all { it.isChecked }
 
+        // ⭐️ 모든 체크박스 스타일 업데이트 추가
+        disasterCheckBoxes.forEach { checkBox ->
+            updateCheckBoxStyle(checkBox, checkBox.isChecked)
+        }
+
+        // ⭐️ 전체 체크박스 스타일도 업데이트
+        updateCheckBoxStyle(cbAll, cbAll.isChecked)
+
+        cbAll.setOnCheckedChangeListener { _, isChecked ->
+            disasterCheckBoxes.forEach { checkBox ->
+                checkBox.setOnCheckedChangeListener(null)
+                checkBox.isChecked = isChecked
+                updateCheckBoxStyle(checkBox, isChecked) // ⭐️ 스타일 업데이트 추가
+                checkBox.setOnCheckedChangeListener { _, isChecked ->
+                    updateCheckBoxStyle(checkBox, isChecked)
+                    updateAllCheckBox()
+                }
+            }
+            updateCheckBoxStyle(cbAll, isChecked) // ⭐️ 전체 체크박스 스타일 업데이트 추가
+        }
+    }
 }

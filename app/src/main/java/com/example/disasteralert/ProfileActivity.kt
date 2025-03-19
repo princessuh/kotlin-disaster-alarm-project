@@ -29,7 +29,7 @@ class ProfileActivity : AppCompatActivity() {
 
         // 설정 화면으로 이동
         btnSettings.setOnClickListener {
-            val intent = Intent(this, Login::class.java)
+            val intent = Intent(this, SettingsActivity::class.java)
             startActivity(intent)
         }
 
@@ -40,7 +40,7 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         btnReportHistory.setOnClickListener {
-            val intent = Intent(this, Login::class.java)
+            val intent = Intent(this, ReportHistoryActivity::class.java)
             startActivity(intent)
         }
     }
