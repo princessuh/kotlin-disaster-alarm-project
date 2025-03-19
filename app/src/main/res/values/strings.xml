@@ -1,6 +1,6 @@
 <resources>
     <!-- 기본 정보 -->
-    <string name="app_name">DisasterAlert</string>
+    <string name="app_name">재난 알리미</string>
 
     <!-- 로그인 관련 -->
     <string name="login">로그인</string>

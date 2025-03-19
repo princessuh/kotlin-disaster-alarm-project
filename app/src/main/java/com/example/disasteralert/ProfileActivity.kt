@@ -21,7 +21,7 @@ class ProfileActivity : AppCompatActivity() {
         val ivProfile = findViewById<ImageView>(R.id.iv_profile) // 프로필 이미지
 
         // 기본 프로필 이미지 설정
-        ivProfile.setImageResource(R.drawable.ic_launcher_foreground) // 없으면 기본 이미지로 설정
+        ivProfile.setImageResource(R.mipmap.ic_launcher) // 없으면 기본 이미지로 설정
 
         // 임시 사용자 정보 설정
         tvNickname.text = getString(R.string.default_nickname)
