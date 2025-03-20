@@ -49,3 +49,12 @@ dependencies {
     implementation("androidx.gridlayout:gridlayout:1.0.0") // GridLayout 지원 추가
 }
 
+dependencies {
+    implementation("com.google.android.gms:play-services-location:21.3.0")
+}
+
+dependencies {
+    implementation("com.google.android.material:material:1.6.1")
+}
+
+

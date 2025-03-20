@@ -24,8 +24,8 @@ class ProfileActivity : AppCompatActivity() {
         ivProfile.setImageResource(R.mipmap.ic_launcher) // 없으면 기본 이미지로 설정
 
         // 임시 사용자 정보 설정
-        tvNickname.text = getString(R.string.default_nickname)
-        tvJoinDate.text = getString(R.string.default_join_date)
+        tvNickname.text = getString(R.string.default_name)
+        tvJoinDate.text = getString(R.string.default_user_id)
 
         // 설정 화면으로 이동
         btnSettings.setOnClickListener {
@@ -40,8 +40,9 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         btnReportHistory.setOnClickListener {
-            val intent = Intent(this, ReportHistoryActivity::class.java)
+            val intent = Intent(this, Login::class.java)
             startActivity(intent)
+
         }
     }
 }
