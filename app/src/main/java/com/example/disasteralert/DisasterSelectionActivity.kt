@@ -61,14 +61,14 @@ class DisasterSelectionActivity : AppCompatActivity() {
             updateCheckBoxStyle(cbAll, isChecked) //전체 체크박스 스타일 변경
         }
 
-        // 선택 완료 버튼 클릭 시 로그인 화면으로 이동 (🩷추후 메인 이동으로 변경 필요)
+        // 선택 완료 버튼 클릭 시 프로필 화면으로 이동 (🩷추후 메인 이동으로 변경 필요)
         btnComplete.setOnClickListener {
             val intent = Intent(this, ProfileActivity::class.java) // 이동할 화면 설정
             startActivity(intent)
             finish()
         }
 
-        // 건너뛰기 버튼 클릭 시 로그인 화면으로 이동 (🩷추후 메인 이동으로 변경 필요)
+        // 건너뛰기 버튼 클릭 시 프로필 화면으로 이동 (🩷추후 메인 이동으로 변경 필요)
         tvSkip.setOnClickListener {
             val intent = Intent(this, ProfileActivity::class.java) // 이동할 화면 설정
             startActivity(intent)
