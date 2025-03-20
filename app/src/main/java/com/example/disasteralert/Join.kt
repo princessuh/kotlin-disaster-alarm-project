@@ -3,7 +3,6 @@ package com.example.disasteralert
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.*
 import java.util.Calendar
 import androidx.appcompat.app.AppCompatActivity
@@ -43,9 +42,6 @@ class Join : AppCompatActivity() {
         val genderOptions = arrayOf("선택 안 됨", "남성", "여성")
         val genderAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, genderOptions)
         spinnerGender.adapter = genderAdapter
-
-        // 📌 회원가입 버튼을 항상 활성화 (선택 안 해도 클릭 가능)
-        joinBtn.isEnabled = true
 
         // 📌 생년월일 선택 기능 추가
         birthdate.setOnClickListener {
