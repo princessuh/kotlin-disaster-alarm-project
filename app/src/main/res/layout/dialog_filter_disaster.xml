@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_top_white"
+        android:padding="24dp">
+
+        <!-- 제목 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="재난 유형 필터"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="@color/blue_90" />
+
+        <!-- 재난 유형 그리드 -->
+        <androidx.gridlayout.widget.GridLayout
+            android:id="@+id/grid_disaster_filter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:columnCount="3"
+            app:useDefaultMargins="true"
+            app:alignmentMode="alignMargins">
+
+            <!-- 각 필터 항목 -->
+            <CheckBox
+                android:id="@+id/cb_typhoon"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:background="@drawable/checkbox_selector"
+                android:gravity="center"
+                android:text="풍수해"
+                android:textColor="@color/grey_60"
+                app:layout_columnWeight="1" />
+
+            <CheckBox
+                android:id="@+id/cb_weather"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:background="@drawable/checkbox_selector"
+                android:gravity="center"
+                android:text="기상재난"
+                android:textColor="@color/grey_60"
+                app:layout_columnWeight="1" />
+
+            <CheckBox
+                android:id="@+id/cb_earthquake"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:background="@drawable/checkbox_selector"
+                android:gravity="center"
+                android:text="지질재난"
+                android:textColor="@color/grey_60"
+                app:layout_columnWeight="1" />
+
+            <CheckBox
+                android:id="@+id/cb_epidemic"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:background="@drawable/checkbox_selector"
+                android:gravity="center"
+                android:text="감염병"
+                android:textColor="@color/grey_60"
+                app:layout_columnWeight="1" />
+
+            <CheckBox
+                android:id="@+id/cb_fire"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:background="@drawable/checkbox_selector"
+                android:gravity="center"
+                android:text="화재/폭발"
+                android:textColor="@color/grey_60"
+                app:layout_columnWeight="1" />
+
+            <CheckBox
+                android:id="@+id/cb_fine_dust"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:background="@drawable/checkbox_selector"
+                android:gravity="center"
+                android:text="미세먼지"
+                android:textColor="@color/grey_60"
+                app:layout_columnWeight="1" />
+        </androidx.gridlayout.widget.GridLayout>
+
+        <!-- 적용 버튼 -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_apply_filter"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="적용"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/blue_60"
+            app:cornerRadius="24dp"
+            android:layout_marginTop="24dp" />
+
+    </LinearLayout>
+</ScrollView>

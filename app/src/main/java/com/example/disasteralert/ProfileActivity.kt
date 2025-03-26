@@ -40,7 +40,7 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         btnReportHistory.setOnClickListener {
-            val intent = Intent(this, Login::class.java)
+            val intent = Intent(this, ReportHistoryActivity::class.java)
             startActivity(intent)
 
         }
