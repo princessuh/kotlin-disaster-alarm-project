@@ -46,4 +46,5 @@ class FilterBottomSheetDialog(
 
         return view
     }
+    override fun getTheme(): Int = R.style.BottomSheetDialogTheme
 }
