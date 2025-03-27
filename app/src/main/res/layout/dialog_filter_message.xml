@@ -17,7 +17,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="메시지 필터"
+            android:text="@string/info_type"
             android:textStyle="bold"
             android:textSize="18sp"
             android:textColor="@color/blue_90" />
@@ -32,10 +32,10 @@
             android:gravity="center_horizontal">
 
             <CheckBox
-                android:id="@+id/cb_all"
+                android:id="@+id/cb_all_info"
                 android:layout_width="72dp"
                 android:layout_height="wrap_content"
-                android:text="전체"
+                android:text="@string/checkbox_all"
                 android:gravity="center"
                 android:background="@drawable/checkbox_selector"
                 android:textColor="@color/grey_60"
@@ -45,7 +45,7 @@
                 android:id="@+id/cb_news"
                 android:layout_width="72dp"
                 android:layout_height="wrap_content"
-                android:text="기사"
+                android:text="@string/news"
                 android:gravity="center"
                 android:background="@drawable/checkbox_selector"
                 android:textColor="@color/grey_60"
@@ -55,7 +55,7 @@
                 android:id="@+id/cb_special"
                 android:layout_width="72dp"
                 android:layout_height="wrap_content"
-                android:text="특보"
+                android:text="@string/special_report"
                 android:gravity="center"
                 android:background="@drawable/checkbox_selector"
                 android:textColor="@color/grey_60"
@@ -65,11 +65,20 @@
                 android:id="@+id/cb_report"
                 android:layout_width="72dp"
                 android:layout_height="wrap_content"
-                android:text="제보"
+                android:text="@string/report"
                 android:gravity="center"
                 android:background="@drawable/checkbox_selector"
                 android:textColor="@color/grey_60" />
         </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/disaster_type"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_marginTop="48dp"
+            android:textColor="@color/blue_90" />
 
         <!-- 🔹 재난 유형 (기존 구조 재사용) -->
         <androidx.gridlayout.widget.GridLayout
@@ -82,13 +91,27 @@
             app:alignmentMode="alignMargins">
 
             <CheckBox
+                android:id="@+id/cb_all"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:background="@drawable/checkbox_selector"
+                android:gravity="center"
+                android:text="@string/checkbox_all"
+                android:textColor="@color/grey_60"
+                app:layout_columnWeight="1"
+                app:layout_columnSpan="3"/>
+
+
+            <!-- 각 필터 항목 -->
+            <CheckBox
                 android:id="@+id/cb_typhoon"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:background="@drawable/checkbox_selector"
                 android:gravity="center"
-                android:text="풍수해"
+                android:text="@string/typhoon"
                 android:textColor="@color/grey_60"
                 app:layout_columnWeight="1" />
 
@@ -99,7 +122,7 @@
                 android:layout_margin="8dp"
                 android:background="@drawable/checkbox_selector"
                 android:gravity="center"
-                android:text="기상재난"
+                android:text="@string/weather"
                 android:textColor="@color/grey_60"
                 app:layout_columnWeight="1" />
 
@@ -110,7 +133,7 @@
                 android:layout_margin="8dp"
                 android:background="@drawable/checkbox_selector"
                 android:gravity="center"
-                android:text="지질재난"
+                android:text="@string/earthquake"
                 android:textColor="@color/grey_60"
                 app:layout_columnWeight="1" />
 
@@ -121,7 +144,7 @@
                 android:layout_margin="8dp"
                 android:background="@drawable/checkbox_selector"
                 android:gravity="center"
-                android:text="감염병"
+                android:text="@string/epidemic"
                 android:textColor="@color/grey_60"
                 app:layout_columnWeight="1" />
 
@@ -132,7 +155,7 @@
                 android:layout_margin="8dp"
                 android:background="@drawable/checkbox_selector"
                 android:gravity="center"
-                android:text="화재/폭발"
+                android:text="@string/fire"
                 android:textColor="@color/grey_60"
                 app:layout_columnWeight="1" />
 
@@ -143,7 +166,7 @@
                 android:layout_margin="8dp"
                 android:background="@drawable/checkbox_selector"
                 android:gravity="center"
-                android:text="미세먼지"
+                android:text="@string/fine_dust"
                 android:textColor="@color/grey_60"
                 app:layout_columnWeight="1" />
         </androidx.gridlayout.widget.GridLayout>
@@ -153,7 +176,7 @@
             android:id="@+id/btn_apply_filter"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:text="적용"
+            android:text="@string/apply"
             android:textColor="@color/white"
             android:backgroundTint="@color/blue_60"
             app:cornerRadius="24dp"

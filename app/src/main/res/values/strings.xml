@@ -25,6 +25,7 @@
 
     <!-- 재난정보 수신 유형 -->
     <string name="receive_disaster_info">재난정보 수신 유형</string>
+    <string name="info_type">정보 유형</string>
     <string name="natural_disaster">자연재난</string>
     <string name="social_disaster">사회재난</string>
     <string name="safety_info">제보정보</string>
@@ -36,9 +37,10 @@
     <string name="filter_open">필터 열기</string>
 
     <string name="disaster_selection_title">소식을 받을 재난 유형을 선택해주세요</string>
-    <string name="disaster_selection_subtitle">해당 선택은 환경설정에서 변경할 수 있어요.</string>
+    <string name="disaster_selection_subtitle">해당 선택은 환경 설정에서 변경할 수 있어요.</string>
 
-    <!-- 재난 중분류 -->
+    <!-- 재난 유형 -->
+    <string name="disaster_type">재난 유형</string>
     <string name="checkbox_all">전체</string>
     <string name="typhoon">풍수해</string>
     <string name="weather">기상재난</string>
@@ -57,4 +59,5 @@
     <string name="default_user_id">user_id</string>
     <string name="edit_title">회원 정보 수정</string>
     <string name="location_time_format">위치: %1$s, %2$s | 시간: %3$s</string>
+    <string name="apply">적용</string>
 </resources>

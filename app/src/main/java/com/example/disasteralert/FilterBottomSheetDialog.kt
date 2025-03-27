@@ -16,7 +16,8 @@ class FilterBottomSheetDialog(
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view = inflater.inflate(R.layout.dialog_filter_disaster, container, false)
 
-        // 체크박스 리스트
+        val cbAll = view.findViewById<CheckBox>(R.id.cb_all)
+
         checkBoxes = listOf(
             view.findViewById(R.id.cb_typhoon),
             view.findViewById(R.id.cb_weather),
@@ -26,15 +27,33 @@ class FilterBottomSheetDialog(
             view.findViewById(R.id.cb_fine_dust)
         )
 
-        checkBoxes.forEach { cb ->
+        val allCheckBoxes = checkBoxes + cbAll
+
+        allCheckBoxes.forEach { cb ->
             cb.setButtonDrawable(android.R.color.transparent)
             cb.setOnCheckedChangeListener { _, isChecked ->
                 val color = ContextCompat.getColor(
-                    cb.context,  // 여기 수정!
+                    cb.context,
                     if (isChecked) R.color.blue_50 else R.color.grey_60
                 )
                 cb.setTextColor(color)
                 cb.setBackgroundResource(R.drawable.checkbox_selector)
+            }
+        }
+
+        // 전체 선택 체크박스 클릭 시
+        cbAll.setOnCheckedChangeListener { _, isChecked ->
+            checkBoxes.forEach { it.isChecked = isChecked }
+        }
+
+        // 개별 체크박스가 변경되면 전체 체크 여부 업데이트
+        checkBoxes.forEach { cb ->
+            cb.setOnCheckedChangeListener { _, _ ->
+                cbAll.setOnCheckedChangeListener(null) // 무한 루프 방지
+                cbAll.isChecked = checkBoxes.all { it.isChecked }
+                cbAll.setOnCheckedChangeListener { _, isChecked ->
+                    checkBoxes.forEach { it.isChecked = isChecked }
+                }
             }
         }
 
@@ -46,5 +65,6 @@ class FilterBottomSheetDialog(
 
         return view
     }
+
     override fun getTheme(): Int = R.style.BottomSheetDialogTheme
 }

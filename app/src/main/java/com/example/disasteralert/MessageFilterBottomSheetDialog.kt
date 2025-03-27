@@ -17,25 +17,23 @@ class MessageFilterBottomSheetDialog(
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view = inflater.inflate(R.layout.dialog_filter_message, container, false)
 
-        // 🟦 정보유형 체크박스 (전체, 기사, 특보, 제보)
-        infoTypeCheckBoxes = listOf(
-            view.findViewById(R.id.cb_all),
-            view.findViewById(R.id.cb_news),
-            view.findViewById(R.id.cb_special),
-            view.findViewById(R.id.cb_report)
-        )
+        val cbAllInfo = view.findViewById<CheckBox>(R.id.cb_all_info)
+        val cbNews = view.findViewById<CheckBox>(R.id.cb_news)
+        val cbSpecial = view.findViewById<CheckBox>(R.id.cb_special)
+        val cbReport = view.findViewById<CheckBox>(R.id.cb_report)
 
-        // 🟨 재난유형 체크박스 (풍수해 ~ 미세먼지)
-        disasterTypeCheckBoxes = listOf(
-            view.findViewById(R.id.cb_typhoon),
-            view.findViewById(R.id.cb_weather),
-            view.findViewById(R.id.cb_earthquake),
-            view.findViewById(R.id.cb_epidemic),
-            view.findViewById(R.id.cb_fire),
-            view.findViewById(R.id.cb_fine_dust)
-        )
+        infoTypeCheckBoxes = listOf(cbAllInfo, cbNews, cbSpecial, cbReport)
 
-        // 공통 스타일 설정
+        val cbAll = view.findViewById<CheckBox>(R.id.cb_all)
+        val cbTyphoon = view.findViewById<CheckBox>(R.id.cb_typhoon)
+        val cbWeather = view.findViewById<CheckBox>(R.id.cb_weather)
+        val cbEarthquake = view.findViewById<CheckBox>(R.id.cb_earthquake)
+        val cbEpidemic = view.findViewById<CheckBox>(R.id.cb_epidemic)
+        val cbFire = view.findViewById<CheckBox>(R.id.cb_fire)
+        val cbFineDust = view.findViewById<CheckBox>(R.id.cb_fine_dust)
+
+        disasterTypeCheckBoxes = listOf(cbAll, cbTyphoon, cbWeather, cbEarthquake, cbEpidemic, cbFire, cbFineDust)
+
         val allCheckBoxes = infoTypeCheckBoxes + disasterTypeCheckBoxes
         allCheckBoxes.forEach { cb ->
             cb.setButtonDrawable(android.R.color.transparent)
@@ -49,10 +47,35 @@ class MessageFilterBottomSheetDialog(
             }
         }
 
-        // 적용 버튼
+        // 🟦 cb_all_info 클릭 시 전체 토글
+        cbAllInfo.setOnClickListener {
+            val check = cbAllInfo.isChecked
+            listOf(cbNews, cbSpecial, cbReport).forEach { it.isChecked = check }
+        }
+
+        // 개별 정보유형 체크박스 클릭 시 전체 체크 상태 동기화
+        listOf(cbNews, cbSpecial, cbReport).forEach { cb ->
+            cb.setOnClickListener {
+                cbAllInfo.isChecked = listOf(cbNews, cbSpecial, cbReport).all { it.isChecked }
+            }
+        }
+
+        // 🟨 cb_all 클릭 시 전체 토글
+        cbAll.setOnClickListener {
+            val check = cbAll.isChecked
+            listOf(cbTyphoon, cbWeather, cbEarthquake, cbEpidemic, cbFire, cbFineDust).forEach { it.isChecked = check }
+        }
+
+        // 개별 재난유형 체크박스 클릭 시 전체 체크 상태 동기화
+        listOf(cbTyphoon, cbWeather, cbEarthquake, cbEpidemic, cbFire, cbFineDust).forEach { cb ->
+            cb.setOnClickListener {
+                cbAll.isChecked = listOf(cbTyphoon, cbWeather, cbEarthquake, cbEpidemic, cbFire, cbFineDust).all { it.isChecked }
+            }
+        }
+
         view.findViewById<MaterialButton>(R.id.btn_apply_filter).setOnClickListener {
-            val selectedInfoTypes = infoTypeCheckBoxes.filter { it.isChecked }.map { it.text.toString() }
-            val selectedDisasterTypes = disasterTypeCheckBoxes.filter { it.isChecked }.map { it.text.toString() }
+            val selectedInfoTypes = infoTypeCheckBoxes.filter { it != cbAllInfo && it.isChecked }.map { it.text.toString() }
+            val selectedDisasterTypes = disasterTypeCheckBoxes.filter { it != cbAll && it.isChecked }.map { it.text.toString() }
 
             onFilterApplied(selectedInfoTypes, selectedDisasterTypes)
             dismiss()
