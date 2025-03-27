@@ -66,7 +66,7 @@ class Join : AppCompatActivity() {
                 Toast.makeText(this, "성별을 선택해 주세요.", Toast.LENGTH_SHORT).show()
             } else {
                 // 🚀 성별이 선택되었을 경우 다음 단계로 진행
-                val intent = Intent(this, ProfileActivity::class.java)
+                val intent = Intent(this, DisasterSelectionActivity::class.java)
                 startActivity(intent)
             }
         }

@@ -13,19 +13,20 @@ class ProfileActivity : AppCompatActivity() {
         setContentView(R.layout.activity_profile)
 
         // UI 요소 초기화
-        val tvNickname = findViewById<TextView>(R.id.tv_nickname)
-        val tvJoinDate = findViewById<TextView>(R.id.tv_join_date)
+        val tvName = findViewById<TextView>(R.id.tv_name)
+        val tvUserID = findViewById<TextView>(R.id.tv_user_id)
         val btnSettings = findViewById<Button>(R.id.btn_settings)
         val btnEditProfile = findViewById<Button>(R.id.btn_edit_profile)
         val btnReportHistory = findViewById<Button>(R.id.btn_report_history)
+        val btnMessageList = findViewById<Button>(R.id.btn_message_list)
         val ivProfile = findViewById<ImageView>(R.id.iv_profile) // 프로필 이미지
 
         // 기본 프로필 이미지 설정
         ivProfile.setImageResource(R.mipmap.ic_launcher) // 없으면 기본 이미지로 설정
 
         // 임시 사용자 정보 설정
-        tvNickname.text = getString(R.string.default_name)
-        tvJoinDate.text = getString(R.string.default_user_id)
+        tvName.text = getString(R.string.default_name)
+        tvUserID.text = getString(R.string.default_user_id)
 
         // 설정 화면으로 이동
         btnSettings.setOnClickListener {
@@ -39,10 +40,16 @@ class ProfileActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        // 제보 내역 화면으로 이동
         btnReportHistory.setOnClickListener {
             val intent = Intent(this, ReportHistoryActivity::class.java)
             startActivity(intent)
+        }
 
+        // 메시지 목록 화면으로 이동
+        btnMessageList.setOnClickListener {
+            val intent = Intent(this, MessageListActivity::class.java)
+            startActivity(intent)
         }
     }
 }
