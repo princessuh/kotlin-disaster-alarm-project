@@ -6,6 +6,8 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.messaging.FirebaseMessaging //토큰 확인용
+
 
 class ProfileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,5 +53,18 @@ class ProfileActivity : AppCompatActivity() {
             val intent = Intent(this, MessageListActivity::class.java)
             startActivity(intent)
         }
+
+        // DEBUG ONLY: FCM 토큰 디버깅용 표시
+        val tvToken = findViewById<TextView>(R.id.tv_fcm_token)
+        FirebaseMessaging.getInstance().token
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val token = task.result
+                    tvToken.text = "🔧 FCM Token (DEBUG):\n$token"
+                } else {
+                    tvToken.text = "FCM 토큰을 가져오지 못했습니다"
+                }
+            }
+
     }
 }
