@@ -9,7 +9,7 @@
     tools:context=".ProfileActivity"
     android:background="@color/white">
 
-    <!-- 프로필 이미지 -->
+    <!-- 기존 UI 생략 -->
     <ImageView
         android:id="@+id/iv_profile"
         android:layout_width="100dp"
@@ -21,7 +21,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- 닉네임 -->
     <TextView
         android:id="@+id/tv_name"
         android:layout_width="wrap_content"
@@ -35,7 +34,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp"/>
 
-    <!-- 가입일 -->
     <TextView
         android:id="@+id/tv_user_id"
         android:layout_width="wrap_content"
@@ -61,7 +59,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="32dp"/>
 
-    <!-- 설정 버튼 -->
     <Button
         android:id="@+id/btn_settings"
         android:layout_width="160dp"
@@ -75,7 +72,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="12dp"/>
 
-    <!-- 개인정보 수정 버튼 -->
     <Button
         android:id="@+id/btn_edit_profile"
         android:layout_width="160dp"
@@ -89,7 +85,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="12dp"/>
 
-    <!-- 개인정보 수정 버튼 -->
     <Button
         android:id="@+id/btn_message_list"
         android:layout_width="160dp"
@@ -102,5 +97,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="12dp"/>
+
+    <!-- DEBUG ONLY: FCM 토큰 디버깅용 표시 -->
+    <TextView
+        android:id="@+id/tv_fcm_token"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="FCM 토큰 로딩 중..."
+        android:textSize="12sp"
+        android:textColor="#666666"
+        android:textIsSelectable="true"
+        android:background="#FFEFEF"
+        android:padding="12dp"
+        app:layout_constraintTop_toBottomOf="@id/btn_message_list"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
