@@ -53,18 +53,20 @@ class SettingsActivity : AppCompatActivity() {
         // 체크박스 설정 로드 & 스타일 적용
         disasterCheckBoxes.forEachIndexed { index, checkBox ->
             checkBox.isChecked = sharedPrefs.getBoolean("disaster_$index", true)
-            updateCheckBoxStyle(checkBox, checkBox.isChecked) // ✅ 초기 스타일 적용
+            updateCheckBoxStyle(checkBox, checkBox.isChecked)
         }
 
         // "전체" 체크박스 상태 업데이트 (초기 스타일 적용)
         cbAll.isChecked = disasterCheckBoxes.all { it.isChecked }
-        updateCheckBoxStyle(cbAll, cbAll.isChecked) // ✅ 초기 스타일 적용
+        updateCheckBoxStyle(cbAll, cbAll.isChecked)
 
-        // 체크박스 UI 설정
-        disasterCheckBoxes.forEach { checkBox ->
-            checkBox.setButtonDrawable(android.R.color.transparent) // 기본 체크박스 제거
+        // 체크박스 UI 및 값 저장 설정
+        disasterCheckBoxes.forEachIndexed { index, checkBox ->
+            checkBox.setButtonDrawable(android.R.color.transparent)
             checkBox.setOnCheckedChangeListener { _, isChecked ->
                 updateCheckBoxStyle(checkBox, isChecked)
+                // ✅ 변경 즉시 저장
+                sharedPrefs.edit().putBoolean("disaster_$index", isChecked).apply()
                 updateAllCheckBox()
             }
         }
@@ -75,7 +77,7 @@ class SettingsActivity : AppCompatActivity() {
             setAllCheckBoxes(isChecked)
         }
 
-        // 이벤트 리스너 설정
+        // 스위치 / 반경 SeekBar 저장 로직 (기존 유지)
         switchPush.setOnCheckedChangeListener { _, isChecked ->
             sharedPrefs.edit().putBoolean("push_notifications", isChecked).apply()
         }
@@ -93,10 +95,19 @@ class SettingsActivity : AppCompatActivity() {
 
         // 저장 버튼 클릭 이벤트 (프로필 화면으로 이동)
         saveBtn.setOnClickListener {
-            val intent = Intent(this, ProfileActivity::class.java)
-            startActivity(intent)
+            saveAllDisasterSelections() // 혹시 모를 누락 대비
+            startActivity(Intent(this, ProfileActivity::class.java))
             finish()
         }
+    }
+
+    /** 모든 체크박스 상태를 SharedPreferences 에 저장 */
+    private fun saveAllDisasterSelections() {
+        val editor = sharedPrefs.edit()
+        disasterCheckBoxes.forEachIndexed { index, cb ->
+            editor.putBoolean("disaster_$index", cb.isChecked)
+        }
+        editor.apply()
     }
 
     // 체크박스 스타일 업데이트 함수 (전체 체크박스도 변경 가능)
@@ -111,25 +122,29 @@ class SettingsActivity : AppCompatActivity() {
 
     // "전체" 체크박스 상태 업데이트
     private fun updateAllCheckBox() {
-        cbAll.setOnCheckedChangeListener(null) // 무한 루프 방지
+        cbAll.setOnCheckedChangeListener(null)
         cbAll.isChecked = disasterCheckBoxes.all { it.isChecked }
-        updateCheckBoxStyle(cbAll, cbAll.isChecked) // ✅ "전체" 스타일 업데이트
+        updateCheckBoxStyle(cbAll, cbAll.isChecked)
         cbAll.setOnCheckedChangeListener { _, isChecked ->
             setAllCheckBoxes(isChecked)
         }
     }
 
-    // "전체 선택" 클릭 시 모든 체크박스 변경
+    // "전체 선택/해제" 처리 + 즉시 저장
     private fun setAllCheckBoxes(isChecked: Boolean) {
-        disasterCheckBoxes.forEach { checkBox ->
-            checkBox.setOnCheckedChangeListener(null) // 무한 루프 방지
+        disasterCheckBoxes.forEachIndexed { index, checkBox ->
+            checkBox.setOnCheckedChangeListener(null)
             checkBox.isChecked = isChecked
-            updateCheckBoxStyle(checkBox, isChecked) // ✅ 개별 체크박스 스타일 업데이트
+            updateCheckBoxStyle(checkBox, isChecked)
+            // ✅ 일괄 저장
+            sharedPrefs.edit().putBoolean("disaster_$index", isChecked).apply()
             checkBox.setOnCheckedChangeListener { _, isChecked ->
                 updateCheckBoxStyle(checkBox, isChecked)
+                sharedPrefs.edit().putBoolean("disaster_$index", isChecked).apply()
                 updateAllCheckBox()
             }
         }
-        updateCheckBoxStyle(cbAll, isChecked) // ✅ "전체" 체크박스 스타일 업데이트
+        updateCheckBoxStyle(cbAll, isChecked)
+        saveAllDisasterSelections() // 최종 저장 안전망
     }
 }

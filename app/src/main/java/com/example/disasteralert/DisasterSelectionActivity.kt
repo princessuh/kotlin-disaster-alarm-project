@@ -1,6 +1,7 @@
 package com.example.disasteralert
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
 import android.widget.Button
@@ -14,12 +15,15 @@ class DisasterSelectionActivity : AppCompatActivity() {
     private lateinit var disasterCheckBoxes: List<CheckBox>
     private lateinit var tvSkip: TextView
     private lateinit var btnComplete: Button
+    private lateinit var sharedPrefs: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_disaster_selection)
 
-        // 체크박스 초기화
+        sharedPrefs = getSharedPreferences("Settings", MODE_PRIVATE)
+
+        // ───── UI 바인딩 ─────
         cbAll = findViewById(R.id.cb_all)
         disasterCheckBoxes = listOf(
             findViewById(R.id.cb_typhoon),
@@ -35,77 +39,78 @@ class DisasterSelectionActivity : AppCompatActivity() {
         tvSkip = findViewById(R.id.tv_skip)
         btnComplete = findViewById(R.id.btn_complete)
 
-        // 체크박스 UI 숨기기
-        disasterCheckBoxes.forEach { checkBox ->
-            checkBox.setButtonDrawable(android.R.color.transparent) // 기본 체크박스 제거
-            checkBox.setOnCheckedChangeListener { _, isChecked ->
-                updateCheckBoxStyle(checkBox, isChecked)
+        // ───── 체크박스 스타일 & 리스너 설정 ─────
+        disasterCheckBoxes.forEach { cb ->
+            cb.setButtonDrawable(android.R.color.transparent) // 기본 체크박스 숨기기
+            cb.setOnCheckedChangeListener { _, isChecked ->
+                updateCheckBoxStyle(cb, isChecked)
                 updateAllCheckBox()
             }
         }
 
-        // "전체" 체크박스 UI 숨기기
         cbAll.setButtonDrawable(android.R.color.transparent)
-
-        // "전체" 체크박스 클릭 시 모든 항목 선택/해제 + 스타일 업데이트
         cbAll.setOnCheckedChangeListener { _, isChecked ->
-            disasterCheckBoxes.forEach { checkBox ->
-                checkBox.setOnCheckedChangeListener(null) // 리스너 임시 해제
-                checkBox.isChecked = isChecked
-                updateCheckBoxStyle(checkBox, isChecked) // 스타일 업데이트 추가
-                checkBox.setOnCheckedChangeListener { _, isChecked ->
-                    updateCheckBoxStyle(checkBox, isChecked)
-                    updateAllCheckBox()
-                }
-            }
-            updateCheckBoxStyle(cbAll, isChecked) //전체 체크박스 스타일 변경
+            applyAllCheckBoxes(isChecked)
         }
 
-        // 선택 완료 버튼 클릭 시 프로필 화면으로 이동 (🩷추후 메인 이동으로 변경 필요)
+        // ───── 버튼 이벤트 ─────
         btnComplete.setOnClickListener {
-            val intent = Intent(this, ProfileActivity::class.java) // 이동할 화면 설정
-            startActivity(intent)
+            saveSelections()
+            startActivity(Intent(this, ProfileActivity::class.java))
             finish()
         }
 
-        // 건너뛰기 버튼 클릭 시 프로필 화면으로 이동 (🩷추후 메인 이동으로 변경 필요)
         tvSkip.setOnClickListener {
-            val intent = Intent(this, ProfileActivity::class.java) // 이동할 화면 설정
-            startActivity(intent)
+            applyAllCheckBoxes(true)  // 건너뛰기 = 전부 수신
+            saveSelections()
+            startActivity(Intent(this, ProfileActivity::class.java))
             finish()
         }
     }
 
-    // 체크박스 스타일 업데이트 함수 (전체 체크박스도 변경 가능)
-    private fun updateCheckBoxStyle(checkBox: CheckBox, isChecked: Boolean) {
-        checkBox.setBackgroundResource(R.drawable.checkbox_selector)
-        checkBox.setTextColor(if (isChecked) Color.parseColor("#007AFF") else Color.parseColor("#757575"))
+    // ────────────────────────────────────────────────────────
+    // 체크박스 유틸리티
+    // ────────────────────────────────────────────────────────
+    /** 개별 체크박스 스타일 적용 */
+    private fun updateCheckBoxStyle(cb: CheckBox, isChecked: Boolean) {
+        cb.setBackgroundResource(R.drawable.checkbox_selector)
+        cb.setTextColor(if (isChecked) Color.parseColor("#007AFF") else Color.parseColor("#757575"))
     }
 
-    // "전체" 체크박스 상태 업데이트 (무한 루프 방지 적용)
-    private fun updateAllCheckBox() {
-        cbAll.setOnCheckedChangeListener(null) // 리스너 해제
-        cbAll.isChecked = disasterCheckBoxes.all { it.isChecked }
-
-        // ⭐️ 모든 체크박스 스타일 업데이트 추가
-        disasterCheckBoxes.forEach { checkBox ->
-            updateCheckBoxStyle(checkBox, checkBox.isChecked)
-        }
-
-        // ⭐️ 전체 체크박스 스타일도 업데이트
-        updateCheckBoxStyle(cbAll, cbAll.isChecked)
-
-        cbAll.setOnCheckedChangeListener { _, isChecked ->
-            disasterCheckBoxes.forEach { checkBox ->
-                checkBox.setOnCheckedChangeListener(null)
-                checkBox.isChecked = isChecked
-                updateCheckBoxStyle(checkBox, isChecked) // ⭐️ 스타일 업데이트 추가
-                checkBox.setOnCheckedChangeListener { _, isChecked ->
-                    updateCheckBoxStyle(checkBox, isChecked)
-                    updateAllCheckBox()
-                }
+    /** 모든 체크박스 & '전체' 체크박스 상태/스타일을 한꺼번에 동기화 */
+    private fun applyAllCheckBoxes(isChecked: Boolean) {
+        // 개별 체크박스 처리
+        disasterCheckBoxes.forEach { cb ->
+            cb.setOnCheckedChangeListener(null)
+            cb.isChecked = isChecked
+            updateCheckBoxStyle(cb, isChecked)
+            cb.setOnCheckedChangeListener { _, checked ->
+                updateCheckBoxStyle(cb, checked)
+                updateAllCheckBox()
             }
-            updateCheckBoxStyle(cbAll, isChecked) // ⭐️ 전체 체크박스 스타일 업데이트 추가
+        }
+        // 전체 체크박스 처리
+        cbAll.setOnCheckedChangeListener(null)
+        cbAll.isChecked = isChecked
+        updateCheckBoxStyle(cbAll, isChecked)
+        cbAll.setOnCheckedChangeListener { _, checked -> applyAllCheckBoxes(checked) }
+    }
+
+    /** 개별 변경 시 '전체' 체크박스 상태를 갱신 */
+    private fun updateAllCheckBox() {
+        cbAll.setOnCheckedChangeListener(null)
+        cbAll.isChecked = disasterCheckBoxes.all { it.isChecked }
+        updateCheckBoxStyle(cbAll, cbAll.isChecked)
+        cbAll.setOnCheckedChangeListener { _, checked -> applyAllCheckBoxes(checked) }
+    }
+
+    /** 현재 선택값을 SharedPreferences("Settings") 에 저장 */
+    private fun saveSelections() {
+        sharedPrefs.edit().apply {
+            disasterCheckBoxes.forEachIndexed { idx, cb ->
+                putBoolean("disaster_$idx", cb.isChecked)
+            }
+            apply()
         }
     }
 }
