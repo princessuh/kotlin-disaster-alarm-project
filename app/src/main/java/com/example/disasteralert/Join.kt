@@ -11,7 +11,7 @@ import java.sql.Date
 import java.util.*
 
 class Join : AppCompatActivity() {
-
+    /** UI 요소 정의 */
     private lateinit var userId: EditText
     private lateinit var password: EditText
     private lateinit var confirmPassword: EditText
@@ -43,12 +43,14 @@ class Join : AppCompatActivity() {
         loginBtn = findViewById(R.id.btn_login)
     }
 
+    /** 성별 선택란 */
     private fun setupGenderSpinner() {
         val genderOptions = arrayOf("선택 안 됨", "남성", "여성")
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, genderOptions)
         spinnerGender.adapter = adapter
     }
 
+    /** 생일 선택 (연, 월, 일) */
     private fun setupBirthdatePicker() {
         birthdate.setOnClickListener {
             val calendar = Calendar.getInstance()
@@ -63,6 +65,7 @@ class Join : AppCompatActivity() {
         }
     }
 
+    /** 회원가입 클릭 시 유효성 검사 */
     private fun setupJoinButton() {
         joinBtn.setOnClickListener {
             val id = userId.text.toString().trim()
@@ -72,7 +75,6 @@ class Join : AppCompatActivity() {
             val birth = birthdate.text.toString().trim()
             val gender = spinnerGender.selectedItem.toString()
 
-            // 유효성 검사
             if (id.isEmpty() || pw.isEmpty() || pwConfirm.isEmpty() || userName.isEmpty() || birth.isEmpty()) {
                 toast("모든 항목을 입력해주세요.")
                 return@setOnClickListener
@@ -95,15 +97,15 @@ class Join : AppCompatActivity() {
 
             val db = FirebaseFirestore.getInstance()
 
-            // 🔍 중복 ID 확인
+            // 중복 ID 확인
             db.collection("users").document(id).get()
                 .addOnSuccessListener { document ->
                     if (document.exists()) {
                         toast("이미 사용 중인 아이디입니다.")
                     } else {
-                        // 🔐 유저 데이터 저장
+                        // 유저 데이터 저장
                         val user = hashMapOf(
-                            "user_pw" to pw, // TODO: 해시 적용 예정
+                            "user_pw" to pw,
                             "user_name" to userName,
                             "birth_date" to Timestamp(Date.valueOf(birth)),
                             "gender" to gender,
@@ -128,6 +130,7 @@ class Join : AppCompatActivity() {
         }
     }
 
+    /** 로그인 버튼 클릭시 로그인 화면 이동 */
     private fun setupLoginButton() {
         loginBtn.setOnClickListener {
             startActivity(Intent(this, Login::class.java))

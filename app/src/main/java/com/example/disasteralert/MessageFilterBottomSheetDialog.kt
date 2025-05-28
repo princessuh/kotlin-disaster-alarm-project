@@ -60,7 +60,7 @@ class MessageFilterBottomSheetDialog(
             }
         }
 
-        // 🟨 cb_all 클릭 시 전체 토글
+        // cb_all 클릭 시 전체 토글
         cbAll.setOnClickListener {
             val check = cbAll.isChecked
             listOf(cbTyphoon, cbWeather, cbEarthquake, cbEpidemic, cbFire, cbFineDust).forEach { it.isChecked = check }

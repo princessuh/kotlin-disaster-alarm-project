@@ -41,12 +41,12 @@ class FilterBottomSheetDialog(
             }
         }
 
-        // 전체 선택 체크박스 클릭 시
+        /** 전체 체크박스 클릭 시 모든 체크박스 체크 및 해제 */
         cbAll.setOnCheckedChangeListener { _, isChecked ->
             checkBoxes.forEach { it.isChecked = isChecked }
         }
 
-        // 개별 체크박스가 변경되면 전체 체크 여부 업데이트
+        /** 개별 체크 박스 선택 시 전체 체크 박스 업데이트 */
         checkBoxes.forEach { cb ->
             cb.setOnCheckedChangeListener { _, _ ->
                 cbAll.setOnCheckedChangeListener(null) // 무한 루프 방지

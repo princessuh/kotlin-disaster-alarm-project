@@ -10,7 +10,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
 class DisasterSelectionActivity : AppCompatActivity() {
-
+    /** UI 요소 정의 */
     private lateinit var cbAll: CheckBox
     private lateinit var disasterCheckBoxes: List<CheckBox>
     private lateinit var tvSkip: TextView
@@ -23,7 +23,6 @@ class DisasterSelectionActivity : AppCompatActivity() {
 
         sharedPrefs = getSharedPreferences("Settings", MODE_PRIVATE)
 
-        // ───── UI 바인딩 ─────
         cbAll = findViewById(R.id.cb_all)
         disasterCheckBoxes = listOf(
             findViewById(R.id.cb_typhoon),
@@ -39,7 +38,7 @@ class DisasterSelectionActivity : AppCompatActivity() {
         tvSkip = findViewById(R.id.tv_skip)
         btnComplete = findViewById(R.id.btn_complete)
 
-        // ───── 체크박스 스타일 & 리스너 설정 ─────
+        /** 체크 박스 스타일 & 리스너 설정 */
         disasterCheckBoxes.forEach { cb ->
             cb.setButtonDrawable(android.R.color.transparent) // 기본 체크박스 숨기기
             cb.setOnCheckedChangeListener { _, isChecked ->
@@ -53,7 +52,7 @@ class DisasterSelectionActivity : AppCompatActivity() {
             applyAllCheckBoxes(isChecked)
         }
 
-        // ───── 버튼 이벤트 ─────
+        /** 버튼 이벤트 */
         btnComplete.setOnClickListener {
             saveSelections()
             startActivity(Intent(this, ProfileActivity::class.java))

@@ -13,7 +13,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class Login : AppCompatActivity() {
 
-    // 📌 UI 요소 선언
+    /** UI 요소 정의 */
     private lateinit var tvTitle: TextView
     private lateinit var etUserId: TextInputEditText
     private lateinit var etPassword: TextInputEditText
