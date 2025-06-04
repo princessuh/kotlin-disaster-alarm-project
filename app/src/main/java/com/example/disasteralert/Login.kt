@@ -1,6 +1,7 @@
 package com.example.disasteralert
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -22,10 +23,27 @@ class Login : AppCompatActivity() {
     private lateinit var tvFindId: TextView
     private lateinit var tvFindPw: TextView
     private lateinit var tvJoin: TextView
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+        // SharedPreferences 초기화
+        sharedPreferences = getSharedPreferences("login_prefs", MODE_PRIVATE)
+
+        // 로그인 상태 확인
+        if (sharedPreferences.getBoolean("keep_login", false)) {
+            val userId = sharedPreferences.getString("user_id", null)
+            if (userId != null) {
+                // 로그인 상태가 유지되어 있으면 MainMapActivity로 이동
+                val intent = Intent(this, MainMapActivity::class.java)
+                intent.putExtra("user_id", userId)
+                startActivity(intent)
+                finish() // 로그인 화면 종료
+                return
+            }
+        }
 
         // UI 초기화
         tvTitle = findViewById(R.id.tv_title)
@@ -44,11 +62,9 @@ class Login : AppCompatActivity() {
         val colorBlue60 = ContextCompat.getColor(this, R.color.blue_60)
 
         spannable.setSpan(ForegroundColorSpan(colorBlue90), 0, titleText.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-
         val loginStart = titleText.indexOf("로그인")
         val loginEnd = loginStart + "로그인".length
         spannable.setSpan(ForegroundColorSpan(colorBlue60), loginStart, loginEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-
         tvTitle.setText(spannable, TextView.BufferType.SPANNABLE)
 
         // 🔐 로그인 버튼 이벤트
@@ -76,11 +92,20 @@ class Login : AppCompatActivity() {
                             Toast.makeText(this, "로그인 성공!", Toast.LENGTH_SHORT).show()
                             val userName = document.getString("user_name") ?: ""
 
-                            val intent = Intent(this, ProfileActivity::class.java)
+                            // 로그인 유지 체크박스 상태 저장
+                            if (cbKeepLogin.isChecked) {
+                                val editor = sharedPreferences.edit()
+                                editor.putBoolean("keep_login", true)
+                                editor.putString("user_id", id)
+                                editor.apply()
+                            }
+
+                            // MainMapActivity로 이동 (ProfileActivity 대신)
+                            val intent = Intent(this, MainMapActivity::class.java)
                             intent.putExtra("user_id", id)
                             intent.putExtra("user_name", userName)
                             startActivity(intent)
-                            finish() // 로그인 화면 종료 (뒤로가기 방지)
+                            finish() // 로그인 화면 종료
                         } else {
                             etPassword.error = "비밀번호가 일치하지 않습니다."
                         }
