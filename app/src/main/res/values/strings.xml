@@ -63,4 +63,5 @@
     <string name="apply">적용</string>
     <string name="message_list">메시지 목록</string>
     <string name="setting">환경 설정</string>
+    <string name="disaster_icon">재난 아이콘</string>
 </resources>

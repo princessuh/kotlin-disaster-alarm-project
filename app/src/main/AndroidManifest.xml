@@ -58,9 +58,8 @@
             android:exported="true"/>
 
         <!-- 지도 액티비티 -->
-        <activity android:name=".MainActivity"
+        <activity android:name=".MainMapActivity"
             android:exported="true"
-            android:label="@string/app_name"
             android:theme="@style/Theme.GoogleMap"/>
 
         <service
