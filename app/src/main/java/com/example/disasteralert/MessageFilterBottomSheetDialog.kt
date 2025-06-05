@@ -7,6 +7,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import androidx.core.content.ContextCompat
 
+// 메시지 유형 필터 팝업
+
 class MessageFilterBottomSheetDialog(
     private val onFilterApplied: (selectedInfoTypes: List<String>, selectedDisasterTypes: List<String>) -> Unit
 ) : BottomSheetDialogFragment() {
@@ -47,7 +49,7 @@ class MessageFilterBottomSheetDialog(
             }
         }
 
-        // 🟦 cb_all_info 클릭 시 전체 토글
+        // cb_all_info 클릭 시 전체 토글
         cbAllInfo.setOnClickListener {
             val check = cbAllInfo.isChecked
             listOf(cbNews, cbSpecial, cbReport).forEach { it.isChecked = check }

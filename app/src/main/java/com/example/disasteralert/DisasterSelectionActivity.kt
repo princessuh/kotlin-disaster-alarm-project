@@ -9,6 +9,8 @@ import android.widget.CheckBox
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
+// 회원가입 중 재난 유형 선택 화면
+
 class DisasterSelectionActivity : AppCompatActivity() {
     /** UI 요소 정의 */
     private lateinit var cbAll: CheckBox

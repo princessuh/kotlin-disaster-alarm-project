@@ -75,6 +75,10 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     debugImplementation("androidx.compose.ui:ui-tooling")
 
+    // — 네비게이션 컴포넌트 —
+    implementation ("androidx.navigation:navigation-fragment-ktx:2.8.3")
+    implementation ("androidx.navigation:navigation-ui-ktx:2.8.3")
+
     // — 테스트 —
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -6,6 +6,8 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
+// 네비게이션 바 - 수정 예정
+
 class MainActivity : AppCompatActivity() {
     /** UI 요소 정의 */
     private lateinit var bottomNavigationView: BottomNavigationView

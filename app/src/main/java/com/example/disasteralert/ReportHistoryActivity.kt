@@ -5,6 +5,8 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
 
+// 제보 내역 리스트
+
 class ReportHistoryActivity : AppCompatActivity() {
 
     private lateinit var btnFilter: MaterialButton

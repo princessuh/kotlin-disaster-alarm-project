@@ -14,6 +14,8 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import android.widget.CheckBox
 
+// 제보(글쓰기) 화면
+
 class PostActivity : AppCompatActivity() {
 
     private lateinit var tvLocationTime: TextView

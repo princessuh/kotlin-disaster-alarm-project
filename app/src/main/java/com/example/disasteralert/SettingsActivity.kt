@@ -11,6 +11,8 @@ import android.widget.Switch
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
+// 설정 화면 - 회원가입 중 기입한 내용을 변경할 때 사용
+
 class SettingsActivity : AppCompatActivity() {
 
     private lateinit var switchPush: Switch

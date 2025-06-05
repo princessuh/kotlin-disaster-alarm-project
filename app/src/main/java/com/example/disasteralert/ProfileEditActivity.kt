@@ -7,6 +7,8 @@ import java.util.Calendar
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 
+// 프로필 수정
+
 class ProfileEditActivity : AppCompatActivity() {
 
     private lateinit var userId: EditText

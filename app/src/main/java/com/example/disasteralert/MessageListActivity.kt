@@ -5,6 +5,8 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
 
+// 메시지 내역 화면
+
 class MessageListActivity : AppCompatActivity() {
 
     private lateinit var btnFilter: MaterialButton

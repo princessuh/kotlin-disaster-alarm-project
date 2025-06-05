@@ -12,6 +12,8 @@ import androidx.core.content.ContextCompat
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.firestore.FirebaseFirestore
 
+// 로그인 화면
+
 class Login : AppCompatActivity() {
 
     /** UI 요소 정의 */

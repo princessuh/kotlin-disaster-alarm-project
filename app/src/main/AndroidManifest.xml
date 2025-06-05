@@ -57,6 +57,9 @@
         <activity android:name=".MessageListActivity"
             android:exported="true"/>
 
+        <activity android:name=".MainActivity"
+            android:exported="true"/>
+
         <!-- 지도 액티비티 -->
         <activity android:name=".MainMapActivity"
             android:exported="true"

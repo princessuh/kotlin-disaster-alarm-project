@@ -10,6 +10,8 @@ import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
+// 사용자별 설정 알림 필터링
+
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     /** 재난 유형 리스트 ― SettingsActivity, 서버와 동일한 순서/이름을 유지하세요. */

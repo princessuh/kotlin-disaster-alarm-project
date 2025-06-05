@@ -10,6 +10,8 @@ import com.google.firebase.Timestamp
 import java.sql.Date
 import java.util.*
 
+// 회원가입 화면
+
 class Join : AppCompatActivity() {
     /** UI 요소 정의 */
     private lateinit var userId: EditText
