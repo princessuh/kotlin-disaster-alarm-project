@@ -6,7 +6,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Join"
-    android:padding="0dp"
+    android:paddingTop="24dp"
+    android:paddingStart="24dp"
+    android:paddingEnd="24dp"
+    android:paddingBottom="0dp"
     android:background="@color/white">
 
     <!-- 회원가입 제목 -->
