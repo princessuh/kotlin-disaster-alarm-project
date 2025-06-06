@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".PostActivity">
+
+    <!-- 제목 입력 -->
+    <EditText
+        android:id="@+id/et_title"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:hint="제목을 입력하세요"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <!-- 위치 및 시간 자동 설정 -->
+    <TextView
+        android:id="@+id/tv_location_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="위치, 시간 자동 설정"
+        android:textColor="@color/grey_60"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/et_title"
+        android:layout_marginTop="8dp"/>
+
+    <!-- 체크박스 그룹 -->
+    <androidx.gridlayout.widget.GridLayout
+        android:id="@+id/grid_disaster_types"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp"
+        app:columnCount="3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_location_time">
+
+        <CheckBox
+            android:id="@+id/cb_typhoon"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:background="@drawable/checkbox_selector"
+            android:gravity="center"
+            android:text="@string/typhoon"
+            app:layout_columnWeight="1"/>
+
+        <CheckBox
+            android:id="@+id/cb_weather"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:background="@drawable/checkbox_selector"
+            android:gravity="center"
+            android:text="@string/weather"
+            app:layout_columnWeight="1"
+            app:layout_constraintTop_toBottomOf="@id/tv_subtitle" />
+
+        <CheckBox
+            android:id="@+id/cb_earthquake"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:background="@drawable/checkbox_selector"
+            android:gravity="center"
+            android:text="@string/earthquake"
+            app:layout_columnWeight="1"
+            app:layout_constraintTop_toBottomOf="@id/tv_subtitle" />
+
+        <CheckBox
+            android:id="@+id/cb_epidemic"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:background="@drawable/checkbox_selector"
+            android:gravity="center"
+            android:text="@string/epidemic"
+            app:layout_columnWeight="1"
+            app:layout_constraintTop_toBottomOf="@id/tv_subtitle" />
+
+        <CheckBox
+            android:id="@+id/cb_fire"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:background="@drawable/checkbox_selector"
+            android:gravity="center"
+            android:text="@string/fire"
+            app:layout_columnWeight="1"
+            app:layout_constraintTop_toBottomOf="@id/tv_subtitle" />
+
+        <CheckBox
+            android:id="@+id/cb_fine_dust"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:background="@drawable/checkbox_selector"
+            android:gravity="center"
+            android:text="@string/fine_dust"
+            app:layout_columnWeight="1"
+            app:layout_constraintTop_toBottomOf="@id/tv_subtitle" />
+    </androidx.gridlayout.widget.GridLayout>
+
+    <!-- 내용 입력 -->
+    <EditText
+        android:id="@+id/et_content"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="내용을 입력하세요"
+        android:minHeight="200dp"
+        android:gravity="top"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/grid_disaster_types"
+        android:layout_marginTop="12dp"/>
+
+    <!-- 태그 -->
+    <TextView
+        android:id="@+id/tv_tags"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="태그 추가"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/et_content"
+        android:layout_marginTop="12dp"/>
+
+    <!-- 태그 선택 -->
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chip_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:singleSelection="false"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_tags"
+        android:layout_marginTop="8dp"/>
+
+    <!-- 사용자 입력 태그 추가 -->
+    <EditText
+        android:id="@+id/et_custom_tag"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:hint="태그 입력 후 엔터"
+        android:inputType="text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/chip_group"
+        android:layout_marginTop="8dp"/>
+
+    <!-- 등록 버튼 -->
+    <Button
+        android:id="@+id/btn_submit"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="등록하기"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/et_custom_tag"
+        android:layout_marginTop="16dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
