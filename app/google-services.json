@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "429144565644",
+    "project_id": "disasteralert-bc125",
+    "storage_bucket": "disasteralert-bc125.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:429144565644:android:8ff20c371501da45c098a9",
+        "android_client_info": {
+          "package_name": "com.example.disasteralert"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArhJPiv0V-wCalRnywuAwjSWedHh8-Mg4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

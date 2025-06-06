@@ -1,0 +1,111 @@
+<html>
+<head>
+<title>Login.kt</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #ff7aad;}
+.s1 { color: #d2d8d9;}
+.s2 { color: #a2a9aa;}
+.s3 { color: #a4d964;}
+.s4 { color: #f29655;}
+.s5 { color: #be8df2;}
+</style>
+</head>
+<body bgcolor="#151d20">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Login.kt</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">com</span><span class="s2">.</span><span class="s1">example</span><span class="s2">.</span><span class="s1">disasteralert</span>
+
+<span class="s1">import android</span><span class="s2">.</span><span class="s1">os</span><span class="s2">.</span><span class="s1">Bundle</span>
+<span class="s1">import android</span><span class="s2">.</span><span class="s1">text</span><span class="s2">.</span><span class="s1">Spannable</span>
+<span class="s1">import android</span><span class="s2">.</span><span class="s1">text</span><span class="s2">.</span><span class="s1">SpannableString</span>
+<span class="s1">import android</span><span class="s2">.</span><span class="s1">text</span><span class="s2">.</span><span class="s1">style</span><span class="s2">.</span><span class="s1">ForegroundColorSpan</span>
+<span class="s1">import android</span><span class="s2">.</span><span class="s1">widget</span><span class="s2">.*</span>
+<span class="s1">import androidx</span><span class="s2">.</span><span class="s1">appcompat</span><span class="s2">.</span><span class="s1">app</span><span class="s2">.</span><span class="s1">BaseActivity</span>
+<span class="s1">import androidx</span><span class="s2">.</span><span class="s1">core</span><span class="s2">.</span><span class="s1">content</span><span class="s2">.</span><span class="s1">ContextCompat</span>
+<span class="s1">import com</span><span class="s2">.</span><span class="s1">google</span><span class="s2">.</span><span class="s1">android</span><span class="s2">.</span><span class="s1">material</span><span class="s2">.</span><span class="s1">textfield</span><span class="s2">.</span><span class="s1">TextInputEditText</span>
+
+<span class="s0">class </span><span class="s1">Login </span><span class="s2">: </span><span class="s1">BaseActivity</span><span class="s2">() {</span>
+
+    <span class="s2">// 📌 UI 요소를 `lateinit`으로 선언 (가독성 향상)</span>
+    <span class="s1">private lateinit </span><span class="s0">var </span><span class="s1">tvTitle</span><span class="s2">: </span><span class="s1">TextView</span>
+    <span class="s1">private lateinit </span><span class="s0">var </span><span class="s1">etUserId</span><span class="s2">: </span><span class="s1">TextInputEditText</span>
+    <span class="s1">private lateinit </span><span class="s0">var </span><span class="s1">etPassword</span><span class="s2">: </span><span class="s1">TextInputEditText</span>
+    <span class="s1">private lateinit </span><span class="s0">var </span><span class="s1">btnLogin</span><span class="s2">: </span><span class="s1">Button</span>
+    <span class="s1">private lateinit </span><span class="s0">var </span><span class="s1">cbKeepLogin</span><span class="s2">: </span><span class="s1">CheckBox</span>
+    <span class="s1">private lateinit </span><span class="s0">var </span><span class="s1">tvFindId</span><span class="s2">: </span><span class="s1">TextView</span>
+    <span class="s1">private lateinit </span><span class="s0">var </span><span class="s1">tvFindPw</span><span class="s2">: </span><span class="s1">TextView</span>
+    <span class="s1">private lateinit </span><span class="s0">var </span><span class="s1">tvJoin</span><span class="s2">: </span><span class="s1">TextView</span>
+
+    <span class="s1">override </span><span class="s0">fun </span><span class="s1">onCreate</span><span class="s2">(</span><span class="s1">savedInstanceState</span><span class="s2">: </span><span class="s1">Bundle</span><span class="s2">?) {</span>
+        <span class="s0">super</span><span class="s2">.</span><span class="s1">onCreate</span><span class="s2">(</span><span class="s1">savedInstanceState</span><span class="s2">)</span>
+        <span class="s1">setContentView</span><span class="s2">(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">layout</span><span class="s2">.</span><span class="s1">activity_login</span><span class="s2">)</span>
+
+        <span class="s2">// 📌 UI 요소 초기화</span>
+        <span class="s1">tvTitle </span><span class="s2">= </span><span class="s1">findViewById</span><span class="s2">(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">id</span><span class="s2">.</span><span class="s1">tv_title</span><span class="s2">)</span>
+        <span class="s1">etUserId </span><span class="s2">= </span><span class="s1">findViewById</span><span class="s2">(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">id</span><span class="s2">.</span><span class="s1">et_email</span><span class="s2">)</span>
+        <span class="s1">etPassword </span><span class="s2">= </span><span class="s1">findViewById</span><span class="s2">(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">id</span><span class="s2">.</span><span class="s1">et_password</span><span class="s2">)</span>
+        <span class="s1">btnLogin </span><span class="s2">= </span><span class="s1">findViewById</span><span class="s2">(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">id</span><span class="s2">.</span><span class="s1">btn_login</span><span class="s2">)</span>
+        <span class="s1">cbKeepLogin </span><span class="s2">= </span><span class="s1">findViewById</span><span class="s2">(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">id</span><span class="s2">.</span><span class="s1">cb_keep_login</span><span class="s2">)</span>
+        <span class="s1">tvFindId </span><span class="s2">= </span><span class="s1">findViewById</span><span class="s2">(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">id</span><span class="s2">.</span><span class="s1">tv_find_id</span><span class="s2">)</span>
+        <span class="s1">tvFindPw </span><span class="s2">= </span><span class="s1">findViewById</span><span class="s2">(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">id</span><span class="s2">.</span><span class="s1">tv_find_pw</span><span class="s2">)</span>
+        <span class="s1">tvJoin </span><span class="s2">= </span><span class="s1">findViewById</span><span class="s2">(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">id</span><span class="s2">.</span><span class="s1">tv_join</span><span class="s2">)</span>
+
+        <span class="s2">// 📌 제목 텍스트 스타일 적용 (로그인 부분만 blue_60, 나머지는 blue_90)</span>
+        <span class="s0">val </span><span class="s1">titleText </span><span class="s2">= </span><span class="s3">&quot;원활한 이용을 위해</span><span class="s4">\n</span><span class="s3">로그인 해 주세요&quot;</span>
+        <span class="s0">val </span><span class="s1">spannable </span><span class="s2">= </span><span class="s1">SpannableString</span><span class="s2">(</span><span class="s1">titleText</span><span class="s2">)</span>
+        <span class="s0">val </span><span class="s1">colorBlue90 </span><span class="s2">= </span><span class="s1">ContextCompat</span><span class="s2">.</span><span class="s1">getColor</span><span class="s2">(</span><span class="s0">this</span><span class="s2">, </span><span class="s1">R</span><span class="s2">.</span><span class="s1">color</span><span class="s2">.</span><span class="s1">blue_90</span><span class="s2">) // 기본 텍스트 색상</span>
+        <span class="s0">val </span><span class="s1">colorBlue60 </span><span class="s2">= </span><span class="s1">ContextCompat</span><span class="s2">.</span><span class="s1">getColor</span><span class="s2">(</span><span class="s0">this</span><span class="s2">, </span><span class="s1">R</span><span class="s2">.</span><span class="s1">color</span><span class="s2">.</span><span class="s1">blue_60</span><span class="s2">) // &quot;로그인&quot; 강조 색상</span>
+
+        <span class="s2">// 기본 텍스트 전체를 blue_90 적용</span>
+        <span class="s1">spannable</span><span class="s2">.</span><span class="s1">setSpan</span><span class="s2">(</span><span class="s1">ForegroundColorSpan</span><span class="s2">(</span><span class="s1">colorBlue90</span><span class="s2">), </span><span class="s5">0</span><span class="s2">, </span><span class="s1">titleText</span><span class="s2">.</span><span class="s1">length</span><span class="s2">, </span><span class="s1">Spannable</span><span class="s2">.</span><span class="s1">SPAN_EXCLUSIVE_EXCLUSIVE</span><span class="s2">)</span>
+
+        <span class="s2">// &quot;로그인&quot; 부분만 blue_60 적용</span>
+        <span class="s0">val </span><span class="s1">loginStart </span><span class="s2">= </span><span class="s1">titleText</span><span class="s2">.</span><span class="s1">indexOf</span><span class="s2">(</span><span class="s3">&quot;로그인&quot;</span><span class="s2">)</span>
+        <span class="s0">val </span><span class="s1">loginEnd </span><span class="s2">= </span><span class="s1">loginStart </span><span class="s2">+ </span><span class="s3">&quot;로그인&quot;</span><span class="s2">.</span><span class="s1">length</span>
+        <span class="s1">spannable</span><span class="s2">.</span><span class="s1">setSpan</span><span class="s2">(</span><span class="s1">ForegroundColorSpan</span><span class="s2">(</span><span class="s1">colorBlue60</span><span class="s2">), </span><span class="s1">loginStart</span><span class="s2">, </span><span class="s1">loginEnd</span><span class="s2">, </span><span class="s1">Spannable</span><span class="s2">.</span><span class="s1">SPAN_EXCLUSIVE_EXCLUSIVE</span><span class="s2">)</span>
+
+        <span class="s2">// 📌 TextView에 Spannable 적용 (BufferType 설정)</span>
+        <span class="s1">tvTitle</span><span class="s2">.</span><span class="s1">setText</span><span class="s2">(</span><span class="s1">spannable</span><span class="s2">, </span><span class="s1">TextView</span><span class="s2">.</span><span class="s1">BufferType</span><span class="s2">.</span><span class="s1">SPANNABLE</span><span class="s2">)</span>
+
+        <span class="s2">// 📌 로그인 버튼 클릭 이벤트</span>
+        <span class="s1">btnLogin</span><span class="s2">.</span><span class="s1">setOnClickListener </span><span class="s2">{</span>
+            <span class="s0">val </span><span class="s1">email </span><span class="s2">= </span><span class="s1">etUserId</span><span class="s2">.</span><span class="s1">text</span><span class="s2">.</span><span class="s1">toString</span><span class="s2">().</span><span class="s1">trim</span><span class="s2">()</span>
+            <span class="s0">val </span><span class="s1">password </span><span class="s2">= </span><span class="s1">etPassword</span><span class="s2">.</span><span class="s1">text</span><span class="s2">.</span><span class="s1">toString</span><span class="s2">().</span><span class="s1">trim</span><span class="s2">()</span>
+
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">email</span><span class="s2">.</span><span class="s1">isEmpty</span><span class="s2">()) {</span>
+                <span class="s1">etUserId</span><span class="s2">.</span><span class="s1">error </span><span class="s2">= </span><span class="s3">&quot;아이디 또는 전화 번호를 입력하세요.&quot;</span>
+                <span class="s0">return</span><span class="s1">@setOnClickListener</span>
+            <span class="s2">}</span>
+
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">password</span><span class="s2">.</span><span class="s1">isEmpty</span><span class="s2">()) {</span>
+                <span class="s1">etPassword</span><span class="s2">.</span><span class="s1">error </span><span class="s2">= </span><span class="s3">&quot;비밀번호를 입력하세요.&quot;</span>
+                <span class="s0">return</span><span class="s1">@setOnClickListener</span>
+            <span class="s2">}</span>
+
+            <span class="s2">// 로그인 성공 시 (여기서 실제 인증 로직을 추가하면 됨)</span>
+            <span class="s1">Toast</span><span class="s2">.</span><span class="s1">makeText</span><span class="s2">(</span><span class="s0">this</span><span class="s2">, </span><span class="s3">&quot;로그인 성공!&quot;</span><span class="s2">, </span><span class="s1">Toast</span><span class="s2">.</span><span class="s1">LENGTH_SHORT</span><span class="s2">).</span><span class="s1">show</span><span class="s2">()</span>
+        <span class="s2">}</span>
+
+        <span class="s2">// 📌 아이디 찾기 클릭 이벤트</span>
+        <span class="s1">tvFindId</span><span class="s2">.</span><span class="s1">setOnClickListener </span><span class="s2">{</span>
+            <span class="s1">Toast</span><span class="s2">.</span><span class="s1">makeText</span><span class="s2">(</span><span class="s0">this</span><span class="s2">, </span><span class="s3">&quot;아이디 찾기 기능 준비 중&quot;</span><span class="s2">, </span><span class="s1">Toast</span><span class="s2">.</span><span class="s1">LENGTH_SHORT</span><span class="s2">).</span><span class="s1">show</span><span class="s2">()</span>
+        <span class="s2">}</span>
+
+        <span class="s2">// 📌 비밀번호 찾기 클릭 이벤트</span>
+        <span class="s1">tvFindPw</span><span class="s2">.</span><span class="s1">setOnClickListener </span><span class="s2">{</span>
+            <span class="s1">Toast</span><span class="s2">.</span><span class="s1">makeText</span><span class="s2">(</span><span class="s0">this</span><span class="s2">, </span><span class="s3">&quot;비밀번호 찾기 기능 준비 중&quot;</span><span class="s2">, </span><span class="s1">Toast</span><span class="s2">.</span><span class="s1">LENGTH_SHORT</span><span class="s2">).</span><span class="s1">show</span><span class="s2">()</span>
+        <span class="s2">}</span>
+
+        <span class="s2">// 📌 회원가입 클릭 이벤트</span>
+        <span class="s1">tvJoin</span><span class="s2">.</span><span class="s1">setOnClickListener </span><span class="s2">{</span>
+            <span class="s1">Toast</span><span class="s2">.</span><span class="s1">makeText</span><span class="s2">(</span><span class="s0">this</span><span class="s2">, </span><span class="s3">&quot;회원가입 화면으로 이동합니다&quot;</span><span class="s2">, </span><span class="s1">Toast</span><span class="s2">.</span><span class="s1">LENGTH_SHORT</span><span class="s2">).</span><span class="s1">show</span><span class="s2">()</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+<span class="s2">}</span>
+</pre>
+</body>
+</html>

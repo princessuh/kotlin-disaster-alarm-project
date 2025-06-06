@@ -1,0 +1,235 @@
+<html>
+<head>
+<title>activity_join.xml</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #e8bf6a;}
+.s1 { color: #f2d466;}
+.s2 { color: #a2a9aa;}
+.s3 { color: #6ccaf0;}
+.s4 { color: #d2d8d9;}
+.s5 { color: #ff7aad;}
+</style>
+</head>
+<body bgcolor="#151d20">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+activity_join.xml</font>
+</center></td></tr></table>
+<pre><span class="s0">&lt;?</span><span class="s1">xml version</span><span class="s3">=&quot;1.0&quot; </span><span class="s1">encoding</span><span class="s3">=&quot;utf-8&quot;</span><span class="s0">?&gt;</span>
+<span class="s2">&lt;</span><span class="s5">androidx.constraintlayout.widget.ConstraintLayout</span>
+    <span class="s1">xmlns:android</span><span class="s3">=&quot;http://schemas.android.com/apk/res/android&quot;</span>
+    <span class="s1">xmlns:app</span><span class="s3">=&quot;http://schemas.android.com/apk/res-auto&quot;</span>
+    <span class="s1">xmlns:tools</span><span class="s3">=&quot;http://schemas.android.com/tools&quot;</span>
+    <span class="s1">android:layout_width</span><span class="s3">=&quot;match_parent&quot;</span>
+    <span class="s1">android:layout_height</span><span class="s3">=&quot;match_parent&quot;</span>
+    <span class="s1">tools:context</span><span class="s3">=&quot;.Join&quot;</span>
+    <span class="s1">android:padding</span><span class="s3">=&quot;24dp&quot;</span>
+    <span class="s1">android:background</span><span class="s3">=&quot;@color/white&quot;</span><span class="s2">&gt;</span>
+
+    <span class="s2">&lt;!-- 회원가입 제목 --&gt;</span>
+    <span class="s2">&lt;</span><span class="s5">TextView</span>
+        <span class="s1">android:id</span><span class="s3">=&quot;@+id/tv_join_title&quot;</span>
+        <span class="s1">android:layout_width</span><span class="s3">=&quot;wrap_content&quot;</span>
+        <span class="s1">android:layout_height</span><span class="s3">=&quot;wrap_content&quot;</span>
+        <span class="s1">android:text</span><span class="s3">=&quot;@string/join_title&quot;</span>
+        <span class="s1">android:textSize</span><span class="s3">=&quot;22sp&quot;</span>
+        <span class="s1">android:textStyle</span><span class="s3">=&quot;bold&quot;</span>
+        <span class="s1">android:textColor</span><span class="s3">=&quot;@color/blue_90&quot;</span>
+        <span class="s1">app:layout_constraintTop_toTopOf</span><span class="s3">=&quot;parent&quot;</span>
+        <span class="s1">app:layout_constraintStart_toStartOf</span><span class="s3">=&quot;parent&quot;</span>
+        <span class="s1">app:layout_constraintEnd_toEndOf</span><span class="s3">=&quot;parent&quot;</span>
+        <span class="s1">android:layout_marginTop</span><span class="s3">=&quot;48dp&quot;</span><span class="s2">/&gt;</span>
+
+    <span class="s2">&lt;!-- 아이디 입력 --&gt;</span>
+    <span class="s2">&lt;</span><span class="s5">com.google.android.material.textfield.TextInputLayout</span>
+        <span class="s1">android:id</span><span class="s3">=&quot;@+id/join_user_id&quot;</span>
+        <span class="s1">android:layout_width</span><span class="s3">=&quot;0dp&quot;</span>
+        <span class="s1">android:layout_height</span><span class="s3">=&quot;wrap_content&quot;</span>
+        <span class="s1">android:hint</span><span class="s3">=&quot;@string/email_hint&quot;</span>
+        <span class="s1">app:layout_constraintStart_toStartOf</span><span class="s3">=&quot;parent&quot;</span>
+        <span class="s1">app:layout_constraintEnd_toEndOf</span><span class="s3">=&quot;parent&quot;</span>
+        <span class="s1">app:layout_constraintTop_toBottomOf</span><span class="s3">=&quot;@id/tv_join_title&quot;</span>
+        <span class="s1">android:layout_marginTop</span><span class="s3">=&quot;24dp&quot;</span><span class="s2">&gt;</span>
+
+        <span class="s2">&lt;</span><span class="s5">com.google.android.material.textfield.TextInputEditText</span>
+            <span class="s1">android:id</span><span class="s3">=&quot;@+id/et_join_user_id&quot;</span>
+            <span class="s1">android:layout_width</span><span class="s3">=&quot;match_parent&quot;</span>
+            <span class="s1">android:layout_height</span><span class="s3">=&quot;wrap_content&quot;</span>
+            <span class="s1">android:inputType</span><span class="s3">=&quot;textEmailAddress&quot;</span>
+            <span class="s1">android:autofillHints</span><span class="s3">=&quot;emailAddress&quot;</span>
+            <span class="s1">android:textColor</span><span class="s3">=&quot;@color/grey_90&quot;</span>
+            <span class="s1">android:minHeight</span><span class="s3">=&quot;48dp&quot;</span><span class="s2">/&gt;</span>
+    <span class="s2">&lt;/</span><span class="s5">com.google.android.material.textfield.TextInputLayout</span><span class="s2">&gt;</span>
+
+    <span class="s2">&lt;!-- 비밀번호 입력 --&gt;</span>
+    <span class="s2">&lt;</span><span class="s5">com.google.android.material.textfield.TextInputLayout</span>
+        <span class="s1">android:id</span><span class="s3">=&quot;@+id/password_layout&quot;</span>
+        <span class="s1">android:layout_width</span><span class="s3">=&quot;0dp&quot;</span>
+        <span class="s1">android:layout_height</span><span class="s3">=&quot;wrap_content&quot;</span>
+        <span class="s1">android:hint</span><span class="s3">=&quot;@string/password_hint&quot;</span>
+        <span class="s1">app:passwordToggleEnabled</span><span class="s3">=&quot;true&quot;</span>
+        <span class="s1">app:layout_constraintStart_toStartOf</span><span class="s3">=&quot;parent&quot;</span>
+        <span class="s1">app:layout_constraintEnd_toEndOf</span><span class="s3">=&quot;parent&quot;</span>
+        <span class="s1">app:layout_constraintTop_toBottomOf</span><span class="s3">=&quot;@id/join_user_id&quot;</span>
+        <span class="s1">android:layout_marginTop</span><span class="s3">=&quot;12dp&quot;</span><span class="s2">&gt;</span>
+
+        <span class="s2">&lt;</span><span class="s5">com.google.android.material.textfield.TextInputEditText</span>
+            <span class="s1">android:id</span><span class="s3">=&quot;@+id/et_join_password&quot;</span>
+            <span class="s1">android:layout_width</span><span class="s3">=&quot;match_parent&quot;</span>
+            <span class="s1">android:layout_height</span><span class="s3">=&quot;wrap_content&quot;</span>
+            <span class="s1">android:inputType</span><span class="s3">=&quot;textPassword&quot;</span>
+            <span class="s1">android:autofillHints</span><span class="s3">=&quot;password&quot;</span>
+            <span class="s1">android:textColor</span><span class="s3">=&quot;@color/grey_90&quot;</span>
+            <span class="s1">android:minHeight</span><span class="s3">=&quot;48dp&quot;</span><span class="s2">/&gt;</span>
+    <span class="s2">&lt;/</span><span class="s5">com.google.android.material.textfield.TextInputLayout</span><span class="s2">&gt;</span>
+
+    <span class="s2">&lt;!-- 비밀번호 확인 --&gt;</span>
+    <span class="s2">&lt;</span><span class="s5">com.google.android.material.textfield.TextInputLayout</span>
+        <span class="s1">android:id</span><span class="s3">=&quot;@+id/confirm_password_layout&quot;</span>
+        <span class="s1">android:layout_width</span><span class="s3">=&quot;0dp&quot;</span>
+        <span class="s1">android:layout_height</span><span class="s3">=&quot;wrap_content&quot;</span>
+        <span class="s1">android:hint</span><span class="s3">=&quot;@string/password_confirm_hint&quot;</span>
+        <span class="s1">app:passwordToggleEnabled</span><span class="s3">=&quot;true&quot;</span>
+        <span class="s1">app:layout_constraintStart_toStartOf</span><span class="s3">=&quot;parent&quot;</span>
+        <span class="s1">app:layout_constraintEnd_toEndOf</span><span class="s3">=&quot;parent&quot;</span>
+        <span class="s1">app:layout_constraintTop_toBottomOf</span><span class="s3">=&quot;@id/password_layout&quot;</span>
+        <span class="s1">android:layout_marginTop</span><span class="s3">=&quot;12dp&quot;</span><span class="s2">&gt;</span>
+
+        <span class="s2">&lt;</span><span class="s5">com.google.android.material.textfield.TextInputEditText</span>
+            <span class="s1">android:id</span><span class="s3">=&quot;@+id/et_join_confirm_password&quot;</span>
+            <span class="s1">android:layout_width</span><span class="s3">=&quot;match_parent&quot;</span>
+            <span class="s1">android:layout_height</span><span class="s3">=&quot;wrap_content&quot;</span>
+            <span class="s1">android:inputType</span><span class="s3">=&quot;textPassword&quot;</span>
+            <span class="s1">android:autofillHints</span><span class="s3">=&quot;password&quot;</span>
+            <span class="s1">android:textColor</span><span class="s3">=&quot;@color/grey_90&quot;</span>
+            <span class="s1">android:minHeight</span><span class="s3">=&quot;48dp&quot;</span><span class="s2">/&gt;</span>
+    <span class="s2">&lt;/</span><span class="s5">com.google.android.material.textfield.TextInputLayout</span><span class="s2">&gt;</span>
+
+    <span class="s2">&lt;!-- 이름 입력 --&gt;</span>
+    <span class="s2">&lt;</span><span class="s5">com.google.android.material.textfield.TextInputLayout</span>
+        <span class="s1">android:id</span><span class="s3">=&quot;@+id/name_layout&quot;</span>
+        <span class="s1">android:layout_width</span><span class="s3">=&quot;0dp&quot;</span>
+        <span class="s1">android:layout_height</span><span class="s3">=&quot;wrap_content&quot;</span>
+        <span class="s1">android:hint</span><span class="s3">=&quot;@string/name_hint&quot;</span>
+        <span class="s1">app:layout_constraintStart_toStartOf</span><span class="s3">=&quot;parent&quot;</span>
+        <span class="s1">app:layout_constraintEnd_toEndOf</span><span class="s3">=&quot;parent&quot;</span>
+        <span class="s1">app:layout_constraintTop_toBottomOf</span><span class="s3">=&quot;@id/confirm_password_layout&quot;</span>
+        <span class="s1">android:layout_marginTop</span><span class="s3">=&quot;12dp&quot;</span><span class="s2">&gt;</span>
+
+        <span class="s2">&lt;</span><span class="s5">com.google.android.material.textfield.TextInputEditText</span>
+            <span class="s1">android:id</span><span class="s3">=&quot;@+id/et_join_name&quot;</span>
+            <span class="s1">android:layout_width</span><span class="s3">=&quot;match_parent&quot;</span>
+            <span class="s1">android:layout_height</span><span class="s3">=&quot;wrap_content&quot;</span>
+            <span class="s1">android:inputType</span><span class="s3">=&quot;textPersonName&quot;</span>
+            <span class="s1">android:textColor</span><span class="s3">=&quot;@color/grey_90&quot;</span>
+            <span class="s1">android:minHeight</span><span class="s3">=&quot;48dp&quot;</span><span class="s2">/&gt;</span>
+    <span class="s2">&lt;/</span><span class="s5">com.google.android.material.textfield.TextInputLayout</span><span class="s2">&gt;</span>
+
+    <span class="s2">&lt;!-- 닉네임 입력 --&gt;</span>
+    <span class="s2">&lt;</span><span class="s5">com.google.android.material.textfield.TextInputLayout</span>
+        <span class="s1">android:id</span><span class="s3">=&quot;@+id/nickname_layout&quot;</span>
+        <span class="s1">android:layout_width</span><span class="s3">=&quot;0dp&quot;</span>
+        <span class="s1">android:layout_height</span><span class="s3">=&quot;wrap_content&quot;</span>
+        <span class="s1">android:hint</span><span class="s3">=&quot;@string/nickname_hint&quot;</span>
+        <span class="s1">app:layout_constraintStart_toStartOf</span><span class="s3">=&quot;parent&quot;</span>
+        <span class="s1">app:layout_constraintEnd_toEndOf</span><span class="s3">=&quot;parent&quot;</span>
+        <span class="s1">app:layout_constraintTop_toBottomOf</span><span class="s3">=&quot;@id/name_layout&quot;</span>
+        <span class="s1">android:layout_marginTop</span><span class="s3">=&quot;12dp&quot;</span><span class="s2">&gt;</span>
+
+        <span class="s2">&lt;</span><span class="s5">com.google.android.material.textfield.TextInputEditText</span>
+            <span class="s1">android:id</span><span class="s3">=&quot;@+id/et_join_nickname&quot;</span>
+            <span class="s1">android:layout_width</span><span class="s3">=&quot;match_parent&quot;</span>
+            <span class="s1">android:layout_height</span><span class="s3">=&quot;wrap_content&quot;</span>
+            <span class="s1">android:inputType</span><span class="s3">=&quot;textPersonName&quot;</span>
+            <span class="s1">android:textColor</span><span class="s3">=&quot;@color/grey_90&quot;</span>
+            <span class="s1">android:minHeight</span><span class="s3">=&quot;48dp&quot;</span><span class="s2">/&gt;</span>
+    <span class="s2">&lt;/</span><span class="s5">com.google.android.material.textfield.TextInputLayout</span><span class="s2">&gt;</span>
+
+    <span class="s2">&lt;!-- 주소 입력 --&gt;</span>
+    <span class="s2">&lt;</span><span class="s5">com.google.android.material.textfield.TextInputLayout</span>
+        <span class="s1">android:id</span><span class="s3">=&quot;@+id/address_layout&quot;</span>
+        <span class="s1">android:layout_width</span><span class="s3">=&quot;0dp&quot;</span>
+        <span class="s1">android:layout_height</span><span class="s3">=&quot;wrap_content&quot;</span>
+        <span class="s1">android:hint</span><span class="s3">=&quot;@string/address_hint&quot;</span>
+        <span class="s1">app:layout_constraintStart_toStartOf</span><span class="s3">=&quot;parent&quot;</span>
+        <span class="s1">app:layout_constraintEnd_toEndOf</span><span class="s3">=&quot;parent&quot;</span>
+        <span class="s1">app:layout_constraintTop_toBottomOf</span><span class="s3">=&quot;@id/nickname_layout&quot;</span>
+        <span class="s1">android:layout_marginTop</span><span class="s3">=&quot;12dp&quot;</span><span class="s2">&gt;</span>
+
+        <span class="s2">&lt;</span><span class="s5">com.google.android.material.textfield.TextInputEditText</span>
+            <span class="s1">android:id</span><span class="s3">=&quot;@+id/et_join_address&quot;</span>
+            <span class="s1">android:layout_width</span><span class="s3">=&quot;match_parent&quot;</span>
+            <span class="s1">android:layout_height</span><span class="s3">=&quot;wrap_content&quot;</span>
+            <span class="s1">android:inputType</span><span class="s3">=&quot;textPostalAddress&quot;</span>
+            <span class="s1">android:textColor</span><span class="s3">=&quot;@color/grey_90&quot;</span>
+            <span class="s1">android:minHeight</span><span class="s3">=&quot;48dp&quot;</span><span class="s2">/&gt;</span>
+    <span class="s2">&lt;/</span><span class="s5">com.google.android.material.textfield.TextInputLayout</span><span class="s2">&gt;</span>
+
+    <span class="s2">&lt;!-- 📌 체크박스 추가 (재난정보 수신 선택) --&gt;</span>
+    <span class="s2">&lt;</span><span class="s5">LinearLayout</span>
+        <span class="s1">android:id</span><span class="s3">=&quot;@+id/disaster_checkboxes&quot;</span>
+        <span class="s1">android:layout_width</span><span class="s3">=&quot;wrap_content&quot;</span>
+        <span class="s1">android:layout_height</span><span class="s3">=&quot;wrap_content&quot;</span>
+        <span class="s1">android:orientation</span><span class="s3">=&quot;horizontal&quot;</span>
+        <span class="s1">app:layout_constraintStart_toStartOf</span><span class="s3">=&quot;parent&quot;</span>
+        <span class="s1">app:layout_constraintTop_toBottomOf</span><span class="s3">=&quot;@id/address_layout&quot;</span>
+        <span class="s1">android:layout_marginTop</span><span class="s3">=&quot;16dp&quot;</span><span class="s2">&gt;</span>
+
+        <span class="s2">&lt;</span><span class="s5">CheckBox</span>
+            <span class="s1">android:id</span><span class="s3">=&quot;@+id/cb_natural_disaster&quot;</span>
+            <span class="s1">android:layout_width</span><span class="s3">=&quot;wrap_content&quot;</span>
+            <span class="s1">android:layout_height</span><span class="s3">=&quot;wrap_content&quot;</span>
+            <span class="s1">android:text</span><span class="s3">=&quot;@string/natural_disaster&quot;</span>
+            <span class="s1">android:checked</span><span class="s3">=&quot;true&quot;</span><span class="s2">/&gt;</span>
+
+        <span class="s2">&lt;</span><span class="s5">CheckBox</span>
+            <span class="s1">android:id</span><span class="s3">=&quot;@+id/cb_social_disaster&quot;</span>
+            <span class="s1">android:layout_width</span><span class="s3">=&quot;wrap_content&quot;</span>
+            <span class="s1">android:layout_height</span><span class="s3">=&quot;wrap_content&quot;</span>
+            <span class="s1">android:text</span><span class="s3">=&quot;@string/social_disaster&quot;</span>
+            <span class="s1">android:checked</span><span class="s3">=&quot;true&quot;</span>
+            <span class="s1">android:layout_marginStart</span><span class="s3">=&quot;12dp&quot;</span><span class="s2">/&gt;</span>
+
+        <span class="s2">&lt;</span><span class="s5">CheckBox</span>
+            <span class="s1">android:id</span><span class="s3">=&quot;@+id/cb_safety_info&quot;</span>
+            <span class="s1">android:layout_width</span><span class="s3">=&quot;wrap_content&quot;</span>
+            <span class="s1">android:layout_height</span><span class="s3">=&quot;wrap_content&quot;</span>
+            <span class="s1">android:text</span><span class="s3">=&quot;@string/safety_info&quot;</span>
+            <span class="s1">android:checked</span><span class="s3">=&quot;true&quot;</span>
+            <span class="s1">android:layout_marginStart</span><span class="s3">=&quot;12dp&quot;</span><span class="s2">/&gt;</span>
+    <span class="s2">&lt;/</span><span class="s5">LinearLayout</span><span class="s2">&gt;</span>
+
+    <span class="s2">&lt;!-- 회원가입 버튼 --&gt;</span>
+    <span class="s2">&lt;</span><span class="s5">com.google.android.material.button.MaterialButton</span>
+        <span class="s1">android:id</span><span class="s3">=&quot;@+id/btn_join&quot;</span>
+        <span class="s1">android:layout_width</span><span class="s3">=&quot;0dp&quot;</span>
+        <span class="s1">android:layout_height</span><span class="s3">=&quot;56dp&quot;</span>
+        <span class="s1">android:text</span><span class="s3">=&quot;@string/start&quot;</span>
+        <span class="s1">android:backgroundTint</span><span class="s3">=&quot;@color/blue_60&quot;</span>
+        <span class="s1">android:textColor</span><span class="s3">=&quot;@color/white&quot;</span>
+        <span class="s1">app:cornerRadius</span><span class="s3">=&quot;24dp&quot;</span>
+        <span class="s1">app:layout_constraintTop_toBottomOf</span><span class="s3">=&quot;@id/disaster_checkboxes&quot;</span>
+        <span class="s1">app:layout_constraintStart_toStartOf</span><span class="s3">=&quot;parent&quot;</span>
+        <span class="s1">app:layout_constraintEnd_toEndOf</span><span class="s3">=&quot;parent&quot;</span>
+        <span class="s1">android:layout_marginTop</span><span class="s3">=&quot;24dp&quot;</span><span class="s2">/&gt;</span>
+
+    <span class="s2">&lt;!-- 로그인 버튼 --&gt;</span>
+    <span class="s2">&lt;</span><span class="s5">com.google.android.material.button.MaterialButton</span>
+        <span class="s1">android:id</span><span class="s3">=&quot;@+id/btn_login&quot;</span>
+        <span class="s1">android:layout_width</span><span class="s3">=&quot;0dp&quot;</span>
+        <span class="s1">android:layout_height</span><span class="s3">=&quot;56dp&quot;</span>
+        <span class="s1">android:text</span><span class="s3">=&quot;@string/login&quot;</span>
+        <span class="s1">android:backgroundTint</span><span class="s3">=&quot;@color/blue_10&quot;</span>
+        <span class="s1">android:textColor</span><span class="s3">=&quot;@color/blue_60&quot;</span>
+        <span class="s1">app:cornerRadius</span><span class="s3">=&quot;24dp&quot;</span>
+        <span class="s1">app:layout_constraintTop_toBottomOf</span><span class="s3">=&quot;@id/btn_join&quot;</span>
+        <span class="s1">app:layout_constraintStart_toStartOf</span><span class="s3">=&quot;parent&quot;</span>
+        <span class="s1">app:layout_constraintEnd_toEndOf</span><span class="s3">=&quot;parent&quot;</span>
+        <span class="s1">android:layout_marginTop</span><span class="s3">=&quot;12dp&quot;</span><span class="s2">/&gt;</span>
+
+<span class="s2">&lt;/</span><span class="s5">androidx.constraintlayout.widget.ConstraintLayout</span><span class="s2">&gt;</span>
+</pre>
+</body>
+</html>
