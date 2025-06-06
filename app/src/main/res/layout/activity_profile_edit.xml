@@ -221,7 +221,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="24dp"/>
 
-    <!-- 로그인 버튼 -->
+    <!-- 로그아웃 버튼 -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_logout"
         android:layout_width="0dp"

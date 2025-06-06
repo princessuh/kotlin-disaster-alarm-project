@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import java.util.Calendar
 import android.widget.*
+import android.content.SharedPreferences
 
 // 프로필 수정
 
@@ -18,6 +19,7 @@ class ProfileEditActivity : BaseActivity() {
     private lateinit var spinnerGender: Spinner
     private lateinit var finishBtn: Button
     private lateinit var logoutBtn: Button
+    private lateinit var sharedPreferences: SharedPreferences
     private lateinit var cbNaturalDisaster: CheckBox
     private lateinit var cbSocialDisaster: CheckBox
     private lateinit var cbSafetyInfo: CheckBox
@@ -35,16 +37,17 @@ class ProfileEditActivity : BaseActivity() {
         spinnerGender = findViewById(R.id.spinner_gender)
         finishBtn = findViewById(R.id.btn_finish)
         logoutBtn = findViewById(R.id.btn_logout)
+        sharedPreferences = getSharedPreferences("login_prefs", MODE_PRIVATE)
         cbNaturalDisaster = findViewById(R.id.cb_natural_disaster)
         cbSocialDisaster = findViewById(R.id.cb_social_disaster)
         cbSafetyInfo = findViewById(R.id.cb_safety_info)
 
-        // 📌 성별 선택 스피너 설정
+        // 성별 선택 스피너 설정
         val genderOptions = arrayOf("선택 안 됨", "남성", "여성")
         val genderAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, genderOptions)
         spinnerGender.adapter = genderAdapter
 
-        // 📌 생년월일 선택 기능
+        // 생년월일 선택 기능
         birthdate.setOnClickListener {
             val calendar = Calendar.getInstance()
             val year = calendar.get(Calendar.YEAR)
@@ -80,10 +83,21 @@ class ProfileEditActivity : BaseActivity() {
             }
         }
 
-        // 로그아웃 버튼 클릭 이벤트 (로그인 화면으로 이동)
+        // 로그아웃 버튼 클릭 이벤트
         logoutBtn.setOnClickListener {
-            val intent = Intent(this, Login::class.java)
+            // 1) SharedPreferences 안의 로그인 정보(keep_login, user_id)를 모두 삭제
+            val editor = sharedPreferences.edit()
+            editor.clear()
+            editor.apply()
+
+            // 2) Login 화면으로 돌아가기
+            val intent = Intent(this, Login::class.java).apply {
+                // 스택에 쌓여 있는 다른 액티비티를 전부 지우고
+                // 새로 Login을 최상위로 띄우기 위해 플래그 설정 (선택 사항)
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+            }
             startActivity(intent)
+            // ProfileEditActivity는 종료
             finish()
         }
     }
