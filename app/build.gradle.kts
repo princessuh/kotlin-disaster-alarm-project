@@ -78,6 +78,9 @@ dependencies {
     // — 네비게이션 컴포넌트 —
     implementation ("com.google.android.material:material:1.9.0")
 
+    // 플로팅 버튼
+    implementation ("com.google.android.material:material:1.9.0")
+
     // — 테스트 —
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
