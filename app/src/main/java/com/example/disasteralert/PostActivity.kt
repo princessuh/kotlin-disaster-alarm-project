@@ -214,7 +214,7 @@ class PostActivity : AppCompatActivity() {
 
     private fun fetchLatLngWithGoogleAPI(address: String, callback: (Double?, Double?) -> Unit) {
         val encodedAddress = java.net.URLEncoder.encode(address, "UTF-8")
-        val apiKey = "AIzaSyBri76ZwsXxl8GP8FM0x-xF8yySCpaR8s8"  // 🔴 반드시 실제 키로 교체하세요
+        val apiKey = "AIzaSyBri76ZwsXxl8GP8FM0x-xF8yySCpaR8s8"
         val urlStr =
             "https://maps.googleapis.com/maps/api/geocode/json?address=$encodedAddress&key=$apiKey"
 

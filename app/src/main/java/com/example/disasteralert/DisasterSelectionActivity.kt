@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 
 // 회원가입 중 재난 유형 선택 화면
 

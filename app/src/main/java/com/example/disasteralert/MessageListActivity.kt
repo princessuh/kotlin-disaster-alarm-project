@@ -2,7 +2,6 @@ package com.example.disasteralert
 
 import android.os.Bundle
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
 
 // 메시지 내역 화면
