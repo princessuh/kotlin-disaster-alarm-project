@@ -20,10 +20,12 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.util.Date
 import java.util.Locale
+import android.content.res.ColorStateList
+import android.widget.EditText
+import androidx.core.content.ContextCompat
 
-// 제보(글쓰기) 화면
 
-class PostActivity : BaseActivity() {
+class PostActivity : AppCompatActivity() {
 
     private lateinit var tvLocationTime: TextView
     private lateinit var etTitle: EditText
@@ -36,6 +38,7 @@ class PostActivity : BaseActivity() {
     private var selectedCity: String? = null
     private var selectedDistrict: String? = null
     private var selectedTimestamp: Long? = null
+
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
@@ -92,6 +95,7 @@ class PostActivity : BaseActivity() {
             finish()
         }
 
+
         tvLocationTime.setOnClickListener {
             val dialog = LocationTimeBottomSheet { province, city, district, timestamp ->
                 selectedProvince = province
@@ -115,36 +119,68 @@ class PostActivity : BaseActivity() {
             }
             dialog.show(supportFragmentManager, "LocationTimeBottomSheet")
         }
+
+
     }
 
     // 위치 및 시간 설정
     private fun setLocationAndTime() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 100)
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                100
+            )
             return
         }
 
         fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
             if (location != null) {
                 val time = System.currentTimeMillis()
-                val dateStr = java.text.SimpleDateFormat("yyyy-MM-dd HH:mm", java.util.Locale.getDefault())
-                    .format(java.util.Date(time))
-                tvLocationTime.text = "위치: ${location.latitude}, ${location.longitude} | 시간: $dateStr"
+                val dateStr =
+                    java.text.SimpleDateFormat("yyyy-MM-dd HH:mm", java.util.Locale.getDefault())
+                        .format(java.util.Date(time))
+                tvLocationTime.text =
+                    "위치: ${location.latitude}, ${location.longitude} | 시간: $dateStr"
             } else {
                 tvLocationTime.text = "위치 정보를 가져올 수 없습니다."
             }
         }
-        setContentView(R.layout.activity_post)
     }
 
+
     // 태그 추가 함수
-    private fun addChip(tag: String) {
-        val chip = Chip(this)
-        chip.text = tag
-        chip.isCloseIconVisible = true
-        chip.setOnCloseIconClickListener {
-            chipGroup.removeView(chip)
+    private fun addChip(tagText: String) {
+        // ChipGroup 참조
+        val chipGroup = findViewById<ChipGroup>(R.id.chip_group)
+
+        // Chip 생성
+        val chip = Chip(this).apply {
+            text = tagText
+            isCloseIconVisible = true
+
+            // 배경색
+            chipBackgroundColor = ColorStateList.valueOf(
+                ContextCompat.getColor(context, R.color.blue_10)
+            )
+
+            // 텍스트 색상
+            setTextColor(ContextCompat.getColor(context, R.color.blue_60))
+
+            // 닫기(X) 아이콘 색상
+            closeIconTint = ColorStateList.valueOf(
+                ContextCompat.getColor(context, R.color.blue_60)
+            )
+
+            // 삭제 클릭 리스너
+            setOnCloseIconClickListener {
+                chipGroup.removeView(this)
+            }
         }
+
+        // ChipGroup에 추가
         chipGroup.addView(chip)
     }
 
@@ -161,7 +197,10 @@ class PostActivity : BaseActivity() {
             val result = geocoder.getFromLocationName(address, 1)
             if (!result.isNullOrEmpty()) {
                 val location = result[0]
-                Log.d("Geocoder", "주소 '$address' → 위도: ${location.latitude}, 경도: ${location.longitude}")
+                Log.d(
+                    "Geocoder",
+                    "주소 '$address' → 위도: ${location.latitude}, 경도: ${location.longitude}"
+                )
                 Pair(location.latitude, location.longitude)
             } else {
                 Log.e("Geocoder", "주소 '$address' → 결과 없음")
@@ -176,7 +215,8 @@ class PostActivity : BaseActivity() {
     private fun fetchLatLngWithGoogleAPI(address: String, callback: (Double?, Double?) -> Unit) {
         val encodedAddress = java.net.URLEncoder.encode(address, "UTF-8")
         val apiKey = "AIzaSyBri76ZwsXxl8GP8FM0x-xF8yySCpaR8s8"  // 🔴 반드시 실제 키로 교체하세요
-        val urlStr = "https://maps.googleapis.com/maps/api/geocode/json?address=$encodedAddress&key=$apiKey"
+        val urlStr =
+            "https://maps.googleapis.com/maps/api/geocode/json?address=$encodedAddress&key=$apiKey"
 
         Thread {
             try {

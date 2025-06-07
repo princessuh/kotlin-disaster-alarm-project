@@ -22,7 +22,7 @@
     <TextView
         android:id="@+id/tv_location_time"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
         android:text="위치, 시간 자동 설정"
         android:textColor="@color/grey_70"
         android:background="@color/grey_20"
