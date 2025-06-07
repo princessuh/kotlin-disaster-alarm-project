@@ -3,8 +3,10 @@ package com.example.disasteralert
 import android.Manifest
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -13,6 +15,11 @@ import com.google.android.material.chip.ChipGroup
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import android.widget.CheckBox
+import org.json.JSONObject
+import java.net.HttpURLConnection
+import java.net.URL
+import java.util.Date
+import java.util.Locale
 
 // 제보(글쓰기) 화면
 
@@ -25,6 +32,10 @@ class PostActivity : BaseActivity() {
     private lateinit var etCustomTag: EditText
     private lateinit var chipGroup: ChipGroup
     private lateinit var btnSubmit: Button
+    private var selectedProvince: String? = null
+    private var selectedCity: String? = null
+    private var selectedDistrict: String? = null
+    private var selectedTimestamp: Long? = null
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
@@ -80,6 +91,30 @@ class PostActivity : BaseActivity() {
             Toast.makeText(this, "게시물이 등록되었습니다!", Toast.LENGTH_SHORT).show()
             finish()
         }
+
+        tvLocationTime.setOnClickListener {
+            val dialog = LocationTimeBottomSheet { province, city, district, timestamp ->
+                selectedProvince = province
+                selectedCity = city
+                selectedDistrict = district
+                selectedTimestamp = timestamp
+
+                val address = "$province $city $district"
+                fetchLatLngWithGoogleAPI(address) { lat, lng ->
+                    Log.d("LocationDialog", "callback 받은 위도=$lat, 경도=$lng")
+                    val dateStr =
+                        java.text.SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
+                            .format(Date(timestamp))
+                    if (lat != null && lng != null) {
+                        tvLocationTime.text = "위치: $address\n위도: $lat, 경도: $lng\n시각: $dateStr"
+                    } else {
+                        tvLocationTime.text = "위치: $address\n위치 좌표 변환 실패\n시각: $dateStr"
+                    }
+                }
+
+            }
+            dialog.show(supportFragmentManager, "LocationTimeBottomSheet")
+        }
     }
 
     // 위치 및 시간 설정
@@ -92,7 +127,9 @@ class PostActivity : BaseActivity() {
         fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
             if (location != null) {
                 val time = System.currentTimeMillis()
-                tvLocationTime.text = "위치: ${location.latitude}, ${location.longitude} | 시간: $time"
+                val dateStr = java.text.SimpleDateFormat("yyyy-MM-dd HH:mm", java.util.Locale.getDefault())
+                    .format(java.util.Date(time))
+                tvLocationTime.text = "위치: ${location.latitude}, ${location.longitude} | 시간: $dateStr"
             } else {
                 tvLocationTime.text = "위치 정보를 가져올 수 없습니다."
             }
@@ -115,5 +152,62 @@ class PostActivity : BaseActivity() {
     private fun updateCheckBoxStyle(checkBox: CheckBox, isChecked: Boolean) {
         checkBox.setBackgroundResource(R.drawable.checkbox_selector)
         checkBox.setTextColor(if (isChecked) Color.parseColor("#007AFF") else Color.parseColor("#757575"))
+    }
+
+    // 사용자 등록 좌표값 변환
+    private fun getCoordinatesFromAddress(address: String): Pair<Double?, Double?> {
+        val geocoder = Geocoder(this, Locale.getDefault())
+        return try {
+            val result = geocoder.getFromLocationName(address, 1)
+            if (!result.isNullOrEmpty()) {
+                val location = result[0]
+                Log.d("Geocoder", "주소 '$address' → 위도: ${location.latitude}, 경도: ${location.longitude}")
+                Pair(location.latitude, location.longitude)
+            } else {
+                Log.e("Geocoder", "주소 '$address' → 결과 없음")
+                Pair(null, null)
+            }
+        } catch (e: Exception) {
+            Log.e("Geocoder", "주소 '$address' → 오류: ${e.message}")
+            Pair(null, null)
+        }
+    }
+
+    private fun fetchLatLngWithGoogleAPI(address: String, callback: (Double?, Double?) -> Unit) {
+        val encodedAddress = java.net.URLEncoder.encode(address, "UTF-8")
+        val apiKey = "AIzaSyBri76ZwsXxl8GP8FM0x-xF8yySCpaR8s8"  // 🔴 반드시 실제 키로 교체하세요
+        val urlStr = "https://maps.googleapis.com/maps/api/geocode/json?address=$encodedAddress&key=$apiKey"
+
+        Thread {
+            try {
+                val url = URL(urlStr)
+                val conn = url.openConnection() as HttpURLConnection
+                conn.requestMethod = "GET"
+                conn.connect()
+
+                val response = conn.inputStream.bufferedReader().use { it.readText() }
+                val json = JSONObject(response)
+
+                val status = json.getString("status")
+                if (status == "OK") {
+                    val location = json.getJSONArray("results")
+                        .getJSONObject(0)
+                        .getJSONObject("geometry")
+                        .getJSONObject("location")
+
+                    val lat = location.getDouble("lat")
+                    val lng = location.getDouble("lng")
+
+                    Log.d("GeocodingAPI", "API 응답 상태: $status")
+                    Log.d("GeocodingAPI", "주소=$address → 위도=$lat, 경도=$lng")
+                    runOnUiThread { callback(lat, lng) }
+                } else {
+                    runOnUiThread { callback(null, null) }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                runOnUiThread { callback(null, null) }
+            }
+        }.start()
     }
 }

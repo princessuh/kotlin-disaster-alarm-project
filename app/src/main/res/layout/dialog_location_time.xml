@@ -1,0 +1,91 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_top_white"
+        android:padding="24dp">
+
+        <!-- 📍 지역 선택 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="지역 선택"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="@color/blue_90" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="12dp"
+            android:weightSum="3">
+
+            <Spinner
+                android:id="@+id/spinner_province"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="4dp" />
+
+            <Spinner
+                android:id="@+id/spinner_city"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="4dp" />
+
+            <Spinner
+                android:id="@+id/spinner_district"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <!-- ⏰ 시각 선택 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="재난 발생 시각"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="@color/blue_90"
+            android:layout_marginTop="32dp" />
+
+        <TextView
+            android:id="@+id/tv_selected_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="날짜를 선택하세요"
+            android:padding="12dp"
+            android:background="#EEEEEE"
+            android:layout_marginTop="12dp" />
+
+        <TextView
+            android:id="@+id/tv_selected_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="시간을 선택하세요"
+            android:padding="12dp"
+            android:background="#EEEEEE"
+            android:layout_marginTop="8dp" />
+
+        <!-- 확인 버튼 -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_confirm_location_time"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="선택 완료"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/blue_60"
+            app:cornerRadius="24dp"
+            android:layout_marginTop="32dp" />
+
+    </LinearLayout>
+</ScrollView>
