@@ -4,10 +4,10 @@
     <selectionStates>
       <SelectionState runConfigName="DisasterAlert.app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2025-06-07T06:10:15.094892600Z">
+        <DropdownSelection timestamp="2025-06-07T08:05:08.983723600Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\user\.android\avd\Medium_Phone.avd" />
+              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\user\.android\avd\test_medium.avd" />
             </handle>
           </Target>
         </DropdownSelection>
@@ -25,6 +25,9 @@
         <DialogSelection />
       </SelectionState>
       <SelectionState runConfigName="PostActivity">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="ReportHistoryActivity (1)">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

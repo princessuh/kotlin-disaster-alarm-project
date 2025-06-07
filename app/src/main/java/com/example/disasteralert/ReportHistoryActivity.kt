@@ -5,6 +5,8 @@ import android.widget.*
 import com.google.android.material.button.MaterialButton
 import android.content.Intent
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.LinearLayoutManager
 
 
 // 제보 내역 리스트
@@ -14,6 +16,8 @@ class ReportHistoryActivity : BaseActivity() {
     private lateinit var btnFilter: MaterialButton
     private lateinit var selectedDisastersTextView: TextView
     private lateinit var fabReport: ExtendedFloatingActionButton
+    private lateinit var recyclerView: RecyclerView
+    private val reportList = mutableListOf<Report>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,6 +32,11 @@ class ReportHistoryActivity : BaseActivity() {
         btnFilter = findViewById(R.id.btn_filter)
         selectedDisastersTextView = findViewById(R.id.tv_selected_disasters)
         fabReport = findViewById(R.id.fabReport)
+
+        recyclerView = findViewById(R.id.recyclerReportHistory)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        loadDummyReports()
+        recyclerView.adapter = ReportAdapter(reportList)
 
 
         // 필터 팝업 띄우기
@@ -46,6 +55,20 @@ class ReportHistoryActivity : BaseActivity() {
         // FAB 클릭 시 PostActivity로 이동
         fabReport.setOnClickListener {
             startActivity(Intent(this, PostActivity::class.java))
+        }
+    }
+    // 더미 데이터 로드 (나중에 실제 DB/API로 교체)
+    private fun loadDummyReports() {
+        reportList.apply {
+            add(
+                Report(
+                    locationTime = "서울 강남구 • 2024/11/14 07:30",
+                    customTag = "#호우",
+                    content = "출근길에 봤는데, 구름이 끼어있는게 곧 비가 올 것 같아요",
+                    recommendedTags = listOf("풍수해")
+                )
+            )
+            // TODO: 추가 항목
         }
     }
 }
