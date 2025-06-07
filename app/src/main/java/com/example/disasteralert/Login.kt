@@ -1,22 +1,22 @@
 package com.example.disasteralert
 
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
-import android.widget.*
-import androidx.core.content.ContextCompat
+import android.widget.Button
+import android.widget.CheckBox
+import android.widget.TextView
+import android.widget.Toast
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.firestore.FirebaseFirestore
 
 // 로그인 화면
-
 class Login : BaseActivity() {
 
-    /** UI 요소 정의 */
-    private lateinit var tvTitle: TextView
     private lateinit var etUserId: TextInputEditText
     private lateinit var etPassword: TextInputEditText
     private lateinit var btnLogin: Button
@@ -24,89 +24,71 @@ class Login : BaseActivity() {
     private lateinit var tvFindId: TextView
     private lateinit var tvFindPw: TextView
     private lateinit var tvJoin: TextView
-    private lateinit var sharedPreferences: SharedPreferences
+
+    private lateinit var loginPrefs: SharedPreferences
+    private lateinit var userPrefs: SharedPreferences
+
+    private val db = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
         // SharedPreferences 초기화
-        sharedPreferences = getSharedPreferences("login_prefs", MODE_PRIVATE)
+        loginPrefs = getSharedPreferences("login_prefs", Context.MODE_PRIVATE)
+        userPrefs  = getSharedPreferences("user_prefs",  Context.MODE_PRIVATE)
 
-        // 로그인 상태 확인
-        if (sharedPreferences.getBoolean("keep_login", false)) {
-            val userId = sharedPreferences.getString("user_id", null)
-            if (userId != null) {
-                // 로그인 상태가 유지되어 있으면 MainMapActivity로 이동
-                val intent = Intent(this, MainMapActivity::class.java)
-                intent.putExtra("user_id", userId)
-                startActivity(intent)
-                finish() // 로그인 화면 종료
-                return
-            }
-        }
-
-        // UI 초기화
-        tvTitle = findViewById(R.id.tv_title)
-        etUserId = findViewById(R.id.et_user_id)
-        etPassword = findViewById(R.id.et_password)
-        btnLogin = findViewById(R.id.btn_login)
+        // UI 요소 초기화
+        etUserId    = findViewById(R.id.et_user_id)
+        etPassword  = findViewById(R.id.et_password)
+        btnLogin    = findViewById(R.id.btn_login)
         cbKeepLogin = findViewById(R.id.cb_keep_login)
-        tvFindId = findViewById(R.id.tv_find_id)
-        tvFindPw = findViewById(R.id.tv_find_pw)
-        tvJoin = findViewById(R.id.tv_join)
+        tvFindId    = findViewById(R.id.tv_find_id)
+        tvFindPw    = findViewById(R.id.tv_find_pw)
+        tvJoin      = findViewById(R.id.tv_join)
 
-        // 제목 텍스트 꾸미기
-        val titleText = "원활한 이용을 위해\n로그인 해주세요"
-        val spannable = SpannableString(titleText)
-        val colorBlue90 = ContextCompat.getColor(this, R.color.blue_90)
-        val colorBlue60 = ContextCompat.getColor(this, R.color.blue_60)
-
-        spannable.setSpan(ForegroundColorSpan(colorBlue90), 0, titleText.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        val loginStart = titleText.indexOf("로그인")
-        val loginEnd = loginStart + "로그인".length
-        spannable.setSpan(ForegroundColorSpan(colorBlue60), loginStart, loginEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        tvTitle.setText(spannable, TextView.BufferType.SPANNABLE)
-
-        // 🔐 로그인 버튼 이벤트
+        // 로그인 버튼 클릭
         btnLogin.setOnClickListener {
-            val id = etUserId.text.toString().trim()
-            val password = etPassword.text.toString().trim()
+            val id       = etUserId.text.toString().trim()
+            val password = etPassword.text.toString()
 
-            if (id.isEmpty()) {
-                etUserId.error = "아이디를 입력하세요."
+            if (id.isEmpty() || password.isEmpty()) {
+                Toast.makeText(this, "아이디와 비밀번호를 모두 입력해주세요.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            if (password.isEmpty()) {
-                etPassword.error = "비밀번호를 입력하세요."
-                return@setOnClickListener
-            }
-
-            // Firestore에서 해당 사용자 문서 가져오기
-            val db = FirebaseFirestore.getInstance()
+            // Firestore에서 사용자 문서 조회
             db.collection("users").document(id).get()
-                .addOnSuccessListener { document ->
-                    if (document != null && document.exists()) {
-                        val savedPw = document.getString("user_pw")
+                .addOnSuccessListener { doc ->
+                    if (doc != null && doc.exists()) {
+                        val savedPw   = doc.getString("user_pw")
+                        val userName  = doc.getString("user_name") ?: ""
+
                         if (savedPw == password) {
                             Toast.makeText(this, "로그인 성공!", Toast.LENGTH_SHORT).show()
-                            val userName = document.getString("user_name") ?: ""
 
-                            // 로그인 유지 체크박스 상태 저장
+                            // (1) 기존 login_prefs에 저장 (로그인 유지용)
                             if (cbKeepLogin.isChecked) {
-                                val editor = sharedPreferences.edit()
-                                editor.putBoolean("keep_login", true)
-                                editor.putString("user_id", id)
-                                editor.apply()
+                                loginPrefs.edit()
+                                    .putBoolean("keep_login", true)
+                                    .putString("user_id", id)
+                                    .apply()
                             }
 
-                            // MainMapActivity로 이동 (ProfileActivity 대신)
-                            val intent = Intent(this, MainMapActivity::class.java)
-                            intent.putExtra("user_id", id)
-                            intent.putExtra("user_name", userName)
+                            // (2) ProfileActivity가 읽는 user_prefs에도 저장
+                            userPrefs.edit()
+                                .putString("user_id",   id)
+                                .putString("user_name", userName)
+                                .apply()
+
+                            // 메인맵 화면으로 이동
+                            val intent = Intent(this, MainMapActivity::class.java).apply {
+                                putExtra("user_id",   id)
+                                putExtra("user_name", userName)
+                            }
                             startActivity(intent)
-                            finish() // 로그인 화면 종료
+                            finish()
+
                         } else {
                             etPassword.error = "비밀번호가 일치하지 않습니다."
                         }
@@ -115,7 +97,7 @@ class Login : BaseActivity() {
                     }
                 }
                 .addOnFailureListener { e ->
-                    Toast.makeText(this, "로그인 중 오류 발생: ${e.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "로그인 오류: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
         }
 
@@ -123,14 +105,11 @@ class Login : BaseActivity() {
         tvFindId.setOnClickListener {
             Toast.makeText(this, "아이디 찾기 기능 준비 중", Toast.LENGTH_SHORT).show()
         }
-
         tvFindPw.setOnClickListener {
             Toast.makeText(this, "비밀번호 찾기 기능 준비 중", Toast.LENGTH_SHORT).show()
         }
-
         tvJoin.setOnClickListener {
-            val intent = Intent(this, Join::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, Join::class.java))
         }
     }
 }

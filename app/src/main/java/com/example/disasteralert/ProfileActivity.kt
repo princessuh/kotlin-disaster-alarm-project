@@ -24,14 +24,17 @@ class ProfileActivity : BaseActivity() {
         val btnEditProfile = findViewById<Button>(R.id.btn_edit_profile)
         val btnReportHistory = findViewById<Button>(R.id.btn_report_history)
         val btnMessageList = findViewById<Button>(R.id.btn_message_list)
-        val ivProfile = findViewById<ImageView>(R.id.iv_profile) // 프로필 이미지
+        val ivProfile = findViewById<ImageView>(R.id.iv_profile)
 
         // 기본 프로필 이미지 설정
-        ivProfile.setImageResource(R.mipmap.ic_launcher) // 없으면 기본 이미지로 설정
+        ivProfile.setImageResource(R.mipmap.ic_launcher)
 
-        // 임시 사용자 정보 설정
-        tvName.text = getString(R.string.default_name)
-        tvUserID.text = getString(R.string.default_user_id)
+        // ★ SharedPreferences에서 저장된 user_name, user_id 가져와 표시
+        val prefs = getSharedPreferences("user_prefs", MODE_PRIVATE)
+        val savedName = prefs.getString("user_name", getString(R.string.default_name))
+        val savedId   = prefs.getString("user_id", getString(R.string.default_user_id))
+        tvName.text   = savedName
+        tvUserID.text = savedId
 
         // 설정 화면으로 이동
         btnSettings.setOnClickListener {

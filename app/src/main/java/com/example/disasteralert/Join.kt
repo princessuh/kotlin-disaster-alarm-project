@@ -43,6 +43,7 @@ class Join : BaseActivity() {
         spinnerGender = findViewById(R.id.spinner_gender)
         joinBtn = findViewById(R.id.btn_join)
         loginBtn = findViewById(R.id.btn_login)
+
     }
 
     /** 성별 선택란 */
@@ -118,6 +119,14 @@ class Join : BaseActivity() {
                             .set(user)
                             .addOnSuccessListener {
                                 toast("회원가입 성공!")
+                                // SharedPreferences에 user_id, user_name 저장
+                                val prefs = getSharedPreferences("user_prefs", MODE_PRIVATE)
+                                prefs.edit()
+                                    .putString("user_id", id)
+                                    .putString("user_name", userName)
+                                    .apply()
+
+                                // 재난 유형 선택 화면으로 이동
                                 startActivity(Intent(this, DisasterSelectionActivity::class.java))
                                 finish()
                             }
