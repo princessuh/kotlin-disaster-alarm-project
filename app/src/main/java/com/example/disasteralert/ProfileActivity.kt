@@ -60,17 +60,17 @@ class ProfileActivity : BaseActivity() {
             startActivity(intent)
         }
 
-        // DEBUG ONLY: FCM 토큰 디버깅용 표시
-        val tvToken = findViewById<TextView>(R.id.tv_fcm_token)
-        FirebaseMessaging.getInstance().token
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val token = task.result
-                    tvToken.text = "🔧 FCM Token (DEBUG):\n$token"
-                } else {
-                    tvToken.text = "FCM 토큰을 가져오지 못했습니다"
-                }
-            }
+//        // DEBUG ONLY: FCM 토큰 디버깅용 표시
+//        val tvToken = findViewById<TextView>(R.id.tv_fcm_token)
+//        FirebaseMessaging.getInstance().token
+//            .addOnCompleteListener { task ->
+//                if (task.isSuccessful) {
+//                    val token = task.result
+//                    tvToken.text = "🔧 FCM Token (DEBUG):\n$token"
+//                } else {
+//                    tvToken.text = "FCM 토큰을 가져오지 못했습니다"
+//                }
+//            }
 
     }
 }
