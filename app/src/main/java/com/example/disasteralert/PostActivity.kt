@@ -2,6 +2,7 @@ package com.example.disasteralert
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
@@ -34,6 +35,7 @@ class PostActivity : AppCompatActivity() {
     private lateinit var cbEpidemic: CheckBox
     private lateinit var cbFire: CheckBox
     private lateinit var cbDust: CheckBox
+    private lateinit var disasterCheckBoxes: List<CheckBox>
 
     private var selectedProvince: String? = null
     private var selectedCity: String? = null
@@ -65,6 +67,14 @@ class PostActivity : AppCompatActivity() {
         setLocationAndTime()
         setupDisasterCheckboxes()
 
+        disasterCheckBoxes = listOf(cbTyphoon, cbWeather, cbEarthquake, cbEpidemic, cbFire, cbDust)
+
+        disasterCheckBoxes.forEach { cb ->
+            cb.setButtonDrawable(android.R.color.transparent) // 체크 박스 기본 아이콘 숨기기
+            updateCheckBoxStyle(cb, cb.isChecked) // 초기 스타일 반영
+        }
+
+
         btnSubmit.setOnClickListener {
             val title = etTitle.text.toString().trim()
             val content = etContent.text.toString().trim()
@@ -82,7 +92,10 @@ class PostActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            val reportTime = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault()).format(Date(timestamp))
+            val reportTime = SimpleDateFormat(
+                "yyyy-MM-dd'T'HH:mm:ss",
+                Locale.getDefault()
+            ).format(Date(timestamp))
 
             val selectedChip = (0 until chipGroup.childCount)
                 .mapNotNull { chipGroup.getChildAt(it) as? Chip }
@@ -91,7 +104,8 @@ class PostActivity : AppCompatActivity() {
             val selectedDisaster = selectedChip?.text.toString()
             val disasterCode = mapDisasterToCode(selectedDisaster)
 
-            val disasterPos = "$selectedProvince $selectedCity $selectedDistrict $selectedTextLocation"
+            val disasterPos =
+                "$selectedProvince $selectedCity $selectedDistrict $selectedTextLocation"
 
 
             val request = UserReportRequest(
@@ -108,44 +122,61 @@ class PostActivity : AppCompatActivity() {
 
             RetrofitClient.userReportService.submitReport(request)
                 .enqueue(object : retrofit2.Callback<Void> {
-                    override fun onResponse(call: retrofit2.Call<Void>, response: retrofit2.Response<Void>) {
+                    override fun onResponse(
+                        call: retrofit2.Call<Void>,
+                        response: retrofit2.Response<Void>
+                    ) {
                         if (response.isSuccessful) {
-                            Toast.makeText(this@PostActivity, "제보가 성공적으로 등록되었습니다!", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                this@PostActivity,
+                                "제보가 성공적으로 등록되었습니다!",
+                                Toast.LENGTH_SHORT
+                            ).show()
                             finish()
                         } else {
-                            Toast.makeText(this@PostActivity, "서버 오류: ${response.code()}", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                this@PostActivity,
+                                "서버 오류: ${response.code()}",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
 
                     override fun onFailure(call: retrofit2.Call<Void>, t: Throwable) {
-                        Toast.makeText(this@PostActivity, "네트워크 오류: ${t.localizedMessage}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this@PostActivity,
+                            "네트워크 오류: ${t.localizedMessage}",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 })
         }
 
         tvLocationTime.setOnClickListener {
-            val dialog = LocationTimeBottomSheet { province, city, district, timestamp, textLocation ->
-                selectedProvince = province
-                selectedCity = city
-                selectedDistrict = district
-                selectedTimestamp = timestamp
-                selectedTextLocation = textLocation
+            val dialog =
+                LocationTimeBottomSheet { province, city, district, timestamp, textLocation ->
+                    selectedProvince = province
+                    selectedCity = city
+                    selectedDistrict = district
+                    selectedTimestamp = timestamp
+                    selectedTextLocation = textLocation
 
-                val geocodeAddress = "$province $city $district"           // 좌표 변환용
-                val fullTextAddress = "$geocodeAddress $textLocation"      // 서버 전송용
+                    val geocodeAddress = "$province $city $district"           // 좌표 변환용
+                    val fullTextAddress = "$geocodeAddress $textLocation"      // 서버 전송용
 
-                fetchLatLngWithGoogleAPI(geocodeAddress) { lat, lng ->
-                    selectedLat = lat
-                    selectedLng = lng
-                    val dateStr = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
-                        .format(Date(timestamp))
-                    if (lat != null && lng != null) {
-                        tvLocationTime.text = "위치: $fullTextAddress\n위도: $lat, 경도: $lng\n시각: $dateStr"
-                    } else {
-                        tvLocationTime.text = "위치: $fullTextAddress\n위치 좌표 변환 실패\n시각: $dateStr"
+                    fetchLatLngWithGoogleAPI(geocodeAddress) { lat, lng ->
+                        selectedLat = lat
+                        selectedLng = lng
+                        val dateStr = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
+                            .format(Date(timestamp))
+                        if (lat != null && lng != null) {
+                            tvLocationTime.text =
+                                "위치: $fullTextAddress\n위도: $lat, 경도: $lng\n시각: $dateStr"
+                        } else {
+                            tvLocationTime.text = "위치: $fullTextAddress\n위치 좌표 변환 실패\n시각: $dateStr"
+                        }
                     }
                 }
-            }
             dialog.show(supportFragmentManager, "LocationTimeBottomSheet")
         }
 
@@ -200,15 +231,25 @@ class PostActivity : AppCompatActivity() {
     }
 
     private fun setLocationAndTime() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 100)
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                100
+            )
             return
         }
         fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
             location?.let {
                 val time = System.currentTimeMillis()
-                val dateStr = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(Date(time))
-                tvLocationTime.text = "위치: ${location.latitude}, ${location.longitude} | 시간: $dateStr"
+                val dateStr =
+                    SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(Date(time))
+                tvLocationTime.text =
+                    "위치: ${location.latitude}, ${location.longitude} | 시간: $dateStr"
             }
         }
     }
@@ -216,7 +257,8 @@ class PostActivity : AppCompatActivity() {
     private fun fetchLatLngWithGoogleAPI(address: String, callback: (Double?, Double?) -> Unit) {
         val encodedAddress = java.net.URLEncoder.encode(address, "UTF-8")
         val apiKey = "AIzaSyBri76ZwsXxl8GP8FM0x-xF8yySCpaR8s8"
-        val urlStr = "https://maps.googleapis.com/maps/api/geocode/json?address=$encodedAddress&key=$apiKey"
+        val urlStr =
+            "https://maps.googleapis.com/maps/api/geocode/json?address=$encodedAddress&key=$apiKey"
 
         Thread {
             try {
@@ -262,5 +304,10 @@ class PostActivity : AppCompatActivity() {
             "감염병", "미세먼지" -> 11
             else -> -1
         }
+    }
+    /** 개별 체크박스 스타일 적용 */
+    private fun updateCheckBoxStyle(cb: CheckBox, isChecked: Boolean) {
+        cb.setBackgroundResource(R.drawable.checkbox_selector)
+        cb.setTextColor(if (isChecked) Color.parseColor("#007AFF") else Color.parseColor("#757575"))
     }
 }
