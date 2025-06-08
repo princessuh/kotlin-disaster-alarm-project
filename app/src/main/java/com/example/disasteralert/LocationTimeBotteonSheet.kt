@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class LocationTimeBottomSheet(
-    private val onConfirm: (province: String, city: String, district: String, timestamp: Long) -> Unit
+    private val onConfirm: (province: String, city: String, district: String, timestamp: Long, textLocation: String) -> Unit
 ) : BottomSheetDialogFragment() {
 
     private var selectedTimestamp: Long = System.currentTimeMillis()
@@ -28,6 +28,9 @@ class LocationTimeBottomSheet(
         val spinnerProvince = view.findViewById<Spinner>(R.id.spinner_province)
         val spinnerCity = view.findViewById<Spinner>(R.id.spinner_city)
         val spinnerDistrict = view.findViewById<Spinner>(R.id.spinner_district)
+
+        // EditText for 텍스트 위치 정보
+        val etTextLocation = view.findViewById<EditText>(R.id.et_text_location)
 
         // 날짜/시간 선택 텍스트
         val tvSelectedDate = view.findViewById<TextView>(R.id.tv_selected_date)
@@ -87,10 +90,11 @@ class LocationTimeBottomSheet(
 
         // 확인 버튼 클릭
         btnConfirm.setOnClickListener {
-            val province = spinnerProvince.selectedItem.toString()
-            val city = spinnerCity.selectedItem.toString()
-            val district = spinnerDistrict.selectedItem.toString()
-            onConfirm(province, city, district, selectedTimestamp)
+            val province = spinnerProvince.selectedItem?.toString() ?: ""
+            val city = spinnerCity.selectedItem?.toString() ?: ""
+            val district = spinnerDistrict.selectedItem?.toString() ?: ""
+            val textLocation = etTextLocation.text.toString().trim()
+            onConfirm(province, city, district, selectedTimestamp, textLocation)
             dismiss()
         }
 
