@@ -5,118 +5,123 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="24dp"
-    android:paddingStart="24dp"
-    android:paddingEnd="24dp"
-    android:paddingBottom="0dp"
-    tools:context=".ProfileActivity"
-    android:background="@color/white">
+    android:background="@color/white"
+    tools:context=".ProfileActivity">
 
-    <!-- 기존 UI 생략 -->
-    <ImageView
-        android:id="@+id/iv_profile"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="40dp"
-        android:src="@mipmap/ic_launcher_round"
-        android:scaleType="fitCenter"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/padded_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:paddingTop="24dp"
+        android:paddingBottom="0dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintBottom_toTopOf="@id/bottom_navigation">
+        <ImageView
+            android:id="@+id/iv_profile"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="40dp"
+            android:src="@mipmap/ic_launcher_round"
+            android:scaleType="fitCenter"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-    <TextView
-        android:id="@+id/tv_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/default_name"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        app:layout_constraintTop_toBottomOf="@id/iv_profile"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"/>
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/default_name"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            app:layout_constraintTop_toBottomOf="@id/iv_profile"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp"/>
 
-    <TextView
-        android:id="@+id/tv_user_id"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/default_user_id"
-        android:textSize="14sp"
-        android:textColor="@color/grey_70"
-        app:layout_constraintTop_toBottomOf="@id/tv_name"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp"/>
+        <TextView
+            android:id="@+id/tv_user_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/default_user_id"
+            android:textSize="14sp"
+            android:textColor="@color/grey_70"
+            app:layout_constraintTop_toBottomOf="@id/tv_name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="8dp"/>
 
-    <Button
-        android:id="@+id/btn_settings"
-        android:layout_width="160dp"
-        android:layout_height="50dp"
-        android:text="@string/setting"
-        android:backgroundTint="@color/grey_30"
-        android:textColor="@color/black"
-        app:cornerRadius="24dp"
-        app:layout_constraintTop_toBottomOf="@id/tv_user_id"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="32dp"/>
+        <Button
+            android:id="@+id/btn_settings"
+            android:layout_width="160dp"
+            android:layout_height="50dp"
+            android:text="@string/setting"
+            android:backgroundTint="@color/grey_30"
+            android:textColor="@color/black"
+            app:cornerRadius="24dp"
+            app:layout_constraintTop_toBottomOf="@id/tv_user_id"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="32dp"/>
 
-    <Button
-        android:id="@+id/btn_edit_profile"
-        android:layout_width="160dp"
-        android:layout_height="50dp"
-        android:text="@string/edit_title"
-        android:backgroundTint="@color/grey_30"
-        android:textColor="@color/black"
-        app:cornerRadius="24dp"
-        app:layout_constraintTop_toBottomOf="@+id/btn_settings"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="12dp"/>
+        <Button
+            android:id="@+id/btn_edit_profile"
+            android:layout_width="160dp"
+            android:layout_height="50dp"
+            android:text="@string/edit_title"
+            android:backgroundTint="@color/grey_30"
+            android:textColor="@color/black"
+            app:cornerRadius="24dp"
+            app:layout_constraintTop_toBottomOf="@+id/btn_settings"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="12dp"/>
 
-    <Button
-        android:id="@+id/btn_message_list"
-        android:layout_width="160dp"
-        android:layout_height="50dp"
-        android:text="메시지 수신 내역"
-        android:backgroundTint="@color/grey_30"
-        android:textColor="@color/black"
-        app:cornerRadius="24dp"
-        app:layout_constraintTop_toBottomOf="@id/btn_edit_profile"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="12dp"/>
+        <Button
+            android:id="@+id/btn_message_list"
+            android:layout_width="160dp"
+            android:layout_height="50dp"
+            android:text="메시지 수신 내역"
+            android:backgroundTint="@color/grey_30"
+            android:textColor="@color/black"
+            app:cornerRadius="24dp"
+            app:layout_constraintTop_toBottomOf="@id/btn_edit_profile"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="12dp"/>
 
-    <Button
-        android:id="@+id/btn_report_history"
-        android:layout_width="160dp"
-        android:layout_height="50dp"
-        android:text="@string/report_history"
-        android:backgroundTint="@color/grey_30"
-        android:textColor="@color/black"
-        app:cornerRadius="24dp"
-        app:layout_constraintTop_toBottomOf="@id/btn_message_list"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="12dp"/>
+        <Button
+            android:id="@+id/btn_report_history"
+            android:layout_width="160dp"
+            android:layout_height="50dp"
+            android:text="@string/report_history"
+            android:backgroundTint="@color/grey_30"
+            android:textColor="@color/black"
+            app:cornerRadius="24dp"
+            app:layout_constraintTop_toBottomOf="@id/btn_message_list"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="12dp"/>
 
-<!--    &lt;!&ndash; DEBUG ONLY: FCM 토큰 디버깅용 표시 &ndash;&gt;-->
-<!--    <TextView-->
-<!--        android:id="@+id/tv_fcm_token"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="FCM 토큰 로딩 중..."-->
-<!--        android:textSize="12sp"-->
-<!--        android:textColor="#666666"-->
-<!--        android:textIsSelectable="true"-->
-<!--        android:background="#FFEFEF"-->
-<!--        android:padding="12dp"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/btn_report_history"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        android:layout_marginTop="16dp"/>-->
-
+    <!--    &lt;!&ndash; DEBUG ONLY: FCM 토큰 디버깅용 표시 &ndash;&gt;-->
+    <!--    <TextView-->
+    <!--        android:id="@+id/tv_fcm_token"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:text="FCM 토큰 로딩 중..."-->
+    <!--        android:textSize="12sp"-->
+    <!--        android:textColor="#666666"-->
+    <!--        android:textIsSelectable="true"-->
+    <!--        android:background="#FFEFEF"-->
+    <!--        android:padding="12dp"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/btn_report_history"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        android:layout_marginTop="16dp"/>-->
+    </androidx.constraintlayout.widget.ConstraintLayout>
     <!-- 하단 네비게이션 바 -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
