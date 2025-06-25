@@ -6,6 +6,7 @@ import android.os.Bundle
 import java.util.Calendar
 import android.widget.*
 import android.content.SharedPreferences
+import com.google.firebase.firestore.FirebaseFirestore
 
 // 프로필 수정
 
@@ -20,16 +21,15 @@ class ProfileEditActivity : BaseActivity() {
     private lateinit var finishBtn: Button
     private lateinit var logoutBtn: Button
     private lateinit var sharedPreferences: SharedPreferences
-    private lateinit var cbNaturalDisaster: CheckBox
-    private lateinit var cbSocialDisaster: CheckBox
-    private lateinit var cbSafetyInfo: CheckBox
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile_edit)
+        val loginPrefs = getSharedPreferences("login_prefs", MODE_PRIVATE)
+        val userIdStr = loginPrefs.getString("user_id", null)
 
         // UI 요소 초기화
-        userId = findViewById(R.id.et_user_id)
+
         password = findViewById(R.id.et_password)
         confirmPassword = findViewById(R.id.et_confirm_password)
         name = findViewById(R.id.et_name)
@@ -38,9 +38,6 @@ class ProfileEditActivity : BaseActivity() {
         finishBtn = findViewById(R.id.btn_finish)
         logoutBtn = findViewById(R.id.btn_logout)
         sharedPreferences = getSharedPreferences("login_prefs", MODE_PRIVATE)
-        cbNaturalDisaster = findViewById(R.id.cb_natural_disaster)
-        cbSocialDisaster = findViewById(R.id.cb_social_disaster)
-        cbSafetyInfo = findViewById(R.id.cb_safety_info)
 
         // 성별 선택 스피너 설정
         val genderOptions = arrayOf("선택 안 됨", "남성", "여성")
@@ -71,6 +68,39 @@ class ProfileEditActivity : BaseActivity() {
 //                finish() // 회원가입 화면 종료
 //            }
 //        }
+
+        if (userIdStr != null) {
+            val db = FirebaseFirestore.getInstance()
+            db.collection("users").document(userIdStr).get()
+                .addOnSuccessListener { doc ->
+                    if (doc.exists()) {
+                        password.setText(doc.getString("user_pw"))
+                        confirmPassword.setText(doc.getString("user_pw"))
+                        name.setText(doc.getString("user_name"))
+
+                        val birthTimestamp = doc.getTimestamp("birth_date")
+                        val birthDateStr = birthTimestamp?.toDate()?.let {
+                            val y = it.year + 1900
+                            val m = it.month + 1
+                            val d = it.date
+                            String.format("%04d-%02d-%02d", y, m, d)
+                        } ?: ""
+                        birthdate.setText(birthDateStr)
+
+                        val genderStr = doc.getString("gender")
+                        val genderIndex = when (genderStr) {
+                            "남성" -> 1
+                            "여성" -> 2
+                            else -> 0
+                        }
+                        spinnerGender.setSelection(genderIndex)
+                    }
+                }
+                .addOnFailureListener {
+                    Toast.makeText(this, "회원 정보 불러오기 실패: ${it.message}", Toast.LENGTH_SHORT).show()
+                }
+        }
+
         // 📌 회원가입 버튼 클릭 이벤트 (성별 선택 여부 체크)
         finishBtn.setOnClickListener {
             if (spinnerGender.selectedItemPosition == 0) {

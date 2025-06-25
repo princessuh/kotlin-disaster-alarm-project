@@ -81,6 +81,9 @@ dependencies {
     // 플로팅 버튼
     implementation ("com.google.android.material:material:1.9.0")
 
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+
     // — 테스트 —
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

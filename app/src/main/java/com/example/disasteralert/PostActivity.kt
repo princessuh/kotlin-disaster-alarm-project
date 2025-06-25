@@ -19,6 +19,7 @@ import com.google.gson.Gson
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
+import java.net.URLEncoder
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -74,7 +75,6 @@ class PostActivity : AppCompatActivity() {
             updateCheckBoxStyle(cb, cb.isChecked) // 초기 스타일 반영
         }
 
-
         btnSubmit.setOnClickListener {
             val title = etTitle.text.toString().trim()
             val content = etContent.text.toString().trim()
@@ -92,10 +92,7 @@ class PostActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            val reportTime = SimpleDateFormat(
-                "yyyy-MM-dd'T'HH:mm:ss",
-                Locale.getDefault()
-            ).format(Date(timestamp))
+            val reportTime = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault()).format(Date(timestamp))
 
             val selectedChip = (0 until chipGroup.childCount)
                 .mapNotNull { chipGroup.getChildAt(it) as? Chip }
@@ -104,8 +101,7 @@ class PostActivity : AppCompatActivity() {
             val selectedDisaster = selectedChip?.text.toString()
             val disasterCode = mapDisasterToCode(selectedDisaster)
 
-            val disasterPos =
-                "$selectedProvince $selectedCity $selectedDistrict $selectedTextLocation"
+            val disasterPos = "$selectedProvince $selectedCity $selectedDistrict $selectedTextLocation"
 
 
             val request = UserReportRequest(
@@ -122,61 +118,45 @@ class PostActivity : AppCompatActivity() {
 
             RetrofitClient.userReportService.submitReport(request)
                 .enqueue(object : retrofit2.Callback<Void> {
-                    override fun onResponse(
-                        call: retrofit2.Call<Void>,
-                        response: retrofit2.Response<Void>
-                    ) {
+                    override fun onResponse(call: retrofit2.Call<Void>, response: retrofit2.Response<Void>) {
                         if (response.isSuccessful) {
-                            Toast.makeText(
-                                this@PostActivity,
-                                "제보가 성공적으로 등록되었습니다!",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            Toast.makeText(this@PostActivity, "제보가 성공적으로 등록되었습니다!", Toast.LENGTH_SHORT).show()
                             finish()
                         } else {
-                            Toast.makeText(
-                                this@PostActivity,
-                                "서버 오류: ${response.code()}",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            Toast.makeText(this@PostActivity, "서버 오류: ${response.code()}", Toast.LENGTH_SHORT).show()
                         }
                     }
 
                     override fun onFailure(call: retrofit2.Call<Void>, t: Throwable) {
-                        Toast.makeText(
-                            this@PostActivity,
-                            "네트워크 오류: ${t.localizedMessage}",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        Toast.makeText(this@PostActivity, "네트워크 오류: ${t.localizedMessage}", Toast.LENGTH_SHORT).show()
                     }
                 })
         }
 
         tvLocationTime.setOnClickListener {
-            val dialog =
-                LocationTimeBottomSheet { province, city, district, timestamp, textLocation ->
-                    selectedProvince = province
-                    selectedCity = city
-                    selectedDistrict = district
-                    selectedTimestamp = timestamp
-                    selectedTextLocation = textLocation
+            val dialog = LocationTimeBottomSheet { province, city, district, timestamp, textLocation ->
+                selectedProvince = province
+                selectedCity = city
+                selectedDistrict = district
+                selectedTimestamp = timestamp
+                selectedTextLocation = textLocation
 
-                    val geocodeAddress = "$province $city $district"           // 좌표 변환용
-                    val fullTextAddress = "$geocodeAddress $textLocation"      // 서버 전송용
+                val geocodeAddress = "$province $city $district"           // 좌표 변환용
+                val fullTextAddress = "$geocodeAddress $textLocation"      // 서버 전송용
 
-                    fetchLatLngWithGoogleAPI(geocodeAddress) { lat, lng ->
-                        selectedLat = lat
-                        selectedLng = lng
-                        val dateStr = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
-                            .format(Date(timestamp))
-                        if (lat != null && lng != null) {
-                            tvLocationTime.text =
-                                "위치: $fullTextAddress\n위도: $lat, 경도: $lng\n시각: $dateStr"
-                        } else {
-                            tvLocationTime.text = "위치: $fullTextAddress\n위치 좌표 변환 실패\n시각: $dateStr"
-                        }
+                fetchLatLngWithVWorld(geocodeAddress) { lat, lng ->
+                    selectedLat = lat
+                    selectedLng = lng
+                    val dateStr = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
+                        .format(Date(timestamp))
+                    if (lat != null && lng != null) {
+                        tvLocationTime.text = "위치: $fullTextAddress\n위도: $lat, 경도: $lng\n시각: $dateStr"
+                    } else {
+                        tvLocationTime.text = "위치: $fullTextAddress\n 위치 좌표 변환 실패\n시각: $dateStr"
                     }
                 }
+
+            }
             dialog.show(supportFragmentManager, "LocationTimeBottomSheet")
         }
 
@@ -231,34 +211,25 @@ class PostActivity : AppCompatActivity() {
     }
 
     private fun setLocationAndTime() {
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                100
-            )
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 100)
             return
         }
         fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
             location?.let {
                 val time = System.currentTimeMillis()
-                val dateStr =
-                    SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(Date(time))
-                tvLocationTime.text =
-                    "위치: ${location.latitude}, ${location.longitude} | 시간: $dateStr"
+                val dateStr = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(Date(time))
+                tvLocationTime.text = "위치: ${location.latitude}, ${location.longitude} | 시간: $dateStr"
             }
         }
     }
 
-    private fun fetchLatLngWithGoogleAPI(address: String, callback: (Double?, Double?) -> Unit) {
-        val encodedAddress = java.net.URLEncoder.encode(address, "UTF-8")
-        val apiKey = "AIzaSyBri76ZwsXxl8GP8FM0x-xF8yySCpaR8s8"
-        val urlStr =
-            "https://maps.googleapis.com/maps/api/geocode/json?address=$encodedAddress&key=$apiKey"
+    fun fetchLatLngWithVWorld(address: String, callback: (Double?, Double?) -> Unit) {
+        val apiKey = "3E669EE1-18EB-352F-95E6-1A6D59122188"  // 🔑 VWorld 발급키
+        val encodedAddress = URLEncoder.encode(address, "UTF-8")
+        val urlStr = "https://api.vworld.kr/req/address?" +
+                "service=address&request=getCoord&version=2.0&crs=EPSG:4326&" +
+                "address=$encodedAddress&type=road&refine=true&simple=false&format=json&key=$apiKey"
 
         Thread {
             try {
@@ -268,18 +239,21 @@ class PostActivity : AppCompatActivity() {
                 conn.connect()
 
                 val response = conn.inputStream.bufferedReader().use { it.readText() }
-                val json = JSONObject(response)
+                Log.d("VWorldAPI", "응답 원문: $response")  // 디버깅용 로그
 
-                val status = json.getString("status")
+                val json = JSONObject(response)
+                val status = json.getJSONObject("response").getString("status")
+
                 if (status == "OK") {
-                    val location = json.getJSONArray("results")
-                        .getJSONObject(0)
-                        .getJSONObject("geometry")
-                        .getJSONObject("location")
-                    val lat = location.getDouble("lat")
-                    val lng = location.getDouble("lng")
+                    val point = json.getJSONObject("response")
+                        .getJSONObject("result")
+                        .getJSONObject("point")
+
+                    val lng = point.getDouble("x")
+                    val lat = point.getDouble("y")
                     runOnUiThread { callback(lat, lng) }
                 } else {
+                    Log.e("VWorldAPI", "상태 오류: $status")
                     runOnUiThread { callback(null, null) }
                 }
             } catch (e: Exception) {
