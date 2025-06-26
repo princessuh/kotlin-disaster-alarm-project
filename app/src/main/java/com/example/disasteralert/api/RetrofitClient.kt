@@ -28,4 +28,12 @@ object RetrofitClient {
 
         retrofit.create(UserReportService::class.java)
     }
+    val disasterApi: DisasterApi by lazy {
+        val retrofit = Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        retrofit.create(DisasterApi::class.java)
+    }
 }
