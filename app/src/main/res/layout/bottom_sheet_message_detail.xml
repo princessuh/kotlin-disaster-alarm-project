@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clipToOutline="true"
+    android:background="@drawable/rounded_top_white">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- 제목 -->
+            <TextView
+                android:id="@+id/tv_detail_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="제목"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#222" />
+
+            <!-- 본문 -->
+            <TextView
+                android:id="@+id/tv_detail_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="본문"
+                android:textSize="15sp"
+                android:layout_marginTop="10dp"
+                android:textColor="#444" />
+
+            <TextView
+                android:id="@+id/btn_report"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="20dp"
+                android:text="해제 요청"
+                android:textSize="15sp"
+                android:textColor="@color/red_60"
+                android:paddingHorizontal="6dp" />
+
+    <!--        &lt;!&ndash; 🔹 구분선 &ndash;&gt;-->
+    <!--        <View-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="1dp"-->
+    <!--            android:background="#DDD"-->
+    <!--            android:layout_marginTop="24dp"-->
+    <!--            android:layout_marginBottom="12dp" />-->
+
+    <!--        &lt;!&ndash; 댓글 입력 &ndash;&gt;-->
+    <!--        <EditText-->
+    <!--            android:id="@+id/et_comment"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:hint="댓글을 입력하세요"-->
+    <!--            android:background="@drawable/comment_background"-->
+    <!--            android:padding="12dp"-->
+    <!--            android:textSize="14sp" />-->
+
+    <!--        &lt;!&ndash; 댓글 등록 버튼 &ndash;&gt;-->
+    <!--        <Button-->
+    <!--            android:id="@+id/btn_submit_comment"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:text="댓글 등록"-->
+    <!--            android:layout_marginTop="8dp" />-->
+
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>

@@ -1,8 +1,10 @@
 package com.example.disasteralert.api
 
+import UserReportReceptionService
 import android.util.Log
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+
 
 object RetrofitClient {
     private const val BASE_URL = "http://61.245.248.197:8000/"
@@ -28,12 +30,13 @@ object RetrofitClient {
 
         retrofit.create(UserReportService::class.java)
     }
-    val disasterApi: DisasterApi by lazy {
+
+    val userReportReceptionService: UserReportReceptionService by lazy {
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-        retrofit.create(DisasterApi::class.java)
+        retrofit.create(UserReportReceptionService::class.java)
     }
 }

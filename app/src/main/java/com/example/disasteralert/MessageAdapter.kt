@@ -6,14 +6,23 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class MessageAdapter(private val messageList: List<Message>) :
-    RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
+class MessageAdapter(
+    private val messageList: List<Message>,
+    private val onMessageClick: (Message) -> Unit
+) : RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvSenderTime: TextView = itemView.findViewById(R.id.tvSenderTime)
         val tvTitle: TextView = itemView.findViewById(R.id.tvTitle)
         val tvContent: TextView = itemView.findViewById(R.id.tvContent)
         val tvCategory: TextView = itemView.findViewById(R.id.tvCategory)
+
+        init {
+            itemView.setOnClickListener {
+                val message = messageList[adapterPosition]
+                onMessageClick(message)
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
