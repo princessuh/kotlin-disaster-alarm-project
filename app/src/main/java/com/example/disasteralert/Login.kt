@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.TextView
@@ -29,10 +30,11 @@ class Login : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_login)
 
         // SharedPreferences 초기화
         loginPrefs = getSharedPreferences("login_prefs", Context.MODE_PRIVATE)
-        userPrefs  = getSharedPreferences("user_prefs",  Context.MODE_PRIVATE)
+        userPrefs = applicationContext.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
 
         // ✅ 자동 로그인 처리
         val keepLogin = loginPrefs.getBoolean("keep_login", false)
@@ -60,8 +62,6 @@ class Login : BaseActivity() {
             return  // 로그인 화면은 띄우지 않음
         }
 
-        setContentView(R.layout.activity_login)
-
         // UI 요소 초기화
         etUserId    = findViewById(R.id.et_user_id)
         etPassword  = findViewById(R.id.et_password)
@@ -85,33 +85,30 @@ class Login : BaseActivity() {
             db.collection("users").document(id).get()
                 .addOnSuccessListener { doc ->
                     if (doc != null && doc.exists()) {
-                        val savedPw  = doc.getString("user_pw")
-                        val userName = doc.getString("user_name") ?: ""
+                        val savedPw   = doc.getString("user_pw")
+                        val userName  = doc.getString("user_name") ?: ""
 
                         if (savedPw == password) {
                             Toast.makeText(this, "로그인 성공!", Toast.LENGTH_SHORT).show()
 
-                            // 로그인 유지 체크된 경우 저장
+                            // (1) 기존 login_prefs에 저장 (로그인 유지용)
                             if (cbKeepLogin.isChecked) {
                                 loginPrefs.edit()
                                     .putBoolean("keep_login", true)
                                     .putString("user_id", id)
                                     .apply()
-                            } else {
-                                loginPrefs.edit()
-                                    .clear()
-                                    .apply()
                             }
 
-                            // 사용자 정보 저장
+                            // (2) ProfileActivity가 읽는 user_prefs에도 저장
+                            Log.d("LOGIN_DEBUG", "user_id saved: $id")
                             userPrefs.edit()
-                                .putString("user_id", id)
+                                .putString("user_id",   id)
                                 .putString("user_name", userName)
                                 .apply()
 
                             // 메인맵 화면으로 이동
                             val intent = Intent(this, MainMapActivity::class.java).apply {
-                                putExtra("user_id", id)
+                                putExtra("user_id",   id)
                                 putExtra("user_name", userName)
                             }
                             startActivity(intent)

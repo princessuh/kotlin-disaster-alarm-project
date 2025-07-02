@@ -1,9 +1,11 @@
 package com.example.disasteralert
 
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.example.disasteralert.R
 import com.example.disasteralert.api.ReportDetail
@@ -42,6 +44,7 @@ class ReportAdapter(
         return ViewHolder(view)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val report = items[position]
 
@@ -61,6 +64,7 @@ class ReportAdapter(
 
     override fun getItemCount(): Int = items.size
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun formatDateTime(iso: String): String {
         return try {
             val parsed = LocalDateTime.parse(iso, DateTimeFormatter.ISO_DATE_TIME)

@@ -16,10 +16,7 @@ class LocationTimeBottomSheet(
 
     private var selectedTimestamp: Long = System.currentTimeMillis()
 
-    private val regionData = mapOf(
-        "서울특별시" to mapOf("강남구" to listOf("역삼동", "논현동")),
-        "경기도" to mapOf("수원시" to listOf("영통동", "팔달구"))
-    )
+    private val regionData = RegionDataProvider.regionData
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view = inflater.inflate(R.layout.dialog_location_time, container, false)

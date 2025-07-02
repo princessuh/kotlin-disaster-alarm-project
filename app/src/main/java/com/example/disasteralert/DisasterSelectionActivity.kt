@@ -56,14 +56,14 @@ class DisasterSelectionActivity : BaseActivity() {
         /** 버튼 이벤트 */
         btnComplete.setOnClickListener {
             saveSelections()
-            startActivity(Intent(this, ProfileActivity::class.java))
+            startActivity(Intent(this, MainMapActivity::class.java))
             finish()
         }
 
         tvSkip.setOnClickListener {
             applyAllCheckBoxes(true)  // 건너뛰기 = 전부 수신
             saveSelections()
-            startActivity(Intent(this, ProfileActivity::class.java))
+            startActivity(Intent(this, MainMapActivity::class.java))
             finish()
         }
     }

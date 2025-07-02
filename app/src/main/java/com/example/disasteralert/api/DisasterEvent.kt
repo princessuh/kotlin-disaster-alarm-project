@@ -16,26 +16,3 @@ data class DisasterResponse(
     val events: List<DisasterEvent>,
     val count: Int
 )
-
-data class SearchResult(
-    val count: Int,
-    val results: List<DisasterItem>
-)
-
-data class DisasterItem(
-    val type: String,         // "rtd" 또는 "report"
-    val id: String,
-    val time: String,
-    val rtd_loc: String?,     // type == "rtd"
-    val rtd_details: String?,
-    val rtd_code: Int?,
-    val regioncode: Int?,
-    val report_location: String?, // type == "report"
-    val middle_type: String?,
-    val small_type: String?,
-    val content: String?,
-    val report_by: String?,
-    val delete_vote: Int?,
-    val latitude: Double,
-    val longitude: Double
-)

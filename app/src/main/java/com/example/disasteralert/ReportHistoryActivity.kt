@@ -18,7 +18,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-//제보내역 화면
 class ReportHistoryActivity : BaseActivity() {
 
     private lateinit var btnFilter: MaterialButton
@@ -65,7 +64,10 @@ class ReportHistoryActivity : BaseActivity() {
     }
 
     private fun loadReportsFromServer() {
-        RetrofitClient.userReportReceptionService.getUserReportHistory()
+        val prefs = getSharedPreferences("user_prefs", MODE_PRIVATE)
+        val localUserId = prefs.getString("user_id", null)
+
+        RetrofitClient.userReportReceptionService.getUserReportHistory(localUserId.toString(), 50)
             .enqueue(object : Callback<UserReportReceptionResponse> {
                 override fun onResponse(
                     call: Call<UserReportReceptionResponse>,

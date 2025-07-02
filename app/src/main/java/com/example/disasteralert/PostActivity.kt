@@ -66,18 +66,47 @@ class PostActivity : AppCompatActivity() {
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         setLocationAndTime()
-        setupDisasterCheckboxes()
 
         disasterCheckBoxes = listOf(cbTyphoon, cbWeather, cbEarthquake, cbEpidemic, cbFire, cbDust)
 
         disasterCheckBoxes.forEach { cb ->
-            cb.setButtonDrawable(android.R.color.transparent) // 체크 박스 기본 아이콘 숨기기
-            updateCheckBoxStyle(cb, cb.isChecked) // 초기 스타일 반영
+            cb.setButtonDrawable(android.R.color.transparent)
+            updateCheckBoxStyle(cb, cb.isChecked)
+
+            cb.setOnCheckedChangeListener { clickedCb, isChecked ->
+                if (isChecked) {
+                    // 다른 체크박스 해제
+                    disasterCheckBoxes.forEach { otherCb ->
+                        if (otherCb != clickedCb) {
+                            otherCb.isChecked = false
+                            updateCheckBoxStyle(otherCb, false)
+                        }
+                    }
+
+                    // chip 추가
+                    chipGroup.removeAllViews()
+                    when (clickedCb.id) {
+                        R.id.cb_typhoon -> listOf("태풍", "호우", "홍수", "강풍", "대설").forEach { addChip(it) }
+                        R.id.cb_weather -> listOf("폭염", "한파").forEach { addChip(it) }
+                        R.id.cb_earthquake -> addChip("지진")
+                        R.id.cb_epidemic -> addChip("감염병")
+                        R.id.cb_fire -> listOf("산불", "일일화재").forEach { addChip(it) }
+                        R.id.cb_fine_dust -> addChip("미세먼지")
+                    }
+                } else {
+                    chipGroup.removeAllViews() // <- 선택 해제 시 chip도 초기화
+                }
+
+                updateCheckBoxStyle(clickedCb as CheckBox, isChecked)
+            }
         }
 
         btnSubmit.setOnClickListener {
             val title = etTitle.text.toString().trim()
             val content = etContent.text.toString().trim()
+            val prefs = getSharedPreferences("user_prefs", MODE_PRIVATE)
+            val localUserId = prefs.getString("user_id", "unknown_user") ?: "unknown_user"
+            Log.d("DEBUG", "user_id: $localUserId")
 
             if (title.isEmpty() || content.isEmpty()) {
                 Toast.makeText(this, "제목과 내용을 모두 입력해주세요.", Toast.LENGTH_SHORT).show()
@@ -105,7 +134,7 @@ class PostActivity : AppCompatActivity() {
 
 
             val request = UserReportRequest(
-                userId = "plz",
+                userId = localUserId,
                 disasterType = disasterCode.toString(),
                 disasterTime = reportTime,
                 reportContent = content,
@@ -159,46 +188,6 @@ class PostActivity : AppCompatActivity() {
             }
             dialog.show(supportFragmentManager, "LocationTimeBottomSheet")
         }
-
-    }
-
-    private fun setupDisasterCheckboxes() {
-        cbTyphoon.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                chipGroup.removeAllViews()
-                listOf("태풍", "호우", "홍수", "강풍", "대설").forEach { addChip(it) }
-            }
-        }
-        cbWeather.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                chipGroup.removeAllViews()
-                listOf("폭염", "한파").forEach { addChip(it) }
-            }
-        }
-        cbEarthquake.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                chipGroup.removeAllViews()
-                addChip("지진")
-            }
-        }
-        cbEpidemic.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                chipGroup.removeAllViews()
-                addChip("감염병")
-            }
-        }
-        cbFire.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                chipGroup.removeAllViews()
-                listOf("산불", "일일화재").forEach { addChip(it) }
-            }
-        }
-        cbDust.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                chipGroup.removeAllViews()
-                addChip("미세먼지")
-            }
-        }
     }
 
     private fun addChip(label: String) {
@@ -217,11 +206,22 @@ class PostActivity : AppCompatActivity() {
         }
         fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
             location?.let {
-                val time = System.currentTimeMillis()
-                val dateStr = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(Date(time))
-                tvLocationTime.text = "위치: ${location.latitude}, ${location.longitude} | 시간: $dateStr"
+                val lat = location.latitude
+                val lng = location.longitude
+                selectedLat = lat
+                selectedLng = lng
+
+                reverseGeocodeWithVWorld(lat, lng) { roadAddress ->
+                    val time = System.currentTimeMillis()
+                    selectedTimestamp = time
+                    val dateStr = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(Date(time))
+                    val displayAddress = roadAddress ?: "주소 변환 실패"
+
+                    tvLocationTime.text = "위치: $displayAddress\n시각: $dateStr"
+                }
             }
         }
+
     }
 
     fun fetchLatLngWithVWorld(address: String, callback: (Double?, Double?) -> Unit) {
@@ -283,5 +283,42 @@ class PostActivity : AppCompatActivity() {
     private fun updateCheckBoxStyle(cb: CheckBox, isChecked: Boolean) {
         cb.setBackgroundResource(R.drawable.checkbox_selector)
         cb.setTextColor(if (isChecked) Color.parseColor("#007AFF") else Color.parseColor("#757575"))
+    }
+    fun reverseGeocodeWithVWorld(lat: Double, lng: Double, callback: (String?) -> Unit) {
+        val apiKey = "3E669EE1-18EB-352F-95E6-1A6D59122188"
+        val urlStr = "https://api.vworld.kr/req/address?" +
+                "service=address&request=getAddress&version=2.0&type=road" +
+                "&point=$lng,$lat&format=json&key=$apiKey"
+
+        Log.d("ReverseGeo", "요청 URL: $urlStr")
+
+        Thread {
+            try {
+                val url = URL(urlStr)
+                val conn = url.openConnection() as HttpURLConnection
+                conn.requestMethod = "GET"
+                conn.connect()
+
+                val response = conn.inputStream.bufferedReader().use { it.readText() }
+                Log.d("ReverseGeo", "응답: $response")
+
+                val json = JSONObject(response)
+                val status = json.getJSONObject("response").getString("status")
+
+                if (status == "OK") {
+                    val results = json.getJSONObject("response").getJSONArray("result")
+                    val firstResult = results.getJSONObject(0)
+                    val address = firstResult.getString("text")
+
+                    runOnUiThread { callback(address) }
+                } else {
+                    Log.e("ReverseGeo", "API 오류 상태: $status")
+                    runOnUiThread { callback(null) }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                runOnUiThread { callback(null) }
+            }
+        }.start()
     }
 }

@@ -3,16 +3,18 @@ package com.example.disasteralert
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.*
+import com.example.disasteralert.api.RetrofitClient
+import com.example.disasteralert.api.UserRegisterRequest
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.Timestamp
-import java.sql.Date
+import com.google.firebase.messaging.FirebaseMessaging
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.*
 
-// 회원가입 화면
-
 class Join : BaseActivity() {
-    /** UI 요소 정의 */
     private lateinit var userId: EditText
     private lateinit var password: EditText
     private lateinit var confirmPassword: EditText
@@ -21,10 +23,21 @@ class Join : BaseActivity() {
     private lateinit var spinnerGender: Spinner
     private lateinit var joinBtn: Button
     private lateinit var loginBtn: Button
+    private var fcmToken: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_join1)
+
+        // FCM 토큰 요청
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                fcmToken = task.result
+                Log.d("FCM", "FCM 토큰 받아옴: $fcmToken")
+            } else {
+                Log.w("FCM", "FCM 토큰 못 받아옴", task.exception)
+            }
+        }
 
         initViews()
         setupGenderSpinner()
@@ -42,17 +55,14 @@ class Join : BaseActivity() {
         spinnerGender = findViewById(R.id.spinner_gender)
         joinBtn = findViewById(R.id.btn_join)
         loginBtn = findViewById(R.id.btn_login)
-
     }
 
-    /** 성별 선택란 */
     private fun setupGenderSpinner() {
         val genderOptions = arrayOf("선택 안 됨", "남성", "여성")
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, genderOptions)
         spinnerGender.adapter = adapter
     }
 
-    /** 생일 선택 (연, 월, 일) */
     private fun setupBirthdatePicker() {
         birthdate.setOnClickListener {
             val calendar = Calendar.getInstance()
@@ -67,7 +77,6 @@ class Join : BaseActivity() {
         }
     }
 
-    /** 회원가입 클릭 시 유효성 검사 */
     private fun setupJoinButton() {
         joinBtn.setOnClickListener {
             val id = userId.text.toString().trim()
@@ -98,49 +107,70 @@ class Join : BaseActivity() {
             }
 
             val db = FirebaseFirestore.getInstance()
-
-            // 중복 ID 확인
             db.collection("users").document(id).get()
                 .addOnSuccessListener { document ->
                     if (document.exists()) {
                         toast("이미 사용 중인 아이디입니다.")
                     } else {
-                        // 유저 데이터 저장
+                        // 🎯 수정된 저장 구조 (Timestamp 제거)
                         val user = hashMapOf(
                             "user_pw" to pw,
                             "user_name" to userName,
-                            "birth_date" to Timestamp(Date.valueOf(birth)),
+                            "birth_date" to birth,
                             "gender" to gender,
-                            "created_at" to Timestamp.now()
+                            "created_at" to Date().toString()
                         )
 
                         db.collection("users").document(id)
                             .set(user)
                             .addOnSuccessListener {
-                                toast("회원가입 성공!")
-                                // SharedPreferences에 user_id, user_name 저장
-                                val prefs = getSharedPreferences("user_prefs", MODE_PRIVATE)
-                                prefs.edit()
-                                    .putString("user_id", id)
-                                    .putString("user_name", userName)
-                                    .apply()
+                                Log.d("REGISTER_DEBUG", "Firestore 저장 성공")
 
-                                // 재난 유형 선택 화면으로 이동
-                                startActivity(Intent(this, DisasterSelectionActivity::class.java))
+                                // ✅ FCM 토큰 서버 전송
+                                val registerRequest = UserRegisterRequest(
+                                    user_id = id,
+                                    device_token = fcmToken ?: "no_token"
+                                )
+
+                                Log.d("REGISTER_DEBUG", "전송 URL: http://61.245.248.197:8000/devices/register")
+                                Log.d("REGISTER_DEBUG", "user_id = ${registerRequest.user_id}, token = ${registerRequest.device_token}")
+
+                                RetrofitClient.userRegisterService.registerUser(registerRequest)
+                                    .enqueue(object : Callback<Void> {
+                                        override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                                            if (!response.isSuccessful) {
+                                                Log.e("REGISTER", "서버 등록 실패: ${response.code()}")
+                                            } else {
+                                                Log.d("REGISTER", "서버 등록 성공")
+                                            }
+                                        }
+
+                                        override fun onFailure(call: Call<Void>, t: Throwable) {
+                                            Log.e("REGISTER", "네트워크 오류: ${t.localizedMessage}")
+                                        }
+                                    })
+
+                                // SharedPreferences 저장
+                                val prefs = getSharedPreferences("user_prefs", MODE_PRIVATE)
+                                prefs.edit().putString("user_id", id).putString("user_name", userName).apply()
+
+                                // 다음 화면으로 이동
+                                startActivity(Intent(this@Join, DisasterSelectionActivity::class.java))
                                 finish()
                             }
                             .addOnFailureListener { e ->
                                 toast("회원가입 실패: ${e.message}")
+                                Log.e("REGISTER_DEBUG", "Firestore 저장 실패: ${e.message}")
                             }
                     }
                 }
                 .addOnFailureListener { e ->
                     toast("ID 확인 실패: ${e.message}")
+                    Log.e("REGISTER_DEBUG", "Firestore ID 중복 확인 실패: ${e.message}")
                 }
         }
     }
 
-    /** 로그인 버튼 클릭시 로그인 화면 이동 */
     private fun setupLoginButton() {
         loginBtn.setOnClickListener {
             startActivity(Intent(this, Login::class.java))
