@@ -50,11 +50,9 @@ class MainMapActivity : BaseActivity(), OnMapReadyCallback {
     private lateinit var locationPermission: ActivityResultLauncher<Array<String>>
     private lateinit var rtdMarkerManager: RtdMarkerManager
 
-
     private var isFirstLocationUpdate = true
     private var currentMarker: Marker? = null
     private var currentLatLng: LatLng? = null
-
 
     private lateinit var markerManager: DisasterMarkerManager
     private val markerEventMap = mutableMapOf<Marker, RtdEvent>()
@@ -68,7 +66,6 @@ class MainMapActivity : BaseActivity(), OnMapReadyCallback {
         setContentView(R.layout.activity_map)
 
         setupBottomNavigation(R.id.bottom_navigation, "MainMapActivity")
-
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         locationPermission = registerForActivityResult(
@@ -107,8 +104,6 @@ class MainMapActivity : BaseActivity(), OnMapReadyCallback {
         dialog.show(supportFragmentManager, "RtdDetail")
     }
 
-
-
     override fun onMapReady(googleMap: GoogleMap) {
         mGoogleMap = googleMap.apply {
             uiSettings.isZoomControlsEnabled = true
@@ -130,13 +125,8 @@ class MainMapActivity : BaseActivity(), OnMapReadyCallback {
         rtdMarkerManager = RtdMarkerManager(this, mGoogleMap)
 
         mGoogleMap.setOnMarkerClickListener { marker ->
-            Log.d(TAG, "🔥 마커 클릭됨: ${marker.title}")
-
             marker.hideInfoWindow()
-            markerEventMap[marker]?.let { event ->
-                Log.d(TAG, "👉 showInfo 호출")
-                showRtdInfo(event)
-            }
+            markerEventMap[marker]?.let { event -> showRtdInfo(event) }
             true
         }
 
@@ -147,42 +137,6 @@ class MainMapActivity : BaseActivity(), OnMapReadyCallback {
 
         updateLocation()
         fetchDisasterEvents()
-    }
-
-
-    private fun showInfo(event: DisasterEvent) {
-        Log.d(TAG, "🟢 showInfo 시작: ${event.disaster_type} (${event.latitude}, ${event.longitude})")
-
-        geoJsonManager.removeAllLayers()
-
-        if (event.disaster_type in polygonTypes) {
-            val latLng = LatLng(event.latitude, event.longitude)
-            val region = regionDataList
-                .filter { it.boundingBox.contains(latLng) }
-                .minByOrNull { r ->
-                    val c = r.boundingBox.center
-                    val dLat = latLng.latitude - c.latitude
-                    val dLng = latLng.longitude - c.longitude
-                    dLat * dLat + dLng * dLng
-                }
-            region?.let {
-                lifecycleScope.launch { geoJsonManager.showRegionAsync(it) }
-            }
-        }
-
-        val prev = supportFragmentManager.findFragmentByTag("DisasterDetail")
-        if (prev != null && prev is BottomSheetDialogFragment) {
-            prev.dismissAllowingStateLoss()
-            supportFragmentManager.beginTransaction().remove(prev).commitNow()
-        }
-
-        val dialog = DisasterDetailBottomSheet(event) {
-            geoJsonManager.removeAllLayers()
-            selectedMarker = null
-            Log.d(TAG, "🧹 바텀시트 닫힘 → 레이어 초기화")
-        }
-        dialog.show(supportFragmentManager, "DisasterDetail")
-        Log.d(TAG, "📦 바텀시트 show 호출 완료")
     }
 
     private fun updateLocation() {
@@ -247,37 +201,54 @@ class MainMapActivity : BaseActivity(), OnMapReadyCallback {
                                 )
                             }
 
-                            rtdEvents.forEach { event ->
-
-                                val lat = event.latitude
-                                val lng = event.longitude
-
-                                if (lat == null || lng == null) {
-                                    Log.w(TAG, "❌ 위경도 누락 → 마커 생략됨: ${event.rtd_loc}")
-                                    return@forEach
-                                }
-
-                                val pos = LatLng(event.latitude, event.longitude)
-                                val marker = rtdMarkerManager.addMarker(event)
-                                if (marker != null) {
-                                    markerEventMap[marker] = event
-                                }
-                            }
+                            // 🔽 새로 추가된 점진적 마커 생성 호출
+                            addRtdMarkersSmoothly(rtdEvents)
                         } else {
-                            Log.e("RTD", "서버 응답 실패: ${response.code()}")
+                            Log.e(TAG, "서버 응답 실패: ${response.code()}")
                         }
                     }
 
                     override fun onFailure(call: Call<RtdResponse>, t: Throwable) {
-                        Log.e("RTD", "서버 요청 실패: ${t.localizedMessage}")
+                        Log.e(TAG, "서버 요청 실패: ${t.localizedMessage}")
                     }
                 })
-
             } catch (e: Exception) {
-                Log.e("RTD", "예외 발생", e)
+                Log.e(TAG, "예외 발생", e)
                 Toast.makeText(this@MainMapActivity, "재난 정보를 불러오지 못했습니다.", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
+    // 🔽 부드럽게 마커를 추가하는 메서드
+    private fun addRtdMarkersSmoothly(rtdEvents: List<RtdEvent>) {
+        val iterator = rtdEvents.iterator()
+        val handler = android.os.Handler(Looper.getMainLooper())
+
+        fun scheduleNextBatch() {
+            var count = 0
+            while (iterator.hasNext() && count < 5) {
+                val event = iterator.next()
+                val lat = event.latitude
+                val lng = event.longitude
+
+                if (lat != null && lng != null) {
+                    try {
+                        val marker = rtdMarkerManager.addMarker(event)
+                        if (marker != null) {
+                            markerEventMap[marker] = event
+                        }
+                    } catch (e: Exception) {
+                        Log.e(TAG, "마커 추가 중 예외 발생", e)
+                    }
+                }
+                count++
+            }
+
+            if (iterator.hasNext()) {
+                handler.postDelayed({ scheduleNextBatch() }, 10L)
+            }
+        }
+
+        scheduleNextBatch()
+    }
 }

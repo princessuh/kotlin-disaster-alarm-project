@@ -1,6 +1,5 @@
 package com.example.disasteralert
 
-import com.example.disasteralert.ReportAdapter
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -10,7 +9,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.disasteralert.api.ReportDetail
 import com.example.disasteralert.api.RetrofitClient
-import com.example.disasteralert.api.UserReportReceptionRequest
 import com.example.disasteralert.api.UserReportReceptionResponse
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -26,7 +24,7 @@ class ReportHistoryActivity : BaseActivity() {
     private lateinit var recyclerView: RecyclerView
 
     private val reportList = mutableListOf<ReportDetail>()
-    private lateinit var adapter: ReportAdapter  // 기존 어댑터 이름 그대로 쓰는 것으로 가정
+    private lateinit var adapter: ReportAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,24 +65,57 @@ class ReportHistoryActivity : BaseActivity() {
         val prefs = getSharedPreferences("user_prefs", MODE_PRIVATE)
         val localUserId = prefs.getString("user_id", null)
 
-        RetrofitClient.userReportReceptionService.getUserReportHistory(localUserId.toString(), 50)
+        Log.d("ReportHistory", "📌 SharedPreferences user_id = $localUserId")
+        Log.d("🔍SharedPrefs", "user_id = $localUserId")
+
+        if (localUserId.isNullOrBlank()) {
+            Toast.makeText(this, "로그인 정보가 없습니다.", Toast.LENGTH_SHORT).show()
+            Log.e("ReportHistory", "❌ user_id is null or blank")
+            return
+        }
+
+        RetrofitClient.userReportReceptionService.getUserReportHistory(localUserId, 50)
             .enqueue(object : Callback<UserReportReceptionResponse> {
                 override fun onResponse(
                     call: Call<UserReportReceptionResponse>,
                     response: Response<UserReportReceptionResponse>
                 ) {
+                    Log.d("Retrofit", "✅ 서버 응답 코드: ${response.code()}")
+
                     if (response.isSuccessful && response.body() != null) {
                         val details = response.body()!!.results
+                        Log.d("Retrofit", "📦 받은 제보 개수: ${details.size}")
+
                         reportList.clear()
                         reportList.addAll(details)
+
+                        // 🔧 테스트용 더미 데이터 강제 삽입
+                        reportList.add(
+                            ReportDetail(
+                                report_id = "dummy-id-001",
+                                report_time = "2025-07-03T09:00:00",
+                                middle_type = "기타",
+                                small_type = "42",
+                                report_location = "서울시 강서구",
+                                report_content = "🔥 테스트용 더미 제보입니다",
+                                latitude = 37.55,
+                                longitude = 126.85,
+                                visible = true,
+                                delete_vote = 0
+                            )
+                        )
+
+
                         adapter.notifyDataSetChanged()
+                        Log.d("Adapter", "✅ 어댑터 갱신 완료. 현재 리스트 크기: ${reportList.size}")
                     } else {
-                        Log.e("Retrofit", "서버 응답 오류: ${response.code()}, ${response.errorBody()?.string()}")
+                        val errorBody = response.errorBody()?.string()
+                        Log.e("Retrofit", "❌ 서버 응답 오류: ${response.code()}, 내용: $errorBody")
                     }
                 }
 
                 override fun onFailure(call: Call<UserReportReceptionResponse>, t: Throwable) {
-                    Log.e("Retrofit", "서버 연결 실패", t)
+                    Log.e("Retrofit", "❌ 서버 연결 실패", t)
                 }
             })
     }
