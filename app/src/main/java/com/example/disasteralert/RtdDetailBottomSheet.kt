@@ -23,7 +23,7 @@ class RtdDetailBottomSheet(
         val btnClose = view.findViewById<Button>(R.id.btn_close_rtd)
 
         tvLocation.text = event.rtd_loc
-        tvDetails.text = event.rtd_details.joinToString("\n")
+        tvDetails.text = event.rtd_details?.joinToString("\n") ?: "상세 정보 없음"
 
         btnClose.setOnClickListener {
             onClose()

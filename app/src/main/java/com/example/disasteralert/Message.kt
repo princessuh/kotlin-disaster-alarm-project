@@ -8,5 +8,6 @@ data class Message(
     val sentTime: String,        // 발송 시각 (ex: 2025/06/25 15:00)
     val title: String,           // 메시지 제목
     val content: String,         // 메시지 본문
-    val category: String         // 정보 유형 (기사, 특보, 제보 등)
+    val category: String,        // 정보 유형 (기사, 특보, 제보 등)
+    val id: String? = null       // report_id 또는 rtd_id 등을 저장
 )

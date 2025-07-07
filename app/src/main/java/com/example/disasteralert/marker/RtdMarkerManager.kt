@@ -20,13 +20,13 @@ class RtdMarkerManager(
         val position = LatLng(lat, lng)
 
         // 🔥 rtd_details에서 disaster type 추출
-        val disasterType = extractDisasterType(event.rtd_details)
+        val disasterType = extractDisasterType(event.rtd_details ?: emptyList())
         val iconResId = getDisasterIconFromType(disasterType)
 
         val options = MarkerOptions()
             .position(position)
             .title(event.rtd_loc)
-            .snippet(event.rtd_details.joinToString())
+            .snippet(event.rtd_details?.joinToString()?: "")
 
         if (iconResId != null) {
             val original = BitmapFactory.decodeResource(context.resources, iconResId)

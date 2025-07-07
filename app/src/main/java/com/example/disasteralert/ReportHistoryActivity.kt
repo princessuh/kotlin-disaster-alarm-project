@@ -89,21 +89,6 @@ class ReportHistoryActivity : BaseActivity() {
                         reportList.clear()
                         reportList.addAll(details)
 
-                        // 🔧 테스트용 더미 데이터 강제 삽입
-                        reportList.add(
-                            ReportDetail(
-                                report_id = "dummy-id-001",
-                                report_time = "2025-07-03T09:00:00",
-                                middle_type = "기타",
-                                small_type = "42",
-                                report_location = "서울시 강서구",
-                                report_content = "🔥 테스트용 더미 제보입니다",
-                                latitude = 37.55,
-                                longitude = 126.85,
-                                visible = true,
-                                delete_vote = 0
-                            )
-                        )
 
 
                         adapter.notifyDataSetChanged()

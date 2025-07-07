@@ -1,16 +1,25 @@
 package com.example.disasteralert
 
 import android.app.Dialog
+import android.content.Context
 import android.content.res.Resources
 import android.os.Bundle
+import android.util.Log
 import android.view.*
-import android.widget.*
+import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
+import com.example.disasteralert.api.ReportDeleteRequest
+import com.example.disasteralert.api.RetrofitClient
+import com.example.disasteralert.api.VoteRequest
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.gson.Gson
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-// 제보 본문
 class MessageDetailBottomSheetReport(
     private val message: Message,
     private val onDeleteRequest: (Message) -> Unit
@@ -29,14 +38,51 @@ class MessageDetailBottomSheetReport(
         tvTitle.text = message.title
         tvContent.text = message.content
 
+        // SharedPreferences에서 user_id 가져오기
+        val userId = context?.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+            ?.getString("user_id", null) ?: "default_user"
+
+        // ✅ 해제 요청
         btnReport.setOnClickListener {
-            onDeleteRequest(message)
-            Toast.makeText(context, "해제 요청이 등록되었습니다.", Toast.LENGTH_SHORT).show()
-            dismiss()
+            val request = VoteRequest(report_id = message.id ?: "", user_id = userId)
+            Log.d("VOTE_REQUEST", "보내는 해제요청: ${Gson().toJson(request)}")
+
+            RetrofitClient.reportService.voteReport(request).enqueue(object : Callback<Void> {
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    if (response.isSuccessful) {
+                        Toast.makeText(context, "해제 요청이 등록되었습니다.", Toast.LENGTH_SHORT).show()
+                        dismiss()
+                    } else {
+                        Toast.makeText(context, "해제 요청 실패: ${response.code()}", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    Toast.makeText(context, "네트워크 오류: ${t.localizedMessage}", Toast.LENGTH_SHORT).show()
+                }
+            })
         }
 
+        // ✅ 삭제 요청
         btnDelete.setOnClickListener {
-            Toast.makeText(context, "삭제 기능은 아직 구현되지 않았습니다.", Toast.LENGTH_SHORT).show()
+            val request = ReportDeleteRequest(report_id = message.id ?: "", user_id = userId)
+            Log.d("DELETE_REQUEST", "보내는 삭제요청: ${Gson().toJson(request)}")
+
+            RetrofitClient.reportService.deleteReport(request).enqueue(object : Callback<Void> {
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    if (response.isSuccessful) {
+                        Toast.makeText(context, "제보가 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                        onDeleteRequest(message)
+                        dismiss()
+                    } else {
+                        Toast.makeText(context, "삭제 실패: ${response.code()}", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    Toast.makeText(context, "네트워크 오류: ${t.localizedMessage}", Toast.LENGTH_SHORT).show()
+                }
+            })
         }
 
         return view

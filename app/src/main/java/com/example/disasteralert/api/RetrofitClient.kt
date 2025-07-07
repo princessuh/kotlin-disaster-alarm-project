@@ -64,4 +64,8 @@ object RetrofitClient {
 
         retrofit.create(RtdService::class.java)
     }
+
+    val reportService: ReportService by lazy {
+        retrofit.create(ReportService::class.java)
+    }
 }
