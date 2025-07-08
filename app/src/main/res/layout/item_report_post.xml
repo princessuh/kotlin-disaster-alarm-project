@@ -38,14 +38,38 @@
                 android:background="@drawable/bg_tag" />
         </LinearLayout>
 
-        <!-- 본문 (제보 내용) -->
-        <TextView
-            android:id="@+id/tvContent"
+        <!-- 본문 + 진행상황 칩 -->
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:textSize="14sp"
-            android:textColor="#333"/>
+            android:gravity="center_vertical">
+
+            <!-- 본문 -->
+            <TextView
+                android:id="@+id/tvContent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="14sp"
+                android:textColor="#333" />
+
+            <!-- 진행상황 칩 -->
+            <TextView
+                android:id="@+id/tvStatusChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="진행 중"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="4dp"
+                android:background="@drawable/chip_border"
+                android:layout_marginStart="8dp"
+                android:visibility="gone" />
+        </LinearLayout>
+
 
         <!-- 추천 태그들 (recommendedTags) -->
         <TextView

@@ -39,7 +39,19 @@ class ReportHistoryActivity : BaseActivity() {
         recyclerView = findViewById(R.id.recyclerReportHistory)
 
         recyclerView.layoutManager = LinearLayoutManager(this)
-        adapter = ReportAdapter(reportList)
+        adapter = ReportAdapter(reportList) { report ->
+            val message = Message(
+                sender = report.report_location,
+                sentTime = report.report_time,
+                title = "제보: ${report.middle_type}-${report.small_type}",
+                content = report.report_content,
+                category = "제보",
+                id = report.report_id
+            )
+            val bottomSheet = MessageDetailBottomSheetReport(message) {}
+            bottomSheet.show(supportFragmentManager, "ReportDetail")
+        }
+
         recyclerView.adapter = adapter
 
         loadReportsFromServer()

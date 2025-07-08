@@ -16,6 +16,7 @@ class MessageAdapter(
         val tvTitle: TextView = itemView.findViewById(R.id.tvTitle)
         val tvContent: TextView = itemView.findViewById(R.id.tvContent)
         val tvCategory: TextView = itemView.findViewById(R.id.tvCategory)
+        val tvStatusChip: TextView = itemView.findViewById(R.id.tvStatusChip)
 
         init {
             itemView.setOnClickListener {
@@ -37,7 +38,21 @@ class MessageAdapter(
         holder.tvTitle.text = message.title
         holder.tvContent.text = message.content
         holder.tvCategory.text = message.category
+
+        val userId = "sample_user_123"
+        val key = "$userId:${message.title}"
+        val deleteRequested = /* deleteRequestSet.contains(key) */ false  // ⚠️ 여기에 실제 로직 필요
+
+        if (deleteRequested) {
+            holder.tvStatusChip.text = "종결"
+            holder.tvStatusChip.setBackgroundResource(R.drawable.chip_border)
+        } else {
+            holder.tvStatusChip.text = "진행 중"
+            holder.tvStatusChip.setBackgroundResource(R.drawable.chip_border)
+        }
+        holder.tvStatusChip.visibility = View.VISIBLE
     }
+
 
     override fun getItemCount(): Int = messageList.size
 }
