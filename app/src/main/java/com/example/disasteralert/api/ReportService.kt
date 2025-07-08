@@ -7,9 +7,12 @@ import retrofit2.http.POST
 
 interface ReportService {
 
-    @DELETE("report/delete")
+    @POST("report/delete")
     fun deleteReport(@Body request: ReportDeleteRequest): Call<Void>
 
     @POST("report/vote_by_id")
     fun voteReport(@Body request: VoteRequest): Call<Void>
+
+    @POST("rtd/vote")
+    fun voteRtd(@Body request: RtdVoteRequest): Call<Void>
 }

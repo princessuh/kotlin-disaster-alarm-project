@@ -19,6 +19,7 @@ import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.UUID
 
 class MessageDetailBottomSheetReport(
     private val message: Message,
@@ -44,46 +45,67 @@ class MessageDetailBottomSheetReport(
 
         // ✅ 해제 요청
         btnReport.setOnClickListener {
-            val request = VoteRequest(report_id = message.id ?: "", user_id = userId)
-            Log.d("VOTE_REQUEST", "보내는 해제요청: ${Gson().toJson(request)}")
+            val reportIdString = message.id
+            if (reportIdString.isNullOrBlank()) {
+                Toast.makeText(context, "report_id가 유효하지 않습니다.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val reportId = try {
+                UUID.fromString(reportIdString)
+            } catch (e: IllegalArgumentException) {
+                Toast.makeText(context, "report_id 형식이 잘못되었습니다.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val prefs = context?.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+            val userId = prefs?.getString("user_id", "unknown_user") ?: "unknown_user"
+
+            val request = VoteRequest(report_id = reportId, user_id = userId)
+
+            val requestJson = com.google.gson.Gson().toJson(request)
+            android.util.Log.d("VoteRequest_JSON", "Sending request: $requestJson")
 
             RetrofitClient.reportService.voteReport(request).enqueue(object : Callback<Void> {
                 override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                    if (response.isSuccessful) {
-                        Toast.makeText(context, "해제 요청이 등록되었습니다.", Toast.LENGTH_SHORT).show()
-                        dismiss()
-                    } else {
-                        Toast.makeText(context, "해제 요청 실패: ${response.code()}", Toast.LENGTH_SHORT).show()
-                    }
+                    android.util.Log.d("VoteRequest_Response", "Status: ${response.code()} - success: ${response.isSuccessful}")
+                    Toast.makeText(context, "해제 요청이 등록되었습니다.", Toast.LENGTH_SHORT).show()
+                    dismiss()
                 }
 
                 override fun onFailure(call: Call<Void>, t: Throwable) {
-                    Toast.makeText(context, "네트워크 오류: ${t.localizedMessage}", Toast.LENGTH_SHORT).show()
+                    android.util.Log.e("VoteRequest_Failure", "요청 실패: ${t.localizedMessage}", t)
+                    Toast.makeText(context, "해제 요청 실패: ${t.localizedMessage}", Toast.LENGTH_SHORT).show()
                 }
             })
         }
+
 
         // ✅ 삭제 요청
-        btnDelete.setOnClickListener {
-            val request = ReportDeleteRequest(report_id = message.id ?: "", user_id = userId)
-            Log.d("DELETE_REQUEST", "보내는 삭제요청: ${Gson().toJson(request)}")
+        btnReport.setOnClickListener {
+            val reportId = UUID.fromString(message.id)  // 널 아님 가정
+            val prefs = context?.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+            val userId = prefs?.getString("user_id", "unknown_user") ?: "unknown_user"
 
-            RetrofitClient.reportService.deleteReport(request).enqueue(object : Callback<Void> {
+            val request = VoteRequest(report_id = reportId, user_id = userId)
+
+            val requestJson = com.google.gson.Gson().toJson(request)
+            android.util.Log.d("VoteRequest_JSON", "Sending request: $requestJson")
+
+            RetrofitClient.reportService.voteReport(request).enqueue(object : Callback<Void> {
                 override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                    if (response.isSuccessful) {
-                        Toast.makeText(context, "제보가 삭제되었습니다.", Toast.LENGTH_SHORT).show()
-                        onDeleteRequest(message)
-                        dismiss()
-                    } else {
-                        Toast.makeText(context, "삭제 실패: ${response.code()}", Toast.LENGTH_SHORT).show()
-                    }
+                    android.util.Log.d("VoteRequest_Response", "Status: ${response.code()} - success: ${response.isSuccessful}")
+                    Toast.makeText(context, "해제 요청이 등록되었습니다.", Toast.LENGTH_SHORT).show()
+                    dismiss()
                 }
 
                 override fun onFailure(call: Call<Void>, t: Throwable) {
-                    Toast.makeText(context, "네트워크 오류: ${t.localizedMessage}", Toast.LENGTH_SHORT).show()
+                    android.util.Log.e("VoteRequest_Failure", "요청 실패: ${t.localizedMessage}", t)
+                    Toast.makeText(context, "해제 요청 실패: ${t.localizedMessage}", Toast.LENGTH_SHORT).show()
                 }
             })
         }
+
 
         return view
     }
