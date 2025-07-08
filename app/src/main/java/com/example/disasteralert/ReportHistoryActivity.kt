@@ -15,6 +15,8 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
 
 class ReportHistoryActivity : BaseActivity() {
 
@@ -40,14 +42,38 @@ class ReportHistoryActivity : BaseActivity() {
 
         recyclerView.layoutManager = LinearLayoutManager(this)
         adapter = ReportAdapter(reportList) { report ->
+            val formattedTime = try {
+                OffsetDateTime.parse(report.report_time)
+                    .format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"))
+            } catch (e: Exception) {
+                Log.e("TimeFormat", "❌ 기본 파싱 실패: ${report.report_time}", e)
+
+                try {
+                    val fallbackTime = report.report_time?.replace(" ", "T")
+                    val fallback = if (fallbackTime != null) "$fallbackTime+09:00" else null
+
+                    if (fallback != null) {
+                        OffsetDateTime.parse(fallback)
+                            .format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"))
+                    } else {
+                        "시간 없음"
+                    }
+                } catch (e2: Exception) {
+                    Log.e("TimeFormat", "❌ fallback 파싱 실패: ${report.report_time}", e2)
+                    report.report_time ?: "시간 없음"
+                }
+            }
+
+
             val message = Message(
                 sender = report.report_location,
-                sentTime = report.report_time,
+                sentTime = formattedTime,
                 title = "제보: ${report.middle_type}-${report.small_type}",
                 content = report.report_content,
                 category = "제보",
                 id = report.report_id
             )
+
             val bottomSheet = MessageDetailBottomSheetReport(message) {}
             bottomSheet.show(supportFragmentManager, "ReportDetail")
         }
@@ -78,7 +104,6 @@ class ReportHistoryActivity : BaseActivity() {
         val localUserId = prefs.getString("user_id", null)
 
         Log.d("ReportHistory", "📌 SharedPreferences user_id = $localUserId")
-        Log.d("🔍SharedPrefs", "user_id = $localUserId")
 
         if (localUserId.isNullOrBlank()) {
             Toast.makeText(this, "로그인 정보가 없습니다.", Toast.LENGTH_SHORT).show()
@@ -98,12 +123,14 @@ class ReportHistoryActivity : BaseActivity() {
                         val details = response.body()!!.results
                         Log.d("Retrofit", "📦 받은 제보 개수: ${details.size}")
 
+                        details.forEachIndexed { index, detail ->
+                            Log.d("Report[$index]", "🕒 ${detail.report_time} / 📍 ${detail.report_location}")
+                        }
+
                         reportList.clear()
                         reportList.addAll(details)
-
-
-
                         adapter.notifyDataSetChanged()
+
                         Log.d("Adapter", "✅ 어댑터 갱신 완료. 현재 리스트 크기: ${reportList.size}")
                     } else {
                         val errorBody = response.errorBody()?.string()

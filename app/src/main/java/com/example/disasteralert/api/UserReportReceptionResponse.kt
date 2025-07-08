@@ -1,6 +1,8 @@
 // UserReportReceptionResponse.kt
 package com.example.disasteralert.api
 
+import com.google.gson.annotations.SerializedName
+
 data class UserReportReceptionResponse(
     val count: Int,
     val results: List<ReportDetail>
@@ -8,7 +10,8 @@ data class UserReportReceptionResponse(
 
 data class ReportDetail(
     val report_id: String,
-    val report_time: String,
+    @SerializedName("report_at")
+    val report_time: String?,
     val middle_type: String,
     val small_type: String,
     val report_location: String,

@@ -9,6 +9,7 @@ import com.example.disasteralert.api.ReportDetail
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import android.util.Log
+import java.time.OffsetDateTime
 
 class ReportAdapter(
     private val items: MutableList<ReportDetail> = mutableListOf(),
@@ -29,7 +30,9 @@ class ReportAdapter(
         val tvStatusChip: TextView = itemView.findViewById(R.id.tvStatusChip)
 
         fun bind(report: ReportDetail) {
-            tvLocationTime.text = "${report.report_location} • ${formatDateTime(report.report_time)}"
+            Log.d("ReportAdapter", "📌 바인딩 데이터: time=${report.report_time}, location=${report.report_location}")
+
+            tvLocationTime.text = "${report.report_location} • ${report.report_time}"
             tvCustomTag.text = "#${smallTypeMap[report.small_type] ?: "기타"}"
             tvContent.text = report.report_content
             tvRecTags.text = ""
@@ -39,6 +42,7 @@ class ReportAdapter(
             } else {
                 tvStatusChip.text = "종결"
             }
+
             tvStatusChip.setBackgroundResource(R.drawable.chip_border)
             tvStatusChip.visibility = View.VISIBLE
 
@@ -48,7 +52,6 @@ class ReportAdapter(
         }
     }
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_report_post, parent, false)
@@ -56,26 +59,10 @@ class ReportAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(items[position])
-    val report = items[position]
+        val report = items[position]
         Log.d("어댑터", "📌 바인딩 위치: $position / ${report.report_location} / ${report.report_content}")
-
-        holder.tvLocationTime.text = "${report.report_location} • ${formatDateTime(report.report_time)}"
-        holder.tvCustomTag.text = "#${smallTypeMap[report.small_type] ?: "기타"}"
-        holder.tvContent.text = report.report_content
-        holder.tvRecTags.text = ""
-
-        // ✅ 진행 상황 칩 표시
-        if (report.visible) {
-            holder.tvStatusChip.text = "진행 중"
-            holder.tvStatusChip.setBackgroundResource(R.drawable.chip_border)
-        } else {
-            holder.tvStatusChip.text = "종결"
-            holder.tvStatusChip.setBackgroundResource(R.drawable.chip_border)
-        }
-        holder.tvStatusChip.visibility = View.VISIBLE
+        holder.bind(report)
     }
-
 
     override fun getItemCount(): Int = items.size
 
@@ -83,14 +70,5 @@ class ReportAdapter(
         items.clear()
         items.addAll(newItems)
         notifyDataSetChanged()
-    }
-
-    private fun formatDateTime(iso: String): String {
-        return try {
-            val parsed = LocalDateTime.parse(iso, DateTimeFormatter.ISO_DATE_TIME)
-            parsed.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"))
-        } catch (e: Exception) {
-            iso
-        }
     }
 }
