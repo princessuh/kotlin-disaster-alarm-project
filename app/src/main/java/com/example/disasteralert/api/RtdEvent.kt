@@ -21,5 +21,6 @@ data class RtdEvent(
     // 공통 필드
     val latitude: Double? = null,
     val longitude: Double? = null,
-    val time: String
+    val time: String,
+    val visible: Boolean? = null
 )

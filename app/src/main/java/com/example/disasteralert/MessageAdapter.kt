@@ -39,17 +39,12 @@ class MessageAdapter(
         holder.tvContent.text = message.content
         holder.tvCategory.text = message.category
 
-        val userId = "sample_user_123"
-        val key = "$userId:${message.title}"
-        val deleteRequested = /* deleteRequestSet.contains(key) */ false  // ⚠️ 여기에 실제 로직 필요
-
-        if (deleteRequested) {
-            holder.tvStatusChip.text = "종결"
-            holder.tvStatusChip.setBackgroundResource(R.drawable.chip_border)
-        } else {
+        if (message.visible) {
             holder.tvStatusChip.text = "진행 중"
-            holder.tvStatusChip.setBackgroundResource(R.drawable.chip_border)
+        } else {
+            holder.tvStatusChip.text = "해제"
         }
+        holder.tvStatusChip.setBackgroundResource(R.drawable.chip_border)
         holder.tvStatusChip.visibility = View.VISIBLE
     }
 

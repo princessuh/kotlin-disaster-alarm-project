@@ -71,7 +71,8 @@ class ReportHistoryActivity : BaseActivity() {
                 title = "제보: ${report.middle_type}-${report.small_type}",
                 content = report.report_content,
                 category = "제보",
-                id = report.report_id
+                id = report.report_id,
+                visible = false // 제보 내역이므로 '해제' 상태로 고정
             )
 
             val bottomSheet = MessageDetailBottomSheetReport(message) {}

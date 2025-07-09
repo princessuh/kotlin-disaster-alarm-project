@@ -5,6 +5,6 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface UserRegisterService {
-    @POST("register")
+    @POST("devices/register")
     fun registerUser(@Body request: UserRegisterRequest): Call<Void>
 }

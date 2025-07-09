@@ -67,7 +67,8 @@ class MessageListActivity : BaseActivity() {
                                         title = title,
                                         content = fullContent,
                                         category = "RTD",
-                                        id = event.id  // ✅ ID 추가
+                                        id = event.id,  // ✅ ID 추가
+                                        visible = event.visible ?: true // ✅ visible 필드 추가
                                     )
                                 )
                             }
@@ -80,7 +81,8 @@ class MessageListActivity : BaseActivity() {
                                         title = "제보: ${event.middle_type ?: "?"}-${event.small_type ?: "?"}",
                                         content = event.content ?: "내용 없음",
                                         category = "제보",
-                                        id = event.id  // ✅ ID 추가
+                                        id = event.id,  // ✅ ID 추가
+                                        visible = event.visible ?: true // ✅ visible 필드 추가
                                     )
                                 )
                             }
