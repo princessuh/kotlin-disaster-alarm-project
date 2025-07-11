@@ -10,6 +10,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import android.util.Log
 import java.time.OffsetDateTime
+import androidx.core.content.ContextCompat
 
 class ReportAdapter(
     private val items: MutableList<ReportDetail> = mutableListOf(),
@@ -37,6 +38,8 @@ class ReportAdapter(
             tvContent.text = report.report_content
             tvRecTags.text = ""
 
+            updateStatusChip(tvStatusChip, report.visible)
+
             if (report.visible) {
                 tvStatusChip.text = "진행 중"
             } else {
@@ -51,6 +54,25 @@ class ReportAdapter(
             }
         }
     }
+
+    private fun updateStatusChip(chip: TextView, isActive: Boolean) {
+        val bg = chip.background?.mutate() as? android.graphics.drawable.GradientDrawable ?: return
+        val context = chip.context
+
+        if (isActive) {
+            chip.text = "진행 중"
+            chip.setTextColor(ContextCompat.getColor(context, R.color.red_60))
+            bg.setStroke(2, ContextCompat.getColor(context, R.color.red_60))
+        } else {
+            chip.text = "종결"
+            chip.setTextColor(ContextCompat.getColor(context, R.color.grey_60))
+            bg.setStroke(2, ContextCompat.getColor(context, R.color.grey_60))
+        }
+
+        chip.background = bg
+        chip.visibility = View.VISIBLE
+    }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)

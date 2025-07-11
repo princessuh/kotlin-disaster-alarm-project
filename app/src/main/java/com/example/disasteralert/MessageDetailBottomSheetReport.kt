@@ -35,6 +35,8 @@ class MessageDetailBottomSheetReport(
         val tvContent = view.findViewById<TextView>(R.id.tv_detail_content)
         val btnDelete = view.findViewById<TextView>(R.id.btn_delete)
         val btnReport = view.findViewById<TextView>(R.id.btn_report)
+        val tvStatusChip = view.findViewById<TextView>(R.id.tv_status_chip)
+        updateStatusChip(tvStatusChip, message.visible)
 
         tvTitle.text = message.title
         tvContent.text = message.content
@@ -133,5 +135,22 @@ class MessageDetailBottomSheetReport(
         }
 
         return dialog
+    }
+    private fun updateStatusChip(chip: TextView, isActive: Boolean) {
+        val bg = chip.background?.mutate() as? android.graphics.drawable.GradientDrawable ?: return
+        val context = chip.context
+
+        if (isActive) {
+            chip.text = "진행 중"
+            chip.setTextColor(ContextCompat.getColor(context, R.color.red_60))
+            bg.setStroke(2, ContextCompat.getColor(context, R.color.red_60))
+        } else {
+            chip.text = "해제됨"
+            chip.setTextColor(ContextCompat.getColor(context, R.color.grey_60))
+            bg.setStroke(2, ContextCompat.getColor(context, R.color.grey_60))
+        }
+
+        chip.background = bg
+        chip.visibility = View.VISIBLE
     }
 }

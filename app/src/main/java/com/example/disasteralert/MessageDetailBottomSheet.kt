@@ -34,6 +34,8 @@ class MessageDetailBottomSheet(
         val tvTitle = view.findViewById<TextView>(R.id.tv_detail_title)
         val tvContent = view.findViewById<TextView>(R.id.tv_detail_content)
         val btnReport = view.findViewById<TextView>(R.id.btn_report)
+        val tvStatusChip = view.findViewById<TextView>(R.id.tv_status_chip)
+        updateStatusChip(tvStatusChip, message.visible)
 
         val userId = context?.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
             ?.getString("user_id", null) ?: "default_user"
@@ -116,5 +118,22 @@ class MessageDetailBottomSheet(
         }
 
         return dialog
+    }
+    private fun updateStatusChip(chip: TextView, isActive: Boolean) {
+        val bg = chip.background?.mutate() as? android.graphics.drawable.GradientDrawable ?: return
+        val context = chip.context
+
+        if (isActive) {
+            chip.text = "진행 중"
+            chip.setTextColor(ContextCompat.getColor(context, R.color.red_60))
+            bg.setStroke(2, ContextCompat.getColor(context, R.color.red_60))
+        } else {
+            chip.text = "해제됨"
+            chip.setTextColor(ContextCompat.getColor(context, R.color.grey_60))
+            bg.setStroke(2, ContextCompat.getColor(context, R.color.grey_60))
+        }
+
+        chip.background = bg
+        chip.visibility = View.VISIBLE
     }
 }

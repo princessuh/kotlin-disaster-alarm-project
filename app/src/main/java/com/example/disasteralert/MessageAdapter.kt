@@ -5,6 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import androidx.core.content.ContextCompat
+
 
 class MessageAdapter(
     private val messageList: List<Message>,
@@ -39,6 +41,8 @@ class MessageAdapter(
         holder.tvContent.text = message.content
         holder.tvCategory.text = message.category
 
+        updateStatusChip(holder.tvStatusChip, message.visible)
+
         if (message.visible) {
             holder.tvStatusChip.text = "진행 중"
         } else {
@@ -48,6 +52,23 @@ class MessageAdapter(
         holder.tvStatusChip.visibility = View.VISIBLE
     }
 
+    private fun updateStatusChip(chip: TextView, isActive: Boolean) {
+        val bg = chip.background?.mutate() as? android.graphics.drawable.GradientDrawable ?: return
+        val context = chip.context
+
+        if (isActive) {
+            chip.text = "진행 중"
+            chip.setTextColor(ContextCompat.getColor(context, R.color.red_60))
+            bg.setStroke(2, ContextCompat.getColor(context, R.color.red_60))
+        } else {
+            chip.text = "해제"
+            chip.setTextColor(ContextCompat.getColor(context, R.color.grey_60))
+            bg.setStroke(2, ContextCompat.getColor(context, R.color.grey_60))
+        }
+
+        chip.background = bg
+        chip.visibility = View.VISIBLE
+    }
 
     override fun getItemCount(): Int = messageList.size
 }
