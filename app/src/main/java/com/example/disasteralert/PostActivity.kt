@@ -179,7 +179,7 @@ class PostActivity : AppCompatActivity() {
                     val dateStr = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
                         .format(Date(timestamp))
                     if (lat != null && lng != null) {
-                        tvLocationTime.text = "위치: $fullTextAddress\n위도: $lat, 경도: $lng\n시각: $dateStr"
+                        tvLocationTime.text = "위치: $fullTextAddress\n시각: $dateStr"
                     } else {
                         tvLocationTime.text = "위치: $fullTextAddress\n 위치 좌표 변환 실패\n시각: $dateStr"
                     }
