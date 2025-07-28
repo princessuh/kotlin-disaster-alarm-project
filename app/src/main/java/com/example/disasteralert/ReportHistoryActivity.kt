@@ -93,8 +93,12 @@ class ReportHistoryActivity : BaseActivity() {
                 }
                 selectedDisastersTextView.text = result
 
-                // 필터 적용
-                val filteredCodes = filtered.map { mapDisasterToCode(it).toString() }
+                // ✅ disaster code 리스트에서 -1 제거
+                val filteredCodes = filtered
+                    .map { mapDisasterToCode(it).toString() }
+                    .filter { it != "-1" } // <- 중요
+
+                Log.d("필터 코드", "✅ 선택된 코드: $filteredCodes")
 
                 val filteredReports = if (filteredCodes.isEmpty()) {
                     reportList

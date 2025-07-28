@@ -125,14 +125,22 @@ class FilterBottomSheetDialog(
 
         // ✅ 필터 적용 버튼
         view.findViewById<MaterialButton>(R.id.btn_apply_filter).setOnClickListener {
-            val selectedChips = (0 until chipGroupDetail.childCount)
+            var selectedChips = (0 until chipGroupDetail.childCount)
                 .mapNotNull { chipGroupDetail.getChildAt(it) as? Chip }
                 .filter { it.isChecked }
                 .map { it.text.toString() }
 
-            onFilterApplied(selectedChips.ifEmpty { emptyList() })
+            // ✅ 칩이 아무것도 선택되지 않았을 때 → 현재 체크된 카테고리의 모든 칩을 자동 선택
+            if (selectedChips.isEmpty()) {
+                selectedChips = (0 until chipGroupDetail.childCount)
+                    .mapNotNull { chipGroupDetail.getChildAt(it) as? Chip }
+                    .map { it.text.toString() }
+            }
+
+            onFilterApplied(selectedChips)
             dismiss()
         }
+
 
         return view
     }
