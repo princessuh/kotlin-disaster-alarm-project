@@ -72,6 +72,7 @@ class ReportHistoryActivity : BaseActivity() {
                 content = report.report_content,
                 category = "제보",
                 id = report.report_id,
+                // TODO: 해제 상태 고정 풀어야 할 듯
                 visible = false // 제보 내역이므로 '해제' 상태로 고정
             )
 
@@ -91,13 +92,21 @@ class ReportHistoryActivity : BaseActivity() {
                     "적용된 필터: ${filtered.joinToString(", ")}"
                 }
                 selectedDisastersTextView.text = result
+
+                // 필터 적용
+                val filteredCodes = filtered.map { mapDisasterToCode(it).toString() }
+
+                val filteredReports = if (filteredCodes.isEmpty()) {
+                    reportList
+                } else {
+                    reportList.filter { it.small_type in filteredCodes }
+                }
+
+                adapter.updateData(filteredReports)
             }
             dialog.show(supportFragmentManager, "FilterBottomSheet")
         }
 
-        fabReport.setOnClickListener {
-            startActivity(Intent(this, PostActivity::class.java))
-        }
     }
 
     private fun loadReportsFromServer() {
@@ -144,4 +153,21 @@ class ReportHistoryActivity : BaseActivity() {
                 }
             })
     }
+    private fun mapDisasterToCode(type: String): Int {
+        return when (type) {
+            "태풍" -> 31
+            "호우" -> 32
+            "홍수" -> 33
+            "강풍" -> 34
+            "대설" -> 35
+            "폭염" -> 41
+            "한파" -> 42
+            "지진" -> 51
+            "산불" -> 61
+            "일일화재" -> 62
+            "감염병", "미세먼지" -> 11
+            else -> -1
+        }
+    }
+
 }
