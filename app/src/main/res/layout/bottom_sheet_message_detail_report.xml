@@ -75,16 +75,16 @@
                 android:layout_marginTop="10dp"
                 android:textColor="#444" />
 
-            <TextView
-                android:id="@+id/btn_report"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="20dp"
-                android:text="해제 요청"
-                android:textSize="15sp"
-                android:textColor="@color/red_60"
-                android:paddingHorizontal="6dp" />
+<!--            <TextView-->
+<!--                android:id="@+id/btn_report"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_margin="20dp"-->
+<!--                android:text="해제 요청"-->
+<!--                android:textSize="15sp"-->
+<!--                android:textColor="@color/red_60"-->
+<!--                android:paddingHorizontal="6dp" />-->
 
             <!--        &lt;!&ndash; 🔹 구분선 &ndash;&gt;-->
             <!--        <View-->

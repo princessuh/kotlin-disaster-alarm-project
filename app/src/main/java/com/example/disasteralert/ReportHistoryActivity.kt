@@ -76,8 +76,7 @@ class ReportHistoryActivity : BaseActivity() {
                 content = report.report_content,
                 category = "제보",
                 id = report.report_id,
-                // TODO: 해제 상태 고정 풀어야 할 듯
-                visible = false // 제보 내역이므로 '해제' 상태로 고정
+                visible = report.visible
             )
 
             val bottomSheet = MessageDetailBottomSheetReport(message) {}
