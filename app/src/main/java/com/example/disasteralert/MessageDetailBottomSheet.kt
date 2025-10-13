@@ -128,7 +128,7 @@ class MessageDetailBottomSheet(
             chip.setTextColor(ContextCompat.getColor(context, R.color.red_60))
             bg.setStroke(2, ContextCompat.getColor(context, R.color.red_60))
         } else {
-            chip.text = "해제됨"
+            chip.text = "종결"
             chip.setTextColor(ContextCompat.getColor(context, R.color.grey_60))
             bg.setStroke(2, ContextCompat.getColor(context, R.color.grey_60))
         }

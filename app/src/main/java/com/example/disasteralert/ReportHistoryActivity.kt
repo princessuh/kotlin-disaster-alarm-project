@@ -41,6 +41,10 @@ class ReportHistoryActivity : BaseActivity() {
         recyclerView = findViewById(R.id.recyclerReportHistory)
 
         recyclerView.layoutManager = LinearLayoutManager(this)
+
+        fabReport.setOnClickListener {
+            startActivity(Intent(this, PostActivity::class.java))
+        }
         adapter = ReportAdapter(reportList) { report ->
             val formattedTime = try {
                 OffsetDateTime.parse(report.report_time)
@@ -85,25 +89,60 @@ class ReportHistoryActivity : BaseActivity() {
         loadReportsFromServer()
 
         btnFilter.setOnClickListener {
-            val dialog = FilterBottomSheetDialog { filtered ->
-                val result = if (filtered.isEmpty()) {
-                    "적용된 필터: 없음"
-                } else {
-                    "적용된 필터: ${filtered.joinToString(", ")}"
+            val dialog = FilterBottomSheetDialog { disasters, province, city, district, dateTime ->
+                // ✅ 선택된 필터 정보 텍스트로 표시
+                val resultText = buildString {
+                    if (disasters.isNotEmpty()) append("재난: ${disasters.joinToString(", ")}  ")
+                    if (!province.isNullOrBlank()) append("지역: $province $city $district  ")
+                    if (!dateTime.isNullOrBlank()) append("시각: $dateTime")
+                    if (isEmpty()) append("적용된 필터: 없음")
                 }
-                selectedDisastersTextView.text = result
+                selectedDisastersTextView.text = resultText
 
-                // ✅ disaster code 리스트에서 -1 제거
-                val filteredCodes = filtered
+                // ✅ 재난 유형 코드 변환
+                val filteredCodes = disasters
                     .map { mapDisasterToCode(it).toString() }
-                    .filter { it != "-1" } // <- 중요
+                    .filter { it != "-1" }
 
-                Log.d("필터 코드", "✅ 선택된 코드: $filteredCodes")
+                Log.d("필터", "✅ 선택된 코드: $filteredCodes")
+                Log.d("필터", "✅ 지역: $province $city $district, 시각: $dateTime")
 
-                val filteredReports = if (filteredCodes.isEmpty()) {
-                    reportList
-                } else {
-                    reportList.filter { it.small_type in filteredCodes }
+                // ✅ 필터링
+                val filteredReports = reportList.filter { report ->
+                    var match = true
+
+                    // 1) 재난 유형 필터
+                    if (filteredCodes.isNotEmpty()) {
+                        match = match && (report.small_type in filteredCodes)
+                    }
+
+                    // 2) 지역 필터 (report.report_location 안에 포함 여부로 판단)
+                    if (!province.isNullOrBlank()) {
+                        match = match && report.report_location?.contains(province) == true
+                    }
+                    if (!city.isNullOrBlank()) {
+                        match = match && report.report_location?.contains(city) == true
+                    }
+                    if (!district.isNullOrBlank()) {
+                        match = match && report.report_location?.contains(district) == true
+                    }
+
+                    // 3) 시각 필터 (yyyy-MM-dd HH:mm 이후 데이터만 포함)
+                    if (!dateTime.isNullOrBlank() && !report.report_time.isNullOrBlank()) {
+                        try {
+                            val filterTime = OffsetDateTime.parse(
+                                dateTime.replace(" ", "T") + ":00+09:00"
+                            )
+                            val reportTime = OffsetDateTime.parse(
+                                report.report_time.replace(" ", "T") + "+09:00"
+                            )
+                            match = match && (reportTime.isAfter(filterTime) || reportTime.isEqual(filterTime))
+                        } catch (e: Exception) {
+                            Log.e("필터", "❌ 시간 파싱 오류: ${report.report_time} vs $dateTime", e)
+                        }
+                    }
+
+                    match
                 }
 
                 adapter.updateData(filteredReports)

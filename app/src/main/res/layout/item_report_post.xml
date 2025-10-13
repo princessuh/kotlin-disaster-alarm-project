@@ -18,14 +18,14 @@
             android:id="@+id/tvStatusChip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingVertical="4dp"
+            android:paddingHorizontal="10dp"
             android:text="진행 중"
             android:textSize="12sp"
             android:textStyle="bold"
-            android:paddingHorizontal="10dp"
-            android:paddingVertical="4dp"
-            android:layout_marginTop="4dp"
             android:background="@drawable/chip_border"
-            android:visibility="gone" />
+            android:layout_marginStart="8dp"
+            />
 
         <!-- 위치 · 시간 (tv_location_time)-->
         <LinearLayout

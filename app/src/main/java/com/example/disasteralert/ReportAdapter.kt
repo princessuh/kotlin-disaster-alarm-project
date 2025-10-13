@@ -35,7 +35,7 @@ class ReportAdapter(
 
             tvLocationTime.text = "${report.report_location} • ${report.report_time}"
             tvCustomTag.text = "#${smallTypeMap[report.small_type] ?: "기타"}"
-            tvContent.text = report.report_content
+            tvContent.text = report.report_con
             tvRecTags.text = ""
 
             updateStatusChip(tvStatusChip, report.visible)

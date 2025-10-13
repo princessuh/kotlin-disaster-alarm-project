@@ -21,10 +21,9 @@ class MessageFilterBottomSheetDialog(
 
         val cbAllInfo = view.findViewById<CheckBox>(R.id.cb_all_info)
         val cbNews = view.findViewById<CheckBox>(R.id.cb_news)
-        val cbSpecial = view.findViewById<CheckBox>(R.id.cb_special)
         val cbReport = view.findViewById<CheckBox>(R.id.cb_report)
 
-        infoTypeCheckBoxes = listOf(cbAllInfo, cbNews, cbSpecial, cbReport)
+        infoTypeCheckBoxes = listOf(cbAllInfo, cbNews, cbReport)
 
         val cbAll = view.findViewById<CheckBox>(R.id.cb_all)
         val cbTyphoon = view.findViewById<CheckBox>(R.id.cb_typhoon)
@@ -52,13 +51,13 @@ class MessageFilterBottomSheetDialog(
         // cb_all_info 클릭 시 전체 토글
         cbAllInfo.setOnClickListener {
             val check = cbAllInfo.isChecked
-            listOf(cbNews, cbSpecial, cbReport).forEach { it.isChecked = check }
+            listOf(cbNews, cbReport).forEach { it.isChecked = check }
         }
 
         // 개별 정보유형 체크박스 클릭 시 전체 체크 상태 동기화
-        listOf(cbNews, cbSpecial, cbReport).forEach { cb ->
+        listOf(cbNews, cbReport).forEach { cb ->
             cb.setOnClickListener {
-                cbAllInfo.isChecked = listOf(cbNews, cbSpecial, cbReport).all { it.isChecked }
+                cbAllInfo.isChecked = listOf(cbNews, cbReport).all { it.isChecked }
             }
         }
 

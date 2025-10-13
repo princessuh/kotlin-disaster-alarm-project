@@ -15,6 +15,7 @@ data class ReportDetail(
     val middle_type: String,
     val small_type: String,
     val report_location: String,
+    val report_con : String,
     val report_content: String,
     val latitude: Double,
     val longitude: Double,

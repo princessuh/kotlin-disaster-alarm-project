@@ -13,6 +13,71 @@
         android:background="@drawable/rounded_top_white"
         android:padding="24dp">
 
+        <!-- 📍 지역 선택 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="지역 선택"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="@color/blue_90" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="12dp"
+            android:weightSum="3">
+
+            <Spinner
+                android:id="@+id/spinner_province"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="4dp" />
+
+            <Spinner
+                android:id="@+id/spinner_city"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="4dp" />
+
+            <Spinner
+                android:id="@+id/spinner_district"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <!-- ⏰ 시각 선택 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="재난 발생 시각"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="@color/blue_90"
+            android:layout_marginTop="32dp" />
+
+        <TextView
+            android:id="@+id/tv_selected_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="날짜를 선택하세요"
+            android:padding="12dp"
+            android:background="#EEEEEE"
+            android:layout_marginTop="12dp" />
+
+        <TextView
+            android:id="@+id/tv_selected_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="시간을 선택하세요"
+            android:padding="12dp"
+            android:background="#EEEEEE"
+            android:layout_marginTop="8dp" />
+
         <!-- 제목 -->
         <TextView
             android:layout_width="wrap_content"
@@ -20,67 +85,64 @@
             android:text="@string/info_type"
             android:textStyle="bold"
             android:textSize="18sp"
+            android:layout_marginTop="32dp"
             android:textColor="@color/blue_90" />
 
         <!-- 🔹 정보 유형 버튼들 -->
-        <LinearLayout
+        <androidx.gridlayout.widget.GridLayout
             android:id="@+id/layout_info_type"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginTop="16dp"
-            android:gravity="center_horizontal">
+            app:columnCount="3"
+            app:useDefaultMargins="true"
+            app:alignmentMode="alignMargins">
 
             <CheckBox
                 android:id="@+id/cb_all_info"
-                android:layout_width="72dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/checkbox_all"
-                android:gravity="center"
+                android:layout_margin="8dp"
                 android:background="@drawable/checkbox_selector"
+                android:gravity="center"
+                android:text="@string/checkbox_all"
                 android:textColor="@color/grey_60"
-                android:layout_marginEnd="16dp" />
+                app:layout_columnWeight="1" />
 
             <CheckBox
                 android:id="@+id/cb_news"
-                android:layout_width="72dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:background="@drawable/checkbox_selector"
+                android:gravity="center"
                 android:text="@string/news"
-                android:gravity="center"
-                android:background="@drawable/checkbox_selector"
                 android:textColor="@color/grey_60"
-                android:layout_marginEnd="16dp" />
-
-            <CheckBox
-                android:id="@+id/cb_special"
-                android:layout_width="72dp"
-                android:layout_height="wrap_content"
-                android:text="@string/special_report"
-                android:gravity="center"
-                android:background="@drawable/checkbox_selector"
-                android:textColor="@color/grey_60"
-                android:layout_marginEnd="16dp" />
+                app:layout_columnWeight="1" />
 
             <CheckBox
                 android:id="@+id/cb_report"
-                android:layout_width="72dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/report"
-                android:gravity="center"
+                android:layout_margin="8dp"
                 android:background="@drawable/checkbox_selector"
-                android:textColor="@color/grey_60" />
-        </LinearLayout>
+                android:gravity="center"
+                android:text="@string/report"
+                android:textColor="@color/grey_60"
+                app:layout_columnWeight="1" />
+        </androidx.gridlayout.widget.GridLayout>
 
+        <!-- 제목 -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/disaster_type"
             android:textStyle="bold"
             android:textSize="18sp"
-            android:layout_marginTop="48dp"
+            android:layout_marginTop="32dp"
             android:textColor="@color/blue_90" />
 
-        <!-- 🔹 재난 유형 (기존 구조 재사용) -->
+        <!-- 재난 유형 그리드 -->
         <androidx.gridlayout.widget.GridLayout
             android:id="@+id/grid_disaster_filter"
             android:layout_width="match_parent"
@@ -170,6 +232,14 @@
                 android:textColor="@color/grey_60"
                 app:layout_columnWeight="1" />
         </androidx.gridlayout.widget.GridLayout>
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chip_group_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:singleSelection="false"
+            app:selectionRequired="false" />
 
         <!-- 적용 버튼 -->
         <com.google.android.material.button.MaterialButton
