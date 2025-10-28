@@ -39,23 +39,21 @@ class ReportHistoryActivity : BaseActivity() {
         selectedDisastersTextView = findViewById(R.id.tv_selected_disasters)
         fabReport = findViewById(R.id.fabReport)
         recyclerView = findViewById(R.id.recyclerReportHistory)
-
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         fabReport.setOnClickListener {
             startActivity(Intent(this, PostActivity::class.java))
         }
+
         adapter = ReportAdapter(reportList) { report ->
             val formattedTime = try {
                 OffsetDateTime.parse(report.report_time)
                     .format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"))
             } catch (e: Exception) {
                 Log.e("TimeFormat", "❌ 기본 파싱 실패: ${report.report_time}", e)
-
                 try {
                     val fallbackTime = report.report_time?.replace(" ", "T")
                     val fallback = if (fallbackTime != null) "$fallbackTime+09:00" else null
-
                     if (fallback != null) {
                         OffsetDateTime.parse(fallback)
                             .format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"))
@@ -67,7 +65,6 @@ class ReportHistoryActivity : BaseActivity() {
                     report.report_time ?: "시간 없음"
                 }
             }
-
 
             val message = Message(
                 sender = report.report_location,
@@ -87,14 +84,16 @@ class ReportHistoryActivity : BaseActivity() {
 
         loadReportsFromServer()
 
+        // ✅ 필터 버튼 클릭
         btnFilter.setOnClickListener {
-            val dialog = FilterBottomSheetDialog { disasters, province, city, district, dateTime ->
-                // ✅ 선택된 필터 정보 텍스트로 표시
+            val dialog = FilterBottomSheetDialog { disasters, province, city, district, period ->
+
+                // ✅ 선택된 필터 요약 표시
                 val resultText = buildString {
                     if (disasters.isNotEmpty()) append("재난: ${disasters.joinToString(", ")}  ")
                     if (!province.isNullOrBlank()) append("지역: $province $city $district  ")
-                    if (!dateTime.isNullOrBlank()) append("시각: $dateTime")
-                    if (isEmpty()) append("적용된 필터: 없음")
+                    if (!period.isNullOrBlank()) append("기간: $period")
+                    if (isEmpty()) append("전체 보기")
                 }
                 selectedDisastersTextView.text = resultText
 
@@ -104,18 +103,27 @@ class ReportHistoryActivity : BaseActivity() {
                     .filter { it != "-1" }
 
                 Log.d("필터", "✅ 선택된 코드: $filteredCodes")
-                Log.d("필터", "✅ 지역: $province $city $district, 시각: $dateTime")
+                Log.d("필터", "✅ 지역: $province $city $district, 기간: $period")
+
+                // ✅ 기간 계산
+                val now = OffsetDateTime.now()
+                val filterTime = when (period) {
+                    "1개월" -> now.minusMonths(1)
+                    "1주일" -> now.minusWeeks(1)
+                    "1일" -> now.minusDays(1)
+                    else -> null // 전체 기간
+                }
 
                 // ✅ 필터링
                 val filteredReports = reportList.filter { report ->
                     var match = true
 
-                    // 1) 재난 유형 필터
+                    // 1️⃣ 재난 유형 필터 — 선택 없으면 전체 허용
                     if (filteredCodes.isNotEmpty()) {
                         match = match && (report.small_type in filteredCodes)
                     }
 
-                    // 2) 지역 필터 (report.report_location 안에 포함 여부로 판단)
+                    // 2️⃣ 지역 필터 — 선택 없으면 전국 허용
                     if (!province.isNullOrBlank()) {
                         match = match && report.report_location?.contains(province) == true
                     }
@@ -126,18 +134,15 @@ class ReportHistoryActivity : BaseActivity() {
                         match = match && report.report_location?.contains(district) == true
                     }
 
-                    // 3) 시각 필터 (yyyy-MM-dd HH:mm 이후 데이터만 포함)
-                    if (!dateTime.isNullOrBlank() && !report.report_time.isNullOrBlank()) {
+                    // 3️⃣ 기간 필터 — 선택 없으면 전체 기간 허용
+                    if (filterTime != null && !report.report_time.isNullOrBlank()) {
                         try {
-                            val filterTime = OffsetDateTime.parse(
-                                dateTime.replace(" ", "T") + ":00+09:00"
-                            )
                             val reportTime = OffsetDateTime.parse(
                                 report.report_time.replace(" ", "T") + "+09:00"
                             )
                             match = match && (reportTime.isAfter(filterTime) || reportTime.isEqual(filterTime))
                         } catch (e: Exception) {
-                            Log.e("필터", "❌ 시간 파싱 오류: ${report.report_time} vs $dateTime", e)
+                            Log.e("필터", "❌ 시간 파싱 오류: ${report.report_time}", e)
                         }
                     }
 
@@ -146,11 +151,12 @@ class ReportHistoryActivity : BaseActivity() {
 
                 adapter.updateData(filteredReports)
             }
+
             dialog.show(supportFragmentManager, "FilterBottomSheet")
         }
-
     }
 
+    // ✅ 서버 데이터 로드
     private fun loadReportsFromServer() {
         val prefs = getSharedPreferences("user_prefs", MODE_PRIVATE)
         val localUserId = prefs.getString("user_id", null)
@@ -195,6 +201,8 @@ class ReportHistoryActivity : BaseActivity() {
                 }
             })
     }
+
+    // ✅ 재난 이름 → 코드 변환
     private fun mapDisasterToCode(type: String): Int {
         return when (type) {
             "태풍" -> 31
@@ -211,5 +219,4 @@ class ReportHistoryActivity : BaseActivity() {
             else -> -1
         }
     }
-
 }

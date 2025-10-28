@@ -58,7 +58,8 @@ class MessageListActivity : BaseActivity() {
                         when (event.type) {
                             "rtd" -> {
                                 val fullContent = event.rtd_details?.joinToString("\n") ?: "내용 없음"
-                                val title = event.rtd_details?.firstOrNull()?.substringBefore(":")?.plus(": ...") ?: "RTD 알림"
+                                val title = event.rtd_details?.firstOrNull()?.substringBefore(":")
+                                    ?.plus(": ...") ?: "RTD 알림"
 
                                 messageList.add(
                                     Message(
@@ -66,7 +67,7 @@ class MessageListActivity : BaseActivity() {
                                         sentTime = formattedTime,
                                         title = title,
                                         content = fullContent,
-                                        category = "RTD",
+                                        category = "서버 발송",
                                         id = event.id,  // ✅ ID 추가
                                         visible = event.visible ?: true // ✅ visible 필드 추가
                                     )
@@ -113,16 +114,17 @@ class MessageListActivity : BaseActivity() {
                 Toast.makeText(this@MessageListActivity, "데이터 요청 실패", Toast.LENGTH_SHORT).show()
             }
         })
-
-        btnFilter.setOnClickListener {
-            val dialog = MessageFilterBottomSheetDialog { infoTypes, disasterTypes ->
-                val infoText = if (infoTypes.isEmpty()) "정보유형: 없음" else "정보유형: ${infoTypes.joinToString(", ")}"
-                val disasterText = if (disasterTypes.isEmpty()) "재난유형: 없음" else "재난유형: ${disasterTypes.joinToString(", ")}"
-                tvSelectedFilters.text = "$infoText\n$disasterText"
-            }
-            dialog.show(supportFragmentManager, "MessageFilterBottomSheet")
-        }
-    }
+    }  //todo 살릴 때 이 부분 삭제
+        //TODO 정보 유형 선택 부분 메시지 필터 바텀 시트 다이얼로그 안에 추가 필요)
+//        btnFilter.setOnClickListener {
+//            val dialog = MessageFilterBottomSheetDialog { infoTypes, disasterTypes ->
+//                val infoText = if (infoTypes.isEmpty()) "정보유형: 없음" else "정보유형: ${infoTypes.joinToString(", ")}"
+//                val disasterText = if (disasterTypes.isEmpty()) "재난유형: 없음" else "재난유형: ${disasterTypes.joinToString(", ")}"
+//                tvSelectedFilters.text = "$infoText\n$disasterText"
+//            }
+//            dialog.show(supportFragmentManager, "MessageFilterBottomSheet")
+//        }
+//    }
 
     private fun handleDeleteRequest(msg: Message) {
         val userId = "sample_user_123"  // ✅ 실제 앱에서는 SharedPreferences에서 불러오는 걸 권장

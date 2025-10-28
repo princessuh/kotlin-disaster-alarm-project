@@ -1,7 +1,5 @@
 package com.example.disasteralert
 
-import android.app.DatePickerDialog
-import android.app.TimePickerDialog
 import android.os.Bundle
 import android.view.*
 import android.widget.*
@@ -10,7 +8,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
-import java.util.*
 
 class FilterBottomSheetDialog(
     private val onFilterApplied: (
@@ -18,7 +15,7 @@ class FilterBottomSheetDialog(
         province: String?,
         city: String?,
         district: String?,
-        dateTime: String?
+        period: String?
     ) -> Unit
 ) : BottomSheetDialogFragment() {
 
@@ -30,22 +27,21 @@ class FilterBottomSheetDialog(
     private lateinit var spinnerProvince: Spinner
     private lateinit var spinnerCity: Spinner
     private lateinit var spinnerDistrict: Spinner
-    private lateinit var tvSelectedDate: TextView
-    private lateinit var tvSelectedTime: TextView
+
+    private lateinit var cb1Month: CheckBox
+    private lateinit var cb1Week: CheckBox
+    private lateinit var cb1Day: CheckBox
+    private lateinit var timeCheckBoxes: List<CheckBox>
 
     private var selectedProvince: String? = null
     private var selectedCity: String? = null
     private var selectedDistrict: String? = null
-    private var selectedDate: String? = null
-    private var selectedTime: String? = null
+    private var selectedPeriod: String? = null
 
     private val allDisasterLabels = listOf(
         "태풍", "호우", "홍수", "강풍", "대설",
-        "폭염", "한파",
-        "지진",
-        "감염병",
-        "산불", "일일화재",
-        "미세먼지"
+        "폭염", "한파", "지진", "감염병",
+        "산불", "일일화재", "미세먼지"
     )
 
     override fun onCreateView(
@@ -67,41 +63,34 @@ class FilterBottomSheetDialog(
         spinnerProvince = view.findViewById(R.id.spinner_province)
         spinnerCity = view.findViewById(R.id.spinner_city)
         spinnerDistrict = view.findViewById(R.id.spinner_district)
-        tvSelectedDate = view.findViewById(R.id.tv_selected_date)
-        tvSelectedTime = view.findViewById(R.id.tv_selected_time)
+
+        cb1Month = view.findViewById(R.id.cb_1month)
+        cb1Week = view.findViewById(R.id.cb_1week)
+        cb1Day = view.findViewById(R.id.cb_1day)
+        timeCheckBoxes = listOf(cb1Month, cb1Week, cb1Day)
 
         setupSpinners()
-        setupDateTimePickers()
+        setupCheckBoxListeners()
+        setupTimeCheckBoxListeners()
 
-        (checkBoxes + cbAll).forEach { cb ->
+        (checkBoxes + cbAll + timeCheckBoxes).forEach { cb ->
             cb.setButtonDrawable(android.R.color.transparent)
         }
 
-        setupCheckBoxListeners()
-
-        // 적용 버튼
         view.findViewById<MaterialButton>(R.id.btn_apply_filter).setOnClickListener {
             var selectedChips = (0 until chipGroupDetail.childCount)
                 .mapNotNull { chipGroupDetail.getChildAt(it) as? Chip }
                 .filter { it.isChecked }
                 .map { it.text.toString() }
 
-            if (selectedChips.isEmpty()) {
-                selectedChips = (0 until chipGroupDetail.childCount)
-                    .mapNotNull { chipGroupDetail.getChildAt(it) as? Chip }
-                    .map { it.text.toString() }
-            }
-
-            val dateTime = if (!selectedDate.isNullOrBlank() && !selectedTime.isNullOrBlank()) {
-                "${selectedDate} ${selectedTime}"
-            } else null
+            if (selectedChips.isEmpty()) selectedChips = allDisasterLabels
 
             onFilterApplied(
                 selectedChips,
                 selectedProvince,
                 selectedCity,
                 selectedDistrict,
-                dateTime
+                selectedPeriod
             )
             dismiss()
         }
@@ -109,78 +98,96 @@ class FilterBottomSheetDialog(
         return view
     }
 
+    /** ✅ 지역 스피너: RegionDataProvider 연동 */
     private fun setupSpinners() {
-        // TODO: 실제 지역 데이터 소스와 연결 필요
-        val provinces = listOf("서울", "부산", "대구")
-        val cities = listOf("강남구", "서초구", "송파구")
-        val districts = listOf("역삼동", "잠실동", "방이동")
-
-        spinnerProvince.adapter =
-            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, provinces)
-        spinnerCity.adapter =
-            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, cities)
-        spinnerDistrict.adapter =
-            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, districts)
+        val provinces = listOf("전체") + RegionDataProvider.regionData.keys.toList()
+        val provinceAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, provinces)
+        provinceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerProvince.adapter = provinceAdapter
 
         spinnerProvince.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?, view: View?, position: Int, id: Long
-            ) {
-                selectedProvince = provinces[position]
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val selected = provinces[position]
+                selectedProvince = if (selected == "전체") null else selected
+
+                val cities = if (selectedProvince != null) {
+                    listOf("전체") + (RegionDataProvider.regionData[selectedProvince]?.keys?.toList() ?: emptyList())
+                } else listOf("전체")
+
+                val cityAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, cities)
+                cityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                spinnerCity.adapter = cityAdapter
+
+                selectedCity = null
+                selectedDistrict = null
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
+
         spinnerCity.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?, view: View?, position: Int, id: Long
-            ) {
-                selectedCity = cities[position]
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val province = selectedProvince
+                val cities = if (province != null) {
+                    listOf("전체") + (RegionDataProvider.regionData[province]?.keys?.toList() ?: emptyList())
+                } else listOf("전체")
+
+                val selected = cities[position]
+                selectedCity = if (selected == "전체") null else selected
+
+                val districts = if (province != null && selectedCity != null) {
+                    listOf("전체") + (RegionDataProvider.regionData[province]?.get(selectedCity)?.toList() ?: emptyList())
+                } else listOf("전체")
+
+                val districtAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, districts)
+                districtAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                spinnerDistrict.adapter = districtAdapter
+
+                selectedDistrict = null
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
+
         spinnerDistrict.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?, view: View?, position: Int, id: Long
-            ) {
-                selectedDistrict = districts[position]
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val province = selectedProvince
+                val city = selectedCity
+                val districts = if (province != null && city != null) {
+                    listOf("전체") + (RegionDataProvider.regionData[province]?.get(city)?.toList() ?: emptyList())
+                } else listOf("전체")
+
+                val selected = districts[position]
+                selectedDistrict = if (selected == "전체") null else selected
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
     }
 
-    private fun setupDateTimePickers() {
-        tvSelectedDate.setOnClickListener {
-            val cal = Calendar.getInstance()
-            DatePickerDialog(
-                requireContext(),
-                { _, year, month, dayOfMonth ->
-                    selectedDate = String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth)
-                    tvSelectedDate.text = selectedDate
-                },
-                cal.get(Calendar.YEAR),
-                cal.get(Calendar.MONTH),
-                cal.get(Calendar.DAY_OF_MONTH)
-            ).show()
+    /** ✅ 기간 체크박스 (라디오버튼처럼 작동) */
+    private fun setupTimeCheckBoxListeners() {
+        lateinit var listener: CompoundButton.OnCheckedChangeListener
+        listener = CompoundButton.OnCheckedChangeListener { clickedCb, isChecked ->
+            if (isChecked) {
+                timeCheckBoxes.forEach { other ->
+                    if (other != clickedCb) {
+                        other.setOnCheckedChangeListener(null)
+                        other.isChecked = false
+                        updateCheckBoxStyle(other, false)
+                        other.setOnCheckedChangeListener(listener)
+                    }
+                }
+                selectedPeriod = (clickedCb as CheckBox).text.toString()
+            } else if (timeCheckBoxes.none { it.isChecked }) {
+                selectedPeriod = null
+            }
+            updateCheckBoxStyle(clickedCb as CheckBox, isChecked)
         }
-
-        tvSelectedTime.setOnClickListener {
-            val cal = Calendar.getInstance()
-            TimePickerDialog(
-                requireContext(),
-                { _, hourOfDay, minute ->
-                    selectedTime = String.format("%02d:%02d", hourOfDay, minute)
-                    tvSelectedTime.text = selectedTime
-                },
-                cal.get(Calendar.HOUR_OF_DAY),
-                cal.get(Calendar.MINUTE),
-                true
-            ).show()
-        }
+        timeCheckBoxes.forEach { cb -> cb.setOnCheckedChangeListener(listener) }
     }
 
+    /** ✅ 재난유형 체크박스 + 칩 연결 */
     private fun setupCheckBoxListeners() {
         val cbAllListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
             checkBoxes.forEach {
@@ -249,6 +256,7 @@ class FilterBottomSheetDialog(
         checkBoxes.forEach { cb -> cb.setOnCheckedChangeListener(checkBoxListener) }
     }
 
+    /** ✅ 체크박스 색상 스타일 */
     private fun updateCheckBoxStyle(cb: CheckBox, isChecked: Boolean) {
         val color = ContextCompat.getColor(
             cb.context,
