@@ -3,6 +3,7 @@ package com.example.disasteralert
 import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Location
+import android.os.Build
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
@@ -13,6 +14,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.disasteralert.api.DisasterEvent
 import com.example.disasteralert.api.RetrofitClient
@@ -37,7 +39,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-
 class MainMapActivity : BaseActivity(), OnMapReadyCallback {
 
     companion object {
@@ -61,6 +62,44 @@ class MainMapActivity : BaseActivity(), OnMapReadyCallback {
     private lateinit var geoJsonManager: GeoJsonManager
     private val polygonTypes = setOf("태풍", "호우", "강풍", "대설", "폭염", "한파", "지진", "미세먼지")
 
+    // 🔹 알림 권한 런처 등록
+    private val requestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+            if (isGranted) {
+                Log.d("Permission", "✅ 알림 권한 허용됨")
+            } else {
+                Log.d("Permission", "🚫 알림 권한 거부됨")
+                Toast.makeText(this, "알림 권한이 없어 푸시를 받을 수 없습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+    // 🔹 Android 13 이상에서 알림 권한 요청
+    private fun askNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            when {
+                ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) == PackageManager.PERMISSION_GRANTED -> {
+                    Log.d("Permission", "알림 권한 이미 허용됨")
+                }
+
+                shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS) -> {
+                    Toast.makeText(
+                        this,
+                        "재난 알림을 받기 위해 알림 권한이 필요합니다.",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                }
+
+                else -> {
+                    requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                }
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
@@ -68,6 +107,7 @@ class MainMapActivity : BaseActivity(), OnMapReadyCallback {
         setupBottomNavigation(R.id.bottom_navigation, "MainMapActivity")
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
+        // ✅ 위치 권한 요청
         locationPermission = registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
         ) { results ->
@@ -79,10 +119,15 @@ class MainMapActivity : BaseActivity(), OnMapReadyCallback {
             }
         }
 
-        locationPermission.launch(arrayOf(
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_FINE_LOCATION
-        ))
+        locationPermission.launch(
+            arrayOf(
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
+        )
+
+        // ✅ 알림 권한 요청
+        askNotificationPermission()
 
         findViewById<Button>(R.id.myLocationButton).setOnClickListener {
             currentLatLng?.let {
@@ -201,7 +246,6 @@ class MainMapActivity : BaseActivity(), OnMapReadyCallback {
                                 )
                             }
 
-                            // 🔽 새로 추가된 점진적 마커 생성 호출
                             addRtdMarkersSmoothly(rtdEvents)
                         } else {
                             Log.e(TAG, "서버 응답 실패: ${response.code()}")
@@ -219,7 +263,6 @@ class MainMapActivity : BaseActivity(), OnMapReadyCallback {
         }
     }
 
-    // 🔽 부드럽게 마커를 추가하는 메서드
     private fun addRtdMarkersSmoothly(rtdEvents: List<RtdEvent>) {
         val iterator = rtdEvents.iterator()
         val handler = android.os.Handler(Looper.getMainLooper())
