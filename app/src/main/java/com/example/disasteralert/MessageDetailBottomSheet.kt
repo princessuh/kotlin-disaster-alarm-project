@@ -106,7 +106,7 @@ class MessageDetailBottomSheet(
                 val behavior = BottomSheetBehavior.from(it)
 
                 val screenHeight = Resources.getSystem().displayMetrics.heightPixels
-                val desiredHeight = (screenHeight * 0.66).toInt()
+                val desiredHeight = (screenHeight * 1.0).toInt()
                 it.layoutParams.height = desiredHeight
                 it.requestLayout()
 

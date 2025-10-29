@@ -123,7 +123,7 @@ class MessageDetailBottomSheetReport(
 
                 // 화면의 2/3 높이로 설정
                 val screenHeight = Resources.getSystem().displayMetrics.heightPixels
-                val desiredHeight = (screenHeight * 0.66).toInt()
+                val desiredHeight = (screenHeight * 1.0).toInt()
                 it.layoutParams.height = desiredHeight
                 it.requestLayout()
 
