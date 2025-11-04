@@ -70,8 +70,8 @@ class MessageListActivity : BaseActivity() {
                         when (event.type) {
                             "rtd" -> {
                                 val fullContent = event.rtd_details?.joinToString("\n") ?: "내용 없음"
-                                val title = event.rtd_details?.firstOrNull()?.substringBefore(":")
-                                    ?.plus(": ...") ?: "RTD 알림"
+                                val title = event.rtd_details?.firstOrNull()?.substringAfter(": ")
+                                    ?.plus("") ?: "RTD 알림"
 
                                 messageList.add(
                                     Message(
