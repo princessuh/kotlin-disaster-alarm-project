@@ -18,9 +18,13 @@ import java.time.format.DateTimeFormatter
 
 class MessageListActivity : BaseActivity() {
 
+    private lateinit var recyclerView: RecyclerView
     private lateinit var btnFilter: MaterialButton
     private lateinit var tvSelectedFilters: TextView
     private val deleteRequestSet = mutableSetOf<String>()
+    private val messageList = mutableListOf<Message>()
+
+    private lateinit var adapter: MessageAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,29 +34,37 @@ class MessageListActivity : BaseActivity() {
 
         btnFilter = findViewById(R.id.btn_filter)
         tvSelectedFilters = findViewById(R.id.tv_selected_disasters)
-        val rvMessageList = findViewById<RecyclerView>(R.id.rv_message_list)
-        rvMessageList.layoutManager = LinearLayoutManager(this)
+        recyclerView = findViewById(R.id.rv_message_list)
+        recyclerView.layoutManager = LinearLayoutManager(this)
 
-        // 🔽 RTD 이벤트 호출
+        adapter = MessageAdapter(messageList) { message ->
+            val bottomSheet = if (message.category == "제보") {
+                MessageDetailBottomSheetReport(message) { handleDeleteRequest(it) }
+            } else {
+                MessageDetailBottomSheet(message) { handleDeleteRequest(it) }
+            }
+            bottomSheet.show(supportFragmentManager, "MessageDetail")
+        }
+        recyclerView.adapter = adapter
+
+        loadRtdMessages()
+        setupFilterButton()
+    }
+
+    /** ✅ RTD 메시지 불러오기 */
+    private fun loadRtdMessages() {
         RetrofitClient.rtdService.getRtdEvents().enqueue(object : Callback<RtdResponse> {
             override fun onResponse(call: Call<RtdResponse>, response: Response<RtdResponse>) {
                 if (response.isSuccessful && response.body() != null) {
+                    messageList.clear()
                     val rtdEvents = response.body()!!.results
-                    val messageList = mutableListOf<Message>()
 
                     for (event in rtdEvents) {
                         val formattedTime = try {
-                            val parsedTime = OffsetDateTime.parse(event.time)
-                            parsedTime.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"))
+                            OffsetDateTime.parse(event.time)
+                                .format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"))
                         } catch (e: Exception) {
-                            try {
-                                val fallback = event.time.replace(" ", "T") + "+09:00"
-                                OffsetDateTime.parse(fallback)
-                                    .format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"))
-                            } catch (e2: Exception) {
-                                Log.e("TimeParsing", "시간 파싱 실패: ${event.time}")
-                                "시간 알 수 없음"
-                            }
+                            "시간 알 수 없음"
                         }
 
                         when (event.type) {
@@ -68,8 +80,8 @@ class MessageListActivity : BaseActivity() {
                                         title = title,
                                         content = fullContent,
                                         category = "서버 발송",
-                                        id = event.id,  // ✅ ID 추가
-                                        visible = event.visible ?: true // ✅ visible 필드 추가
+                                        id = event.id,
+                                        visible = event.visible ?: true
                                     )
                                 )
                             }
@@ -82,28 +94,16 @@ class MessageListActivity : BaseActivity() {
                                         title = "제보: ${event.middle_type ?: "?"}-${event.small_type ?: "?"}",
                                         content = event.content ?: "내용 없음",
                                         category = "제보",
-                                        id = event.id,  // ✅ ID 추가
-                                        visible = event.visible ?: true // ✅ visible 필드 추가
+                                        id = event.id,
+                                        visible = event.visible ?: true
                                     )
                                 )
                             }
-
-                            else -> {
-                                Log.w("UnknownType", "알 수 없는 type: ${event.type}")
-                            }
                         }
                     }
 
-                    Log.d("MESSAGE_COUNT", "🟢 메시지 수: ${messageList.size}")
-                    rvMessageList.adapter = MessageAdapter(messageList) { message ->
-                        val bottomSheet = if (message.category == "제보") {
-                            MessageDetailBottomSheetReport(message) { handleDeleteRequest(it) }
-                        } else {
-                            MessageDetailBottomSheet(message) { handleDeleteRequest(it) }
-                        }
-                        bottomSheet.show(supportFragmentManager, "MessageDetail")
-                    }
-
+                    adapter.notifyDataSetChanged()
+                    Log.d("MessageList", "✅ 메시지 ${messageList.size}개 로드 완료")
                 } else {
                     Toast.makeText(this@MessageListActivity, "서버 응답 실패", Toast.LENGTH_SHORT).show()
                 }
@@ -114,23 +114,72 @@ class MessageListActivity : BaseActivity() {
                 Toast.makeText(this@MessageListActivity, "데이터 요청 실패", Toast.LENGTH_SHORT).show()
             }
         })
-    }  //todo 살릴 때 이 부분 삭제
-        //TODO 정보 유형 선택 부분 메시지 필터 바텀 시트 다이얼로그 안에 추가 필요)
-//        btnFilter.setOnClickListener {
-//            val dialog = MessageFilterBottomSheetDialog { infoTypes, disasterTypes ->
-//                val infoText = if (infoTypes.isEmpty()) "정보유형: 없음" else "정보유형: ${infoTypes.joinToString(", ")}"
-//                val disasterText = if (disasterTypes.isEmpty()) "재난유형: 없음" else "재난유형: ${disasterTypes.joinToString(", ")}"
-//                tvSelectedFilters.text = "$infoText\n$disasterText"
-//            }
-//            dialog.show(supportFragmentManager, "MessageFilterBottomSheet")
-//        }
-//    }
+    }
 
+    /** ✅ 필터 버튼 */
+    private fun setupFilterButton() {
+        btnFilter.setOnClickListener {
+            val dialog = MessageFilterBottomSheetDialog { disasters, province, city, district, period ->
+
+                // 필터 텍스트 요약
+                val summary = buildString {
+                    if (disasters.isNotEmpty()) append("재난: ${disasters.joinToString(", ")}  ")
+                    if (!province.isNullOrBlank()) append("지역: $province $city $district  ")
+                    if (!period.isNullOrBlank()) append("기간: $period")
+                    if (isEmpty()) append("전체 보기")
+                }
+                tvSelectedFilters.text = summary
+
+                // 기간 계산
+                val now = OffsetDateTime.now()
+                val filterTime = when (period) {
+                    "1개월" -> now.minusMonths(1)
+                    "1주일" -> now.minusWeeks(1)
+                    "1일" -> now.minusDays(1)
+                    else -> null
+                }
+
+                // 필터 적용
+                val filteredList = messageList.filter { msg ->
+                    var match = true
+
+                    if (disasters.isNotEmpty()) {
+                        match = match && disasters.any { d -> msg.title.contains(d) }
+                    }
+                    if (!province.isNullOrBlank()) {
+                        match = match && msg.sender.contains(province)
+                    }
+                    if (!city.isNullOrBlank()) {
+                        match = match && msg.sender.contains(city)
+                    }
+                    if (!district.isNullOrBlank()) {
+                        match = match && msg.sender.contains(district)
+                    }
+
+                    if (filterTime != null) {
+                        try {
+                            val msgTime = OffsetDateTime.parse(
+                                msg.sentTime.replace("/", "-").replace(" ", "T") + "+09:00"
+                            )
+                            match = match && msgTime.isAfter(filterTime)
+                        } catch (_: Exception) {}
+                    }
+
+                    match
+                }
+
+                adapter.updateData(filteredList)
+            }
+
+            dialog.show(supportFragmentManager, "MessageFilterBottomSheet")
+        }
+    }
+
+    /** ✅ 해제 요청 처리 */
     private fun handleDeleteRequest(msg: Message) {
-        val userId = "sample_user_123"  // ✅ 실제 앱에서는 SharedPreferences에서 불러오는 걸 권장
-        val key = "$userId:${msg.title}"
+        val userId = "sample_user_123"
+        val key = "$userId:${msg.id}"
         if (deleteRequestSet.add(key)) {
-            Log.d("DeleteRequest", "해제 요청: $key")
             Toast.makeText(this, "해제 요청이 등록되었습니다.", Toast.LENGTH_SHORT).show()
         } else {
             Toast.makeText(this, "이미 해제 요청을 하셨습니다.", Toast.LENGTH_SHORT).show()

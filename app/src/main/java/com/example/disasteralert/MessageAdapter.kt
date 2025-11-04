@@ -9,7 +9,7 @@ import androidx.core.content.ContextCompat
 
 
 class MessageAdapter(
-    private val messageList: List<Message>,
+    private val messageList: MutableList<Message>,
     private val onMessageClick: (Message) -> Unit
 ) : RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
 
@@ -71,4 +71,9 @@ class MessageAdapter(
     }
 
     override fun getItemCount(): Int = messageList.size
+    fun updateData(newItems: List<Message>) {
+        messageList.clear()
+        messageList.addAll(newItems)
+        notifyDataSetChanged()
+    }
 }

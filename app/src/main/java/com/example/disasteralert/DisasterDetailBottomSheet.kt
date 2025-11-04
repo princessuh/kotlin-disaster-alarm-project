@@ -35,4 +35,22 @@ class DisasterDetailBottomSheet(
     }
 
     override fun getTheme(): Int = R.style.BottomSheetDialogTheme
+    override fun onStart() {
+        super.onStart()
+
+        val dialog = dialog ?: return
+        val bottomSheet = dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+        bottomSheet?.let {
+            val behavior = com.google.android.material.bottomsheet.BottomSheetBehavior.from(it)
+            behavior.state = com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
+            behavior.peekHeight = 0 // peekHeight 없애서 완전 확장
+        }
+
+        // 상태바까지 꽉 차게 높이 조정
+        dialog.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
+    }
+
 }

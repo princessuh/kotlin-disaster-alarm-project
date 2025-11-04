@@ -3,7 +3,6 @@ package com.example.disasteralert
 import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Location
-import android.os.Build
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
@@ -14,15 +13,12 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
-import com.example.disasteralert.api.DisasterEvent
-import com.example.disasteralert.api.RetrofitClient
-import com.example.disasteralert.marker.DisasterMarkerManager
-import com.example.disasteralert.DisasterDetailBottomSheet
 import com.example.disasteralert.api.RtdEvent
 import com.example.disasteralert.api.RtdResponse
+import com.example.disasteralert.api.RetrofitClient
 import com.example.disasteralert.marker.RtdMarkerManager
+import com.example.disasteralert.marker.DisasterMarkerManager
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -62,43 +58,8 @@ class MainMapActivity : BaseActivity(), OnMapReadyCallback {
     private lateinit var geoJsonManager: GeoJsonManager
     private val polygonTypes = setOf("태풍", "호우", "강풍", "대설", "폭염", "한파", "지진", "미세먼지")
 
-    // 🔹 알림 권한 런처 등록
-    private val requestPermissionLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
-            if (isGranted) {
-                Log.d("Permission", "✅ 알림 권한 허용됨")
-            } else {
-                Log.d("Permission", "🚫 알림 권한 거부됨")
-                Toast.makeText(this, "알림 권한이 없어 푸시를 받을 수 없습니다.", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-    // 🔹 Android 13 이상에서 알림 권한 요청
-    private fun askNotificationPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            when {
-                ContextCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.POST_NOTIFICATIONS
-                ) == PackageManager.PERMISSION_GRANTED -> {
-                    Log.d("Permission", "알림 권한 이미 허용됨")
-                }
-
-                shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS) -> {
-                    Toast.makeText(
-                        this,
-                        "재난 알림을 받기 위해 알림 권한이 필요합니다.",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-                }
-
-                else -> {
-                    requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-                }
-            }
-        }
-    }
+    // 🔹 최신 서버 이벤트를 저장 (마커 재생성용)
+    private var latestRtdEvents: List<RtdEvent> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -107,7 +68,6 @@ class MainMapActivity : BaseActivity(), OnMapReadyCallback {
         setupBottomNavigation(R.id.bottom_navigation, "MainMapActivity")
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-        // ✅ 위치 권한 요청
         locationPermission = registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
         ) { results ->
@@ -119,15 +79,10 @@ class MainMapActivity : BaseActivity(), OnMapReadyCallback {
             }
         }
 
-        locationPermission.launch(
-            arrayOf(
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            )
-        )
-
-        // ✅ 알림 권한 요청
-        askNotificationPermission()
+        locationPermission.launch(arrayOf(
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ))
 
         findViewById<Button>(R.id.myLocationButton).setOnClickListener {
             currentLatLng?.let {
@@ -234,7 +189,8 @@ class MainMapActivity : BaseActivity(), OnMapReadyCallback {
                 RetrofitClient.rtdService.getRtdEvents().enqueue(object : Callback<RtdResponse> {
                     override fun onResponse(call: Call<RtdResponse>, response: Response<RtdResponse>) {
                         if (response.isSuccessful && response.body() != null) {
-                            val rtdEvents = response.body()!!.results
+                            // 🔹 최신 이벤트 저장
+                            latestRtdEvents = response.body()!!.results
 
                             mGoogleMap.clear()
                             markerEventMap.clear()
@@ -246,7 +202,7 @@ class MainMapActivity : BaseActivity(), OnMapReadyCallback {
                                 )
                             }
 
-                            addRtdMarkersSmoothly(rtdEvents)
+                            addRtdMarkersSmoothly(latestRtdEvents)
                         } else {
                             Log.e(TAG, "서버 응답 실패: ${response.code()}")
                         }
@@ -263,7 +219,9 @@ class MainMapActivity : BaseActivity(), OnMapReadyCallback {
         }
     }
 
+    // 🔹 Settings 기반 필터 적용 점진적 마커 추가
     private fun addRtdMarkersSmoothly(rtdEvents: List<RtdEvent>) {
+        val enabledDisasterTypes = getEnabledDisasterTypes()
         val iterator = rtdEvents.iterator()
         val handler = android.os.Handler(Looper.getMainLooper())
 
@@ -273,6 +231,20 @@ class MainMapActivity : BaseActivity(), OnMapReadyCallback {
                 val event = iterator.next()
                 val lat = event.latitude
                 val lng = event.longitude
+
+                val shouldShow = when (event.type) {
+                    "report" -> enabledDisasterTypes.contains("report")
+                    "rtd" -> {
+                        val disasterType = rtdMarkerManager.extractDisasterType(event.rtd_details ?: emptyList())
+                        disasterType != null && enabledDisasterTypes.contains(disasterType)
+                    }
+                    else -> false
+                }
+
+                if (!shouldShow) {
+                    count++
+                    continue
+                }
 
                 if (lat != null && lng != null) {
                     try {
@@ -293,5 +265,45 @@ class MainMapActivity : BaseActivity(), OnMapReadyCallback {
         }
 
         scheduleNextBatch()
+    }
+
+    // 🔹 SettingsActivity와 동일한 키 기반 활성화된 재난 타입 반환
+    private fun getEnabledDisasterTypes(): Set<String> {
+        val prefs = getSharedPreferences("Settings", MODE_PRIVATE)
+        val disasterTypesByIndex = listOf(
+            "태풍", "호우", "뉴스", "지진", "전염병", "특보", "화재", "미세먼지", "report"
+        )
+
+        val enabled = mutableSetOf<String>()
+        disasterTypesByIndex.forEachIndexed { index, type ->
+            if (prefs.getBoolean("disaster_$index", true)) {
+                enabled.add(type)
+            }
+        }
+        return enabled
+    }
+
+    // 🔹 최신 이벤트 기반 마커 재생성
+    fun refreshMarkers() {
+        if (!::mGoogleMap.isInitialized) return
+
+        mGoogleMap.clear()
+        markerEventMap.clear()
+        currentMarker = null
+
+        currentLatLng?.let {
+            currentMarker = mGoogleMap.addMarker(
+                MarkerOptions().position(it).title("현재 위치")
+            )
+        }
+
+        addRtdMarkersSmoothly(latestRtdEvents)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (::mGoogleMap.isInitialized) {
+            refreshMarkers()
+        }
     }
 }
