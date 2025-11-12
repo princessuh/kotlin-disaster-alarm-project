@@ -1,5 +1,6 @@
 package com.example.disasteralert
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,14 +43,6 @@ class MessageAdapter(
         holder.tvCategory.text = message.category
 
         updateStatusChip(holder.tvStatusChip, message.visible)
-
-        if (message.visible) {
-            holder.tvStatusChip.text = "진행 중"
-        } else {
-            holder.tvStatusChip.text = "해제"
-        }
-        holder.tvStatusChip.setBackgroundResource(R.drawable.chip_border)
-        holder.tvStatusChip.visibility = View.VISIBLE
     }
 
     private fun updateStatusChip(chip: TextView, isActive: Boolean) {
@@ -71,6 +64,7 @@ class MessageAdapter(
     }
 
     override fun getItemCount(): Int = messageList.size
+    @SuppressLint("NotifyDataSetChanged")
     fun updateData(newItems: List<Message>) {
         messageList.clear()
         messageList.addAll(newItems)

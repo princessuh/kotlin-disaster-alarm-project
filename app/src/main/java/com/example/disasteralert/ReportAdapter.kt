@@ -43,15 +43,6 @@ class ReportAdapter(
 
             updateStatusChip(tvStatusChip, report.visible)
 
-            if (report.visible) {
-                tvStatusChip.text = "진행 중"
-            } else {
-                tvStatusChip.text = "종결"
-            }
-
-            tvStatusChip.setBackgroundResource(R.drawable.chip_border)
-            tvStatusChip.visibility = View.VISIBLE
-
             itemView.setOnClickListener {
                 onItemClick(report)
             }
