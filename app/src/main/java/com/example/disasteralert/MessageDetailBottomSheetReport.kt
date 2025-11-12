@@ -34,7 +34,6 @@ class MessageDetailBottomSheetReport(
         val tvTitle = view.findViewById<TextView>(R.id.tv_detail_title)
         val tvContent = view.findViewById<TextView>(R.id.tv_detail_content)
         val btnDelete = view.findViewById<TextView>(R.id.btn_delete)
-        val btnReport = view.findViewById<TextView>(R.id.btn_report)
         val tvStatusChip = view.findViewById<TextView>(R.id.tv_status_chip)
         updateStatusChip(tvStatusChip, message.visible)
 
@@ -44,70 +43,6 @@ class MessageDetailBottomSheetReport(
         // SharedPreferences에서 user_id 가져오기
         val userId = context?.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
             ?.getString("user_id", null) ?: "default_user"
-
-        // ✅ 해제 요청
-        btnReport.setOnClickListener {
-            val reportIdString = message.id
-            if (reportIdString.isNullOrBlank()) {
-                Toast.makeText(context, "report_id가 유효하지 않습니다.", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            val reportId = try {
-                UUID.fromString(reportIdString)
-            } catch (e: IllegalArgumentException) {
-                Toast.makeText(context, "report_id 형식이 잘못되었습니다.", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            val prefs = context?.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
-            val userId = prefs?.getString("user_id", "unknown_user") ?: "unknown_user"
-
-            val request = VoteRequest(report_id = reportId, user_id = userId)
-
-            val requestJson = com.google.gson.Gson().toJson(request)
-            android.util.Log.d("VoteRequest_JSON", "Sending request: $requestJson")
-
-            RetrofitClient.reportService.voteReport(request).enqueue(object : Callback<Void> {
-                override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                    android.util.Log.d("VoteRequest_Response", "Status: ${response.code()} - success: ${response.isSuccessful}")
-                    Toast.makeText(context, "해제 요청이 등록되었습니다.", Toast.LENGTH_SHORT).show()
-                    dismiss()
-                }
-
-                override fun onFailure(call: Call<Void>, t: Throwable) {
-                    android.util.Log.e("VoteRequest_Failure", "요청 실패: ${t.localizedMessage}", t)
-                    Toast.makeText(context, "해제 요청 실패: ${t.localizedMessage}", Toast.LENGTH_SHORT).show()
-                }
-            })
-        }
-
-
-        // ✅ 삭제 요청
-        btnReport.setOnClickListener {
-            val reportId = UUID.fromString(message.id)  // 널 아님 가정
-            val prefs = context?.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
-            val userId = prefs?.getString("user_id", "unknown_user") ?: "unknown_user"
-
-            val request = VoteRequest(report_id = reportId, user_id = userId)
-
-            val requestJson = com.google.gson.Gson().toJson(request)
-            android.util.Log.d("VoteRequest_JSON", "Sending request: $requestJson")
-
-            RetrofitClient.reportService.voteReport(request).enqueue(object : Callback<Void> {
-                override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                    android.util.Log.d("VoteRequest_Response", "Status: ${response.code()} - success: ${response.isSuccessful}")
-                    Toast.makeText(context, "해제 요청이 등록되었습니다.", Toast.LENGTH_SHORT).show()
-                    dismiss()
-                }
-
-                override fun onFailure(call: Call<Void>, t: Throwable) {
-                    android.util.Log.e("VoteRequest_Failure", "요청 실패: ${t.localizedMessage}", t)
-                    Toast.makeText(context, "해제 요청 실패: ${t.localizedMessage}", Toast.LENGTH_SHORT).show()
-                }
-            })
-        }
-
 
         return view
     }

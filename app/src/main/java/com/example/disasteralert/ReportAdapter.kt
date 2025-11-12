@@ -33,7 +33,10 @@ class ReportAdapter(
         fun bind(report: ReportDetail) {
             Log.d("ReportAdapter", "📌 바인딩 데이터: time=${report.report_time}, location=${report.report_location}")
 
-            tvLocationTime.text = "${report.report_location} • ${report.report_time}"
+            tvLocationTime.text = "${report.report_location} • ${report.report_time
+                ?.replace("T", " ")
+                ?.replace("-", "/")
+                ?.let { if (it.length >= 16) it.substring(0, 16) else it }}"
             tvCustomTag.text = "#${smallTypeMap[report.small_type] ?: "기타"}"
             tvContent.text = report.report_con
             tvRecTags.text = ""
