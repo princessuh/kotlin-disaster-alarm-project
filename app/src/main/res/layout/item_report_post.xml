@@ -13,33 +13,37 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <!-- 진행상황 칩 -->
-        <TextView
-            android:id="@+id/tvStatusChip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingVertical="4dp"
-            android:paddingHorizontal="10dp"
-            android:text="진행 중"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            android:background="@drawable/chip_border"
-            android:layout_marginStart="8dp"
-            />
-
-        <!-- 위치 · 시간 (tv_location_time)-->
+        <!-- 발신자 · 시간 + 진행 상황 칩 -->
         <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
             android:layout_marginTop="4dp">
 
+            <!-- 발신자 및 시간 -->
             <TextView
                 android:id="@+id/tvLocationTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="익산시 · 2025/07/08 10:20"
+                android:textSize="12sp"
+                android:textColor="#666" />
+
+            <!-- 진행 상황 칩 -->
+            <TextView
+                android:id="@+id/tvStatusChip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="진행 중"
                 android:textSize="12sp"
-                android:textColor="#666"/>
+                android:textStyle="bold"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="4dp"
+                android:background="@drawable/chip_border"
+                android:layout_marginStart="8dp"
+                android:visibility="gone" />
         </LinearLayout>
 
         <!-- 본문 + 진행상황 칩 -->
