@@ -3,6 +3,7 @@ package com.example.disasteralert.marker
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import androidx.core.graphics.scale
 import com.example.disasteralert.R
 import com.example.disasteralert.api.RtdEvent
 import com.google.android.gms.maps.GoogleMap
@@ -28,8 +29,17 @@ class RtdMarkerManager(
             .snippet(if (event.type == "rtd") event.rtd_details?.joinToString() else event.content)
 
         if (iconResId != null) {
-            val bmp: Bitmap = BitmapFactory.decodeResource(context.resources, iconResId)
-            val scaled = Bitmap.createScaledBitmap(bmp, 128, 128, false)
+            val original = BitmapFactory.decodeResource(context.resources, iconResId)
+
+            // ✅ ARGB_8888 포맷으로 투명도 보장
+            val config = Bitmap.Config.ARGB_8888
+            val copy = original.copy(config, true)
+
+            val targetHeight = 120
+            val ratio = targetHeight.toFloat() / copy.height
+            val targetWidth = (copy.width * ratio).toInt()
+
+            val scaled = copy.scale(targetWidth, targetHeight)
             options.icon(BitmapDescriptorFactory.fromBitmap(scaled))
         }
 
@@ -39,20 +49,24 @@ class RtdMarkerManager(
     /** rtd_details에서 disaster type 추출 */
     fun extractDisasterType(details: List<String>): String? {
         if (details.isEmpty()) return null
-        val first = details.first()
-        return when {
-            first.contains("태풍") -> "태풍"
-            first.contains("호우") -> "호우"
-            first.contains("홍수") -> "홍수"
-            first.contains("강풍") -> "강풍"
-            first.contains("대설") -> "대설"
-            first.contains("폭염") -> "폭염"
-            first.contains("한파") -> "한파"
-            first.contains("지진") -> "지진"
-            first.contains("화재") || first.contains("산불") -> "산불"
-            first.contains("미세먼지") || first.contains("대기질") -> "미세먼지"
-            else -> null
+
+        // 각 항목을 순회하면서 확인
+        for (item in details) {
+            when {
+                item.contains("type: 태풍") -> return "태풍"
+                item.contains("type: 호우") -> return "호우"
+                item.contains("type: 홍수") -> return "홍수"
+                item.contains("type: 강풍") -> return "강풍"
+                item.contains("type: 대설") -> return "대설"
+                item.contains("type: 폭염") -> return "폭염"
+                item.contains("type: 한파") -> return "한파"
+                item.contains("type: 지진") -> return "지진"
+                item.contains("type: 화재") || item.contains("type: 산불") -> return "산불"
+                item.contains("pm10_grade") || item.contains("pm25_grade") -> return "미세먼지"
+            }
         }
+
+        return null
     }
 
     /** 재난 유형별 아이콘 반환 */
