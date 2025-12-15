@@ -56,7 +56,7 @@ class MainMapActivity : BaseActivity(), OnMapReadyCallback {
     private var selectedMarker: Marker? = null
 
     private lateinit var geoJsonManager: GeoJsonManager
-    private val polygonTypes = setOf("태풍", "호우", "홍수", "강풍", "대설", "폭염", "한파", "지진", "화재", "산불", "미세먼지", "report")
+    private val polygonTypes = setOf("태풍", "호우", "강풍", "대설", "폭염", "한파", "지진", "미세먼지")
 
     // 🔹 최신 서버 이벤트를 저장 (마커 재생성용)
     private var latestRtdEvents: List<RtdEvent> = emptyList()
@@ -270,25 +270,16 @@ class MainMapActivity : BaseActivity(), OnMapReadyCallback {
     // 🔹 SettingsActivity와 동일한 키 기반 활성화된 재난 타입 반환
     private fun getEnabledDisasterTypes(): Set<String> {
         val prefs = getSharedPreferences("Settings", MODE_PRIVATE)
+        val disasterTypesByIndex = listOf(
+            "태풍", "호우", "뉴스", "지진", "전염병", "특보", "화재", "미세먼지", "report"
+        )
+
         val enabled = mutableSetOf<String>()
-
-        // 기존 체크박스 매핑
-        if (prefs.getBoolean("disaster_0", true)) enabled.add("태풍")
-        if (prefs.getBoolean("disaster_1", true)) enabled.add("호우")
-        if (prefs.getBoolean("disaster_2", true)) enabled.add("뉴스")
-        if (prefs.getBoolean("disaster_3", true)) enabled.add("지진")
-        if (prefs.getBoolean("disaster_4", true)) enabled.add("전염병")
-        if (prefs.getBoolean("disaster_5", true)) enabled.add("특보")
-        if (prefs.getBoolean("disaster_6", true)) {
-            enabled.add("화재")
-            enabled.add("산불")  // ✅ 화재 체크 시 산불도 포함
+        disasterTypesByIndex.forEachIndexed { index, type ->
+            if (prefs.getBoolean("disaster_$index", true)) {
+                enabled.add(type)
+            }
         }
-        if (prefs.getBoolean("disaster_7", true)) enabled.add("미세먼지")
-        if (prefs.getBoolean("disaster_8", true)) enabled.add("report")
-
-        // ✅ 체크박스에 없는 재난 타입은 항상 표시
-        enabled.addAll(listOf("홍수", "강풍", "대설", "폭염", "한파"))
-
         return enabled
     }
 

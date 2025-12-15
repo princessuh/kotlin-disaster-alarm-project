@@ -8,7 +8,6 @@ import android.os.Handler
 import android.os.Looper
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.scale
 import com.example.disasteralert.R
 import com.example.disasteralert.api.DisasterEvent
 import com.google.android.gms.maps.GoogleMap
@@ -79,19 +78,10 @@ class DisasterMarkerManager(
 
         // 아이콘을 스케일 조절해서 사용
         if (iconResId != null) {
-            // ✅ 투명도를 명시적으로 유지
-            val bitmapOptions = BitmapFactory.Options().apply {
-                inPreferredConfig = Bitmap.Config.ARGB_8888
-            }
-            val original = BitmapFactory.decodeResource(context.resources, iconResId, bitmapOptions)
-
-            val targetHeight = 120
-            val ratio = targetHeight.toFloat() / original.height
-            val targetWidth = (original.width * ratio).toInt()
-
-            val scaled = original.scale(targetWidth, targetHeight)
-            options.icon(BitmapDescriptorFactory.fromBitmap(scaled))
-        }
+             val original = BitmapFactory.decodeResource(context.resources, iconResId)
+             val scaled = Bitmap.createScaledBitmap(original, 128, 128, false)
+             options.icon(BitmapDescriptorFactory.fromBitmap(scaled))
+                }
 
         // 지도에 마커 추가
         val marker = map.addMarker(options)

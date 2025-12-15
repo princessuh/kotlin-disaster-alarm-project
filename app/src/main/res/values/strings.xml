@@ -64,4 +64,67 @@
     <string name="message_list">메시지 목록</string>
     <string name="setting">환경 설정</string>
     <string name="disaster_icon">재난 아이콘</string>
+
+    <!-- ============================================ -->
+    <!-- 추가: 코드에서 하드코딩된 문자열 리소스화 -->
+    <!-- ============================================ -->
+
+    <!-- 제보 관련 -->
+    <string name="report_location_unknown">제보 위치 없음</string>
+    <string name="report_category">제보</string>
+    <string name="report_default_title">제보: %1$s-%2$s</string>
+    <string name="content_unknown">내용 없음</string>
+
+    <!-- 메시지 카테고리 -->
+    <string name="category_rtd">재난문자</string>
+    <string name="category_report">제보</string>
+
+    <!-- 재난 세부 유형 (API 매핑용) -->
+    <string name="disaster_typhoon">태풍</string>
+    <string name="disaster_heavy_rain">호우</string>
+    <string name="disaster_flood">홍수</string>
+    <string name="disaster_strong_wind">강풍</string>
+    <string name="disaster_heavy_snow">대설</string>
+    <string name="disaster_heat_wave">폭염</string>
+    <string name="disaster_cold_wave">한파</string>
+    <string name="disaster_earthquake">지진</string>
+    <string name="disaster_fire">화재</string>
+    <string name="disaster_wildfire">산불</string>
+    <string name="disaster_fine_dust">미세먼지</string>
+    <string name="disaster_air_quality">대기질</string>
+
+    <!-- 날짜/시간 관련 -->
+    <string name="today">오늘</string>
+    <string name="yesterday">어제</string>
+    <string name="time_format_am">오전</string>
+    <string name="time_format_pm">오후</string>
+
+    <!-- 에러 메시지 -->
+    <string name="error_network">네트워크 오류가 발생했습니다</string>
+    <string name="error_loading">데이터를 불러오는 중 오류가 발생했습니다</string>
+    <string name="error_login_failed">로그인에 실패했습니다</string>
+
+    <!-- 확인/취소 -->
+    <string name="confirm">확인</string>
+    <string name="cancel">취소</string>
+    <string name="yes">예</string>
+    <string name="no">아니오</string>
+    <string name="ok">확인</string>
+    <string name="close">닫기</string>
+    <string name="save">저장</string>
+    <string name="delete">삭제</string>
+    <string name="edit">수정</string>
+
+    <!-- 알림 관련 -->
+    <string name="notification_channel_name">재난 알림</string>
+    <string name="notification_channel_description">재난 및 안전 정보 알림</string>
+
+    <!-- 지도 관련 -->
+    <string name="map_loading">지도를 불러오는 중...</string>
+    <string name="current_location">현재 위치</string>
+    <string name="location_permission_required">위치 권한이 필요합니다</string>
+
+    <!-- 빈 상태 -->
+    <string name="empty_messages">알림이 없습니다</string>
+    <string name="empty_reports">제보 내역이 없습니다</string>
 </resources>
