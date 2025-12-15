@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Basic Info -->
+    <string name="app_name">Disaster Alert</string>
+
+    <!-- Login -->
+    <string name="login">Login</string>
+    <string name="logout">Logout</string>
+    <string name="login_title">Please log in\nfor a better experience</string>
+    <string name="keep_login">Keep me logged in</string>
+    <string name="find_id">Find ID</string>
+    <string name="find_pw">Find Password</string>
+
+    <!-- Sign Up -->
+    <string name="join">Not a member yet?</string>
+    <string name="join_title">Sign Up</string>
+    <string name="next">Next</string>
+
+    <!-- Input Field Hints -->
+    <string name="email_hint">ID</string>
+    <string name="password_hint">Password</string>
+    <string name="password_confirm_hint">Confirm Password</string>
+    <string name="name_hint">Name</string>
+    <string name="address_hint">Address</string>
+    <string name="phone_number_hint">Phone Number</string>
+
+    <!-- Disaster Info Reception Type -->
+    <string name="receive_disaster_info">Disaster Alert Types</string>
+    <string name="info_type">Info Type</string>
+    <string name="natural_disaster">Natural Disasters</string>
+    <string name="social_disaster">Social Disasters</string>
+    <string name="safety_info">User Reports</string>
+
+    <string name="apply_selected_filter">Apply Selected Filter</string>
+    <string name="applied_filter_none">Applied Filter: None</string>
+    <string name="report_history">Report History</string>
+    <string name="filter_close">Close Filter</string>
+    <string name="filter_open">Open Filter</string>
+    <string name="filter">Filter</string>
+
+    <string name="disaster_selection_title">Select the disaster types you want to receive alerts for</string>
+    <string name="disaster_selection_subtitle">You can change this selection in Settings.</string>
+
+    <!-- Disaster Types -->
+    <string name="disaster_type">Disaster Type</string>
+    <string name="checkbox_all">All</string>
+    <string name="typhoon">Storm/Flood</string>
+    <string name="weather">Weather Disasters</string>
+    <string name="news">News</string>
+    <string name="earthquake">Geological Disasters</string>
+    <string name="epidemic">Epidemic</string>
+    <string name="special_report">Special Alert</string>
+    <string name="fire">Fire/Explosion</string>
+    <string name="fine_dust">Fine Dust</string>
+    <string name="report">Reports</string>
+    <string name="btn_skip">Skip for now</string>
+
+    <!-- Others -->
+    <string name="line"> | </string>
+    <string name="default_name">Username</string>
+    <string name="default_user_id">user_id</string>
+    <string name="edit_title">Edit Profile</string>
+    <string name="location_time_format">Location: %1$s, %2$s | Time: %3$s</string>
+    <string name="apply">Apply</string>
+    <string name="message_list">Message List</string>
+    <string name="setting">Settings</string>
+    <string name="disaster_icon">Disaster Icon</string>
+
+    <!-- ============================================ -->
+    <!-- Additional: Hardcoded strings from code -->
+    <!-- ============================================ -->
+
+    <!-- Report Related -->
+    <string name="report_location_unknown">Location Unknown</string>
+    <string name="report_category">Report</string>
+    <string name="report_default_title">Report: %1$s-%2$s</string>
+    <string name="content_unknown">No Content</string>
+
+    <!-- Message Categories -->
+    <string name="category_rtd">Emergency Alert</string>
+    <string name="category_report">Report</string>
+
+    <!-- Disaster Subtypes (for API mapping) -->
+    <string name="disaster_typhoon">Typhoon</string>
+    <string name="disaster_heavy_rain">Heavy Rain</string>
+    <string name="disaster_flood">Flood</string>
+    <string name="disaster_strong_wind">Strong Wind</string>
+    <string name="disaster_heavy_snow">Heavy Snow</string>
+    <string name="disaster_heat_wave">Heat Wave</string>
+    <string name="disaster_cold_wave">Cold Wave</string>
+    <string name="disaster_earthquake">Earthquake</string>
+    <string name="disaster_fire">Fire</string>
+    <string name="disaster_wildfire">Wildfire</string>
+    <string name="disaster_fine_dust">Fine Dust</string>
+    <string name="disaster_air_quality">Air Quality</string>
+
+    <!-- Date/Time Related -->
+    <string name="today">Today</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="time_format_am">AM</string>
+    <string name="time_format_pm">PM</string>
+
+    <!-- Error Messages -->
+    <string name="error_network">A network error occurred</string>
+    <string name="error_loading">An error occurred while loading data</string>
+    <string name="error_login_failed">Login failed</string>
+
+    <!-- Confirm/Cancel -->
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="ok">OK</string>
+    <string name="close">Close</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
+
+    <!-- Notification Related -->
+    <string name="notification_channel_name">Disaster Alerts</string>
+    <string name="notification_channel_description">Disaster and safety information notifications</string>
+
+    <!-- Map Related -->
+    <string name="map_loading">Loading map...</string>
+    <string name="current_location">Current Location</string>
+    <string name="location_permission_required">Location permission is required</string>
+
+    <!-- Empty States -->
+    <string name="empty_messages">No notifications</string>
+    <string name="empty_reports">No report history</string>
+</resources>
