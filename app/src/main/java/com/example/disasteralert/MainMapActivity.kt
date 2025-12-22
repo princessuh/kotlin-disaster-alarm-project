@@ -75,7 +75,7 @@ class MainMapActivity : BaseActivity(), OnMapReadyCallback {
                 (supportFragmentManager.findFragmentById(R.id.map_fragment)
                         as SupportMapFragment).getMapAsync(this)
             } else {
-                Toast.makeText(this, "위치 권한이 필요합니다.", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, getString(R.string.location_permission_needed), Toast.LENGTH_LONG).show()
             }
         }
 
@@ -87,7 +87,7 @@ class MainMapActivity : BaseActivity(), OnMapReadyCallback {
         findViewById<Button>(R.id.myLocationButton).setOnClickListener {
             currentLatLng?.let {
                 mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(it, 15f))
-            } ?: Toast.makeText(this, "현재 위치를 가져올 수 없습니다.", Toast.LENGTH_SHORT).show()
+            } ?: Toast.makeText(this, getString(R.string.current_location_unavailable), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -170,7 +170,7 @@ class MainMapActivity : BaseActivity(), OnMapReadyCallback {
         val pos = LatLng(loc.latitude, loc.longitude)
         if (currentMarker == null) {
             currentMarker = mGoogleMap.addMarker(
-                MarkerOptions().position(pos).title("현재 위치")
+                MarkerOptions().position(pos).title(getString(R.string.current_location))
             )
         } else {
             currentMarker?.position = pos
@@ -198,7 +198,7 @@ class MainMapActivity : BaseActivity(), OnMapReadyCallback {
 
                             currentLatLng?.let {
                                 currentMarker = mGoogleMap.addMarker(
-                                    MarkerOptions().position(it).title("현재 위치")
+                                    MarkerOptions().position(it).title(getString(R.string.current_location))
                                 )
                             }
 
@@ -214,7 +214,7 @@ class MainMapActivity : BaseActivity(), OnMapReadyCallback {
                 })
             } catch (e: Exception) {
                 Log.e(TAG, "예외 발생", e)
-                Toast.makeText(this@MainMapActivity, "재난 정보를 불러오지 못했습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainMapActivity, getString(R.string.error_disaster_load), Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -293,7 +293,7 @@ class MainMapActivity : BaseActivity(), OnMapReadyCallback {
 
         currentLatLng?.let {
             currentMarker = mGoogleMap.addMarker(
-                MarkerOptions().position(it).title("현재 위치")
+                MarkerOptions().position(it).title(getString(R.string.current_location))
             )
         }
 

@@ -50,11 +50,11 @@ class MessageAdapter(
         val context = chip.context
 
         if (isActive) {
-            chip.text = "진행 중"
+            chip.text = context.getString(R.string.status_in_progress)
             chip.setTextColor(ContextCompat.getColor(context, R.color.red_60))
             bg.setStroke(2, ContextCompat.getColor(context, R.color.red_60))
         } else {
-            chip.text = "해제"
+            chip.text = context.getString(R.string.status_released)
             chip.setTextColor(ContextCompat.getColor(context, R.color.grey_60))
             bg.setStroke(2, ContextCompat.getColor(context, R.color.grey_60))
         }

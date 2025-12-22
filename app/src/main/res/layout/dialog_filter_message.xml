@@ -17,7 +17,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="지역 선택"
+            android:text="@string/filter_choice_region"
             android:textStyle="bold"
             android:textSize="18sp"
             android:textColor="@color/blue_90" />
@@ -54,7 +54,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="기간 선택"
+            android:text="@string/filter_choice_period"
             android:textStyle="bold"
             android:textSize="18sp"
             android:textColor="@color/blue_90"
@@ -76,7 +76,7 @@
                 android:layout_margin="8dp"
                 android:background="@drawable/checkbox_selector"
                 android:gravity="center"
-                android:text="1개월"
+                android:text="@string/period_1month"
                 android:textColor="@color/grey_60"
                 app:layout_columnWeight="1" />
 
@@ -87,7 +87,7 @@
                 android:layout_margin="8dp"
                 android:background="@drawable/checkbox_selector"
                 android:gravity="center"
-                android:text="1주일"
+                android:text="@string/period_1week"
                 android:textColor="@color/grey_60"
                 app:layout_columnWeight="1" />
 
@@ -98,7 +98,7 @@
                 android:layout_margin="8dp"
                 android:background="@drawable/checkbox_selector"
                 android:gravity="center"
-                android:text="1일"
+                android:text="@string/period_1day"
                 android:textColor="@color/grey_60"
                 app:layout_columnWeight="1" />
 

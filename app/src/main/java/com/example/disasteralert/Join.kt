@@ -58,7 +58,11 @@ class Join : BaseActivity() {
     }
 
     private fun setupGenderSpinner() {
-        val genderOptions = arrayOf("선택 안 됨", "남성", "여성")
+        val genderOptions = arrayOf(
+            getString(R.string.gender_not_selected),
+            getString(R.string.gender_male),
+            getString(R.string.gender_female)
+        )
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, genderOptions)
         spinnerGender.adapter = adapter
     }
@@ -87,22 +91,22 @@ class Join : BaseActivity() {
             val gender = spinnerGender.selectedItem.toString()
 
             if (id.isEmpty() || pw.isEmpty() || pwConfirm.isEmpty() || userName.isEmpty() || birth.isEmpty()) {
-                toast("모든 항목을 입력해주세요.")
+                toast(getString(R.string.error_all_fields_required))
                 return@setOnClickListener
             }
 
             if (pw.length < 8) {
-                toast("비밀번호는 최소 8자 이상이어야 합니다.")
+                toast(getString(R.string.error_password_min_length))
                 return@setOnClickListener
             }
 
             if (pw != pwConfirm) {
-                toast("비밀번호가 일치하지 않습니다.")
+                toast(getString(R.string.error_password_mismatch))
                 return@setOnClickListener
             }
 
             if (spinnerGender.selectedItemPosition == 0) {
-                toast("성별을 선택해 주세요.")
+                toast(getString(R.string.error_select_gender))
                 return@setOnClickListener
             }
 
@@ -110,7 +114,7 @@ class Join : BaseActivity() {
             db.collection("users").document(id).get()
                 .addOnSuccessListener { document ->
                     if (document.exists()) {
-                        toast("이미 사용 중인 아이디입니다.")
+                        toast(getString(R.string.error_id_already_exists))
                     } else {
                         // 🎯 수정된 저장 구조 (Timestamp 제거)
                         val user = hashMapOf(
@@ -159,13 +163,13 @@ class Join : BaseActivity() {
                                 finish()
                             }
                             .addOnFailureListener { e ->
-                                toast("회원가입 실패: ${e.message}")
+                                toast(getString(R.string.error_register_failed, e.message))
                                 Log.e("REGISTER_DEBUG", "Firestore 저장 실패: ${e.message}")
                             }
                     }
                 }
                 .addOnFailureListener { e ->
-                    toast("ID 확인 실패: ${e.message}")
+                    toast(getString(R.string.error_id_check_failed, e.message))
                     Log.e("REGISTER_DEBUG", "Firestore ID 중복 확인 실패: ${e.message}")
                 }
         }

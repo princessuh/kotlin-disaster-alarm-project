@@ -136,7 +136,7 @@
                 android:id="@+id/tv_birthdate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="생년월일"
+                android:text="@string/birthday"
                 android:textSize="16sp"/>
 
             <EditText
@@ -162,7 +162,7 @@
                 android:id="@+id/tv_gender"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="성별"
+                android:text="@string/gender"
                 android:textSize="16sp"/>
 
             <Spinner

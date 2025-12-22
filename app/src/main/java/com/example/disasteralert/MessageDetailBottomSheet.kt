@@ -49,7 +49,7 @@ class MessageDetailBottomSheet(
             val rtdId = try {
                 UUID.fromString(rtdIdString)
             } catch (e: IllegalArgumentException) {
-                Toast.makeText(context, "유효하지 않은 rtd_id", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, getString(R.string.error_invalid_rtd_id), Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -57,7 +57,7 @@ class MessageDetailBottomSheet(
             val formattedRtdTime = try {
                 message.sentTime.replace("/", "-").replace(" ", "T") + ":00.000Z"
             } catch (e: Exception) {
-                Toast.makeText(context, "시간 포맷 오류", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, getString(R.string.error_time_format), Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -80,13 +80,13 @@ class MessageDetailBottomSheet(
             RetrofitClient.reportService.voteRtd(request).enqueue(object : Callback<Void> {
                 override fun onResponse(call: Call<Void>, response: Response<Void>) {
                     android.util.Log.d("RtdVote_Response", "Status: ${response.code()} - success: ${response.isSuccessful}")
-                    Toast.makeText(context, "해제 요청이 등록되었습니다.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, getString(R.string.delete_request_registered), Toast.LENGTH_SHORT).show()
                     dismiss()
                 }
 
                 override fun onFailure(call: Call<Void>, t: Throwable) {
                     android.util.Log.e("RtdVote_Failure", "요청 실패: ${t.localizedMessage}", t)
-                    Toast.makeText(context, "해제 요청 실패: ${t.localizedMessage}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, getString(R.string.error_delete_request, t.localizedMessage), Toast.LENGTH_SHORT).show()
                 }
             })
         }
@@ -124,11 +124,11 @@ class MessageDetailBottomSheet(
         val context = chip.context
 
         if (isActive) {
-            chip.text = "진행 중"
+            chip.text = getString(R.string.status_in_progress)
             chip.setTextColor(ContextCompat.getColor(context, R.color.red_60))
             bg.setStroke(2, ContextCompat.getColor(context, R.color.red_60))
         } else {
-            chip.text = "종결"
+            chip.text = getString(R.string.status_closed)
             chip.setTextColor(ContextCompat.getColor(context, R.color.grey_60))
             bg.setStroke(2, ContextCompat.getColor(context, R.color.grey_60))
         }

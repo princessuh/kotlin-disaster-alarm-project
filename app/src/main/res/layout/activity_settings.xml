@@ -17,7 +17,7 @@
         android:id="@+id/tv_settings_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="환경설정"
+        android:text="@string/setting"
         android:textSize="22sp"
         android:textStyle="bold"
         android:textColor="@color/blue_90"
@@ -41,7 +41,7 @@
             android:id="@+id/tv_push_notification"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="푸시 알림"
+            android:text="@string/setting_push_notification"
             android:textSize="16sp"
             android:textColor="@color/grey_90"
             android:layout_weight="1"/>
@@ -56,13 +56,43 @@
 
     </LinearLayout>
 
+    <!-- 언어 설정 -->
+    <LinearLayout
+        android:id="@+id/layout_language"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        app:layout_constraintTop_toBottomOf="@id/layout_push_notification"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp">
+
+        <TextView
+            android:id="@+id/tv_language"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/setting_language"
+            android:textSize="16sp"
+            android:textColor="@color/grey_90"
+            android:layout_weight="1"/>
+
+        <Spinner
+            android:id="@+id/spinner_language"
+            android:layout_width="120dp"
+            android:layout_height="48dp"
+            android:background="@android:drawable/btn_dropdown"
+            android:padding="8dp"/>
+
+    </LinearLayout>
+
     <!-- 소식 반경 설정 -->
     <LinearLayout
         android:id="@+id/layout_news_radius"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/layout_push_notification"
+        app:layout_constraintTop_toBottomOf="@id/layout_language"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="24dp">
@@ -71,7 +101,7 @@
             android:id="@+id/tv_news_radius"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="소식 반경 설정"
+            android:text="@string/setting_news_radius"
             android:textSize="16sp"
             android:textColor="@color/grey_90"/>
 
@@ -101,7 +131,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="재난 정보 수신 설정"
+        android:text="@string/setting_disaster_alert"
         android:textColor="@color/grey_90"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -236,7 +266,7 @@
         android:id="@+id/btn_save"
         android:layout_width="0dp"
         android:layout_height="56dp"
-        android:text="저장"
+        android:text="@string/save"
         android:backgroundTint="@color/blue_60"
         android:textColor="@color/white"
         app:cornerRadius="24dp"

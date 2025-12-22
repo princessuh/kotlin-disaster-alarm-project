@@ -38,7 +38,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val type      = data["type"] ?: return      // 재난 유형
         val lat       = data["lat"] ?.toDoubleOrNull() ?: return
         val lon       = data["lon"] ?.toDoubleOrNull() ?: return
-        val titleTxt  = data["title"] ?: "재난 알림"
+        val titleTxt  = data["title"] ?: getString(R.string.notification_default_title)
         val bodyTxt   = data["body"]  ?: ""
 
         /* ❸ 재난 유형 필터 */
@@ -86,10 +86,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 channelId,
-                "DisasterAlert 기본 채널",
+                getString(R.string.notification_channel_default),
                 NotificationManager.IMPORTANCE_HIGH
             ).apply {
-                description = "사용자 지정 필터를 통과한 재난 알림"
+                description = getString(R.string.notification_channel_default_desc)
             }
             notificationManager.createNotificationChannel(channel)
         }

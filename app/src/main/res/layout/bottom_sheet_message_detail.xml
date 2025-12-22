@@ -63,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="20dp"
-                android:text="해제 요청"
+                android:text="@string/delete_request"
                 android:textSize="15sp"
                 android:textColor="@color/red_60"
                 android:paddingHorizontal="6dp" />

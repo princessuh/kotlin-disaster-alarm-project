@@ -36,8 +36,8 @@
         <!-- 필터 버튼 -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_filter"
-            android:layout_width="80dp"
-            android:layout_height="56dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/filter"
             android:backgroundTint="@color/blue_60"
             android:textColor="@color/white"

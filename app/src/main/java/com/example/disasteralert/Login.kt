@@ -77,7 +77,7 @@ class Login : BaseActivity() {
             val password = etPassword.text.toString()
 
             if (id.isEmpty() || password.isEmpty()) {
-                Toast.makeText(this, "아이디와 비밀번호를 모두 입력해주세요.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.error_input_required), Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -89,7 +89,7 @@ class Login : BaseActivity() {
                         val userName  = doc.getString("user_name") ?: ""
 
                         if (savedPw == password) {
-                            Toast.makeText(this, "로그인 성공!", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, getString(R.string.login_success), Toast.LENGTH_SHORT).show()
 
                             // (1) 기존 login_prefs에 저장 (로그인 유지용)
                             if (cbKeepLogin.isChecked) {
@@ -115,23 +115,23 @@ class Login : BaseActivity() {
                             finish()
 
                         } else {
-                            etPassword.error = "비밀번호가 일치하지 않습니다."
+                            etPassword.error = getString(R.string.error_password_mismatch)
                         }
                     } else {
-                        etUserId.error = "존재하지 않는 아이디입니다."
+                        etUserId.error = getString(R.string.error_id_not_found)
                     }
                 }
                 .addOnFailureListener { e ->
-                    Toast.makeText(this, "로그인 오류: ${e.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.error_login, e.message), Toast.LENGTH_SHORT).show()
                 }
         }
 
         // 기타 버튼 이벤트
         tvFindId.setOnClickListener {
-            Toast.makeText(this, "아이디 찾기 기능 준비 중", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.feature_find_id), Toast.LENGTH_SHORT).show()
         }
         tvFindPw.setOnClickListener {
-            Toast.makeText(this, "비밀번호 찾기 기능 준비 중", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.feature_find_pw), Toast.LENGTH_SHORT).show()
         }
         tvJoin.setOnClickListener {
             startActivity(Intent(this, Join::class.java))

@@ -7,7 +7,6 @@ import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.widget.*
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.example.disasteralert.api.RetrofitClient
 import com.example.disasteralert.api.UserReportRequest
@@ -23,7 +22,7 @@ import java.net.URLEncoder
 import java.text.SimpleDateFormat
 import java.util.*
 
-class PostActivity : AppCompatActivity() {
+class PostActivity : BaseActivity() {
 
     private lateinit var tvLocationTime: TextView
     private lateinit var etTitle: EditText
@@ -86,12 +85,30 @@ class PostActivity : AppCompatActivity() {
                     // chip 추가
                     chipGroup.removeAllViews()
                     when (clickedCb.id) {
-                        R.id.cb_typhoon -> listOf("태풍", "호우", "홍수", "강풍", "대설").forEach { addChip(it) }
-                        R.id.cb_weather -> listOf("폭염", "한파").forEach { addChip(it) }
-                        R.id.cb_earthquake -> addChip("지진")
-                        R.id.cb_epidemic -> addChip("감염병")
-                        R.id.cb_fire -> listOf("산불", "일일화재").forEach { addChip(it) }
-                        R.id.cb_fine_dust -> addChip("미세먼지")
+                        R.id.cb_typhoon -> listOf(
+                            getString(R.string.disaster_typhoon),      // 태풍
+                            getString(R.string.disaster_heavy_rain),   // 호우
+                            getString(R.string.disaster_flood),        // 홍수
+                            getString(R.string.disaster_strong_wind),  // 강풍
+                            getString(R.string.disaster_heavy_snow)    // 대설
+                        )
+                        R.id.cb_weather -> listOf(
+                            getString(R.string.disaster_heat_wave),    // 폭염
+                            getString(R.string.disaster_cold_wave)     // 한파
+                        )
+                        R.id.cb_earthquake -> listOf(
+                            getString(R.string.disaster_earthquake)    // 지진
+                        )
+                        R.id.cb_epidemic -> listOf(
+                            getString(R.string.epidemic)               // 감염병
+                        )
+                        R.id.cb_fire -> listOf(
+                            getString(R.string.disaster_wildfire),     // 산불
+                            getString(R.string.disaster_fire)          // 화재 (일일화재)
+                        )
+                        R.id.cb_fine_dust -> listOf(
+                            getString(R.string.disaster_fine_dust)     // 미세먼지
+                        )
                     }
                 } else {
                     chipGroup.removeAllViews() // <- 선택 해제 시 chip도 초기화
@@ -109,7 +126,7 @@ class PostActivity : AppCompatActivity() {
             Log.d("DEBUG", "user_id: $localUserId")
 
             if (title.isEmpty() || content.isEmpty()) {
-                Toast.makeText(this, "제목과 내용을 모두 입력해주세요.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.error_title_content_required), Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -117,7 +134,7 @@ class PostActivity : AppCompatActivity() {
             val reportLng = selectedLng
             val timestamp = selectedTimestamp
             if (reportLat == null || reportLng == null || timestamp == null) {
-                Toast.makeText(this, "위치와 시간을 설정해주세요.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.error_location_time_required), Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -149,15 +166,15 @@ class PostActivity : AppCompatActivity() {
                 .enqueue(object : retrofit2.Callback<Void> {
                     override fun onResponse(call: retrofit2.Call<Void>, response: retrofit2.Response<Void>) {
                         if (response.isSuccessful) {
-                            Toast.makeText(this@PostActivity, "제보가 성공적으로 등록되었습니다!", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@PostActivity, getString(R.string.report_success), Toast.LENGTH_SHORT).show()
                             finish()
                         } else {
-                            Toast.makeText(this@PostActivity, "서버 오류: ${response.code()}", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@PostActivity, getString(R.string.error_server, response.code().toString()), Toast.LENGTH_SHORT).show()
                         }
                     }
 
                     override fun onFailure(call: retrofit2.Call<Void>, t: Throwable) {
-                        Toast.makeText(this@PostActivity, "네트워크 오류: ${t.localizedMessage}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@PostActivity, getString(R.string.error_network_message, t.localizedMessage), Toast.LENGTH_SHORT).show()
                     }
                 })
         }
@@ -179,9 +196,9 @@ class PostActivity : AppCompatActivity() {
                     val dateStr = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
                         .format(Date(timestamp))
                     if (lat != null && lng != null) {
-                        tvLocationTime.text = "위치: $fullTextAddress\n시각: $dateStr"
+                        tvLocationTime.text = getString(R.string.location_time_display, fullTextAddress, dateStr)
                     } else {
-                        tvLocationTime.text = "위치: $fullTextAddress\n 위치 좌표 변환 실패\n시각: $dateStr"
+                        tvLocationTime.text = getString(R.string.location_geocode_failed, fullTextAddress, dateStr)
                     }
                 }
 
@@ -215,9 +232,9 @@ class PostActivity : AppCompatActivity() {
                     val time = System.currentTimeMillis()
                     selectedTimestamp = time
                     val dateStr = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(Date(time))
-                    val displayAddress = roadAddress ?: "주소 변환 실패"
+                    val displayAddress = roadAddress ?: getString(R.string.address_convert_failed)
 
-                    tvLocationTime.text = "위치: $displayAddress\n시각: $dateStr"
+                    tvLocationTime.text = getString(R.string.location_time_display, displayAddress, dateStr)
                 }
             }
         }

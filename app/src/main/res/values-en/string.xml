@@ -1,9 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Basic Info -->
     <string name="app_name">Disaster Alert</string>
 
-    <!-- Login -->
     <string name="login">Login</string>
     <string name="logout">Logout</string>
     <string name="login_title">Please log in\nfor a better experience</string>
@@ -11,25 +8,24 @@
     <string name="find_id">Find ID</string>
     <string name="find_pw">Find Password</string>
 
-    <!-- Sign Up -->
     <string name="join">Not a member yet?</string>
     <string name="join_title">Sign Up</string>
     <string name="next">Next</string>
 
-    <!-- Input Field Hints -->
     <string name="email_hint">ID</string>
     <string name="password_hint">Password</string>
     <string name="password_confirm_hint">Confirm Password</string>
     <string name="name_hint">Name</string>
     <string name="address_hint">Address</string>
     <string name="phone_number_hint">Phone Number</string>
+    <string name="gender">Gender</string>
+    <string name="birthday">Birth Day</string>
 
-    <!-- Disaster Info Reception Type -->
-    <string name="receive_disaster_info">Disaster Alert Types</string>
+    <string name="receive_disaster_info">Disaster Info Types</string>
     <string name="info_type">Info Type</string>
-    <string name="natural_disaster">Natural Disasters</string>
-    <string name="social_disaster">Social Disasters</string>
-    <string name="safety_info">User Reports</string>
+    <string name="natural_disaster">Natural Disaster</string>
+    <string name="social_disaster">Social Disaster</string>
+    <string name="safety_info">Report Info</string>
 
     <string name="apply_selected_filter">Apply Selected Filter</string>
     <string name="applied_filter_none">Applied Filter: None</string>
@@ -38,24 +34,22 @@
     <string name="filter_open">Open Filter</string>
     <string name="filter">Filter</string>
 
-    <string name="disaster_selection_title">Select the disaster types you want to receive alerts for</string>
+    <string name="disaster_selection_title">Select disaster types to receive alerts for</string>
     <string name="disaster_selection_subtitle">You can change this selection in Settings.</string>
 
-    <!-- Disaster Types -->
     <string name="disaster_type">Disaster Type</string>
     <string name="checkbox_all">All</string>
     <string name="typhoon">Storm/Flood</string>
-    <string name="weather">Weather Disasters</string>
+    <string name="weather">Weather</string>
     <string name="news">News</string>
-    <string name="earthquake">Geological Disasters</string>
+    <string name="earthquake">Geological</string>
     <string name="epidemic">Epidemic</string>
-    <string name="special_report">Special Alert</string>
+    <string name="special_report">Special Report</string>
     <string name="fire">Fire/Explosion</string>
     <string name="fine_dust">Fine Dust</string>
-    <string name="report">Reports</string>
+    <string name="report">Report</string>
     <string name="btn_skip">Skip for now</string>
 
-    <!-- Others -->
     <string name="line"> | </string>
     <string name="default_name">Username</string>
     <string name="default_user_id">user_id</string>
@@ -66,21 +60,14 @@
     <string name="setting">Settings</string>
     <string name="disaster_icon">Disaster Icon</string>
 
-    <!-- ============================================ -->
-    <!-- Additional: Hardcoded strings from code -->
-    <!-- ============================================ -->
-
-    <!-- Report Related -->
     <string name="report_location_unknown">Location Unknown</string>
     <string name="report_category">Report</string>
     <string name="report_default_title">Report: %1$s-%2$s</string>
     <string name="content_unknown">No Content</string>
 
-    <!-- Message Categories -->
     <string name="category_rtd">Emergency Alert</string>
     <string name="category_report">Report</string>
 
-    <!-- Disaster Subtypes (for API mapping) -->
     <string name="disaster_typhoon">Typhoon</string>
     <string name="disaster_heavy_rain">Heavy Rain</string>
     <string name="disaster_flood">Flood</string>
@@ -94,18 +81,15 @@
     <string name="disaster_fine_dust">Fine Dust</string>
     <string name="disaster_air_quality">Air Quality</string>
 
-    <!-- Date/Time Related -->
     <string name="today">Today</string>
     <string name="yesterday">Yesterday</string>
     <string name="time_format_am">AM</string>
     <string name="time_format_pm">PM</string>
 
-    <!-- Error Messages -->
     <string name="error_network">A network error occurred</string>
     <string name="error_loading">An error occurred while loading data</string>
     <string name="error_login_failed">Login failed</string>
 
-    <!-- Confirm/Cancel -->
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
     <string name="yes">Yes</string>
@@ -116,16 +100,114 @@
     <string name="delete">Delete</string>
     <string name="edit">Edit</string>
 
-    <!-- Notification Related -->
     <string name="notification_channel_name">Disaster Alerts</string>
-    <string name="notification_channel_description">Disaster and safety information notifications</string>
+    <string name="notification_channel_description">Disaster and safety information alerts</string>
 
-    <!-- Map Related -->
     <string name="map_loading">Loading map...</string>
     <string name="current_location">Current Location</string>
+    <string name="my_location">My Location</string>
     <string name="location_permission_required">Location permission is required</string>
 
-    <!-- Empty States -->
     <string name="empty_messages">No notifications</string>
     <string name="empty_reports">No report history</string>
+
+    <string name="error_input_required">Please enter both ID and password.</string>
+    <string name="login_success">Login successful!</string>
+    <string name="error_password_mismatch">Passwords do not match.</string>
+    <string name="error_id_not_found">ID does not exist.</string>
+    <string name="error_login">Login Error: %1$s</string>
+    <string name="feature_find_id">Find ID feature coming soon</string>
+    <string name="feature_find_pw">Find Password feature coming soon</string>
+
+    <string name="error_all_fields_required">Please fill in all fields.</string>
+    <string name="error_password_min_length">Password must be at least 8 characters.</string>
+    <string name="error_select_gender">Please select a gender.</string>
+    <string name="error_id_already_exists">ID is already in use.</string>
+    <string name="error_register_failed">Registration failed: %1$s</string>
+    <string name="error_id_check_failed">ID check failed: %1$s</string>
+    <string name="error_load_user_info">Failed to load user info: %1$s</string>
+
+    <string name="gender_not_selected">Not Selected</string>
+    <string name="gender_male">Male</string>
+    <string name="gender_female">Female</string>
+
+    <string name="error_title_content_required">Please enter both title and content.</string>
+    <string name="error_location_time_required">Please set the location and time.</string>
+    <string name="report_success">Report successfully submitted!</string>
+    <string name="error_server">Server Error: %1$s</string>
+    <string name="error_network_message">Network Error: %1$s</string>
+    <string name="location_format">Location: %1$s</string>
+    <string name="time_format">Time: %1$s</string>
+    <string name="location_time_display">Location: %1$s\nTime: %2$s</string>
+    <string name="location_geocode_failed">Location: %1$s\n Failed to convert coordinates\nTime: %2$s</string>
+    <string name="address_convert_failed">Failed to convert address</string>
+
+    <string name="time_unknown">Time unknown</string>
+    <string name="time_none">No time info</string>
+    <string name="content_none">No content</string>
+    <string name="sender_unknown">Unknown Sender</string>
+    <string name="server_sent">Server Sent</string>
+    <string name="rtd_alert">RTD Alert</string>
+    <string name="error_server_response">Server response failed</string>
+    <string name="error_data_request">Data request failed</string>
+    <string name="delete_request">Request Release</string>
+    <string name="delete_request_registered">Delete request registered.</string>
+    <string name="delete_request_already">You have already requested deletion.</string>
+    <string name="error_no_login_info">No login information found.</string>
+
+    <string name="filter_all">All</string>
+    <string name="filter_view_all">View All</string>
+    <string name="filter_disaster">Disaster: %1$s</string>
+    <string name="filter_region">Region: %1$s</string>
+    <string name="filter_choice_region">Select Region</string>
+    <string name="filter_period">Period: %1$s</string>
+    <string name="filter_choice_period">Select Period</string>
+    <string name="period_1month">1 Month</string>
+    <string name="period_1week">1 Week</string>
+    <string name="period_1day">1 Day</string>
+
+    <string name="location_permission_needed">Location permission is required.</string>
+    <string name="current_location_unavailable">Cannot retrieve current location.</string>
+    <string name="error_disaster_load">Failed to load disaster information.</string>
+
+    <string name="radius_format">Radius: %1$dkm</string>
+    <string name="setting_language">Language</string>
+    <string name="language_korean">한국어</string>
+    <string name="language_english">English</string>
+    <string name="language_change_restart">Language changed. Restarting app.</string>
+    <string name="setting_title">Settings</string>
+    <string name="setting_push_notification">Push Notifications</string>
+    <string name="setting_news_radius">News Radius Range</string>
+    <string name="settingg_message_list">Message History</string>
+    <string name="setting_disaster_alert">Disaster Alert Settings</string>
+
+    <string name="status_in_progress">Ongoing</string>
+    <string name="status_released">Released</string>
+    <string name="status_closed">Closed</string>
+
+    <string name="detail_info_none">No detailed info</string>
+    <string name="error_invalid_rtd_id">Invalid rtd_id</string>
+    <string name="error_time_format">Time format error</string>
+    <string name="error_delete_request">Delete request failed: %1$s</string>
+
+    <string name="notification_channel_default">DisasterAlert Default Channel</string>
+    <string name="notification_channel_default_desc">Disaster alerts matching your filters</string>
+    <string name="notification_default_title">Disaster Alert</string>
+
+    <string name="home">Home</string>
+    <string name="message">News</string>
+    <string name="profile">Profile</string>
+
+    <string name="input_title_hint">Enter title</string>
+    <string name="input_content_hint">Enter content</string>
+    <string name="btn_report_submit">Submit Report</string>
+
+    <string name="select_tag">Select Tag</string>
+
+    <string name="btn_register">Register</string>
+
+    <string name="location_description_hint">Enter location description (e.g. In front of OO Bldg)</string>
+    <string name="disaster_occurrence_time">Time of Disaster</string>
+    <string name="select_date">Select Date</string>
+    <string name="select_time">Select Time</string>
 </resources>

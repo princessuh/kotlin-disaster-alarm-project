@@ -117,7 +117,7 @@
                 android:id="@+id/tv_birthdate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="생년월일"
+                android:text="@string/birthday"
                 android:textSize="16sp"/>
 
             <EditText
@@ -143,7 +143,7 @@
                 android:id="@+id/tv_gender"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="성별"
+                android:text="@string/gender"
                 android:textSize="16sp"/>
 
             <Spinner
@@ -160,7 +160,7 @@
         android:id="@+id/btn_finish"
         android:layout_width="0dp"
         android:layout_height="56dp"
-        android:text="수정 완료"
+        android:text="@string/save"
         android:backgroundTint="@color/blue_60"
         android:textColor="@color/white"
         app:cornerRadius="24dp"

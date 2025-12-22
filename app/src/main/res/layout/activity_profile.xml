@@ -84,7 +84,7 @@
             android:id="@+id/btn_message_list"
             android:layout_width="160dp"
             android:layout_height="50dp"
-            android:text="메시지 수신 내역"
+            android:text="@string/settingg_message_list"
             android:backgroundTint="@color/grey_30"
             android:textColor="@color/black"
             app:cornerRadius="24dp"

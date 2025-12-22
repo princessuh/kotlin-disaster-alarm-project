@@ -4,11 +4,16 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.SeekBar
+import android.widget.Spinner
 import android.widget.Switch
 import android.widget.TextView
+import android.widget.Toast
 
 // 설정 화면 - 회원가입 중 기입한 내용을 변경할 때 사용
 
@@ -21,6 +26,9 @@ class SettingsActivity : BaseActivity() {
     private lateinit var disasterCheckBoxes: List<CheckBox>
     private lateinit var sharedPrefs: SharedPreferences
     private lateinit var saveBtn: Button
+    private lateinit var spinnerLanguage: Spinner
+
+    private var isLanguageInitialized = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +41,11 @@ class SettingsActivity : BaseActivity() {
         seekbarRadius = findViewById(R.id.seekbar_radius)
         tvRadiusValue = findViewById(R.id.tv_radius_value)
         cbAll = findViewById(R.id.cb_all)
+        spinnerLanguage = findViewById(R.id.spinner_language)
+
+        // 언어 설정 스피너 초기화
+        setupLanguageSpinner()
+
         disasterCheckBoxes = listOf(
             findViewById(R.id.cb_typhoon),
             findViewById(R.id.cb_weather),
@@ -49,7 +62,7 @@ class SettingsActivity : BaseActivity() {
         // 기존 설정 불러오기
         switchPush.isChecked = sharedPrefs.getBoolean("push_notifications", true)
         seekbarRadius.progress = sharedPrefs.getInt("news_radius", 10)
-        tvRadiusValue.text = "반경: ${seekbarRadius.progress}km"
+        tvRadiusValue.text = getString(R.string.radius_format, seekbarRadius.progress)
 
         // 체크박스 설정 로드 & 스타일 적용
         disasterCheckBoxes.forEachIndexed { index, checkBox ->
@@ -85,7 +98,7 @@ class SettingsActivity : BaseActivity() {
 
         seekbarRadius.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                tvRadiusValue.text = "반경: ${progress}km"
+                tvRadiusValue.text = getString(R.string.radius_format, progress)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
@@ -99,6 +112,49 @@ class SettingsActivity : BaseActivity() {
             saveAllDisasterSelections() // 혹시 모를 누락 대비
             startActivity(Intent(this, ProfileActivity::class.java))
             finish()
+        }
+    }
+
+    private fun setupLanguageSpinner() {
+        // 1. 현재 설정된 언어 가져오기
+        val currentLanguage = LocaleHelper.getLanguage(this)
+
+        // 2. 스피너에 표시할 언어 목록 (strings.xml 리소스 사용: "한국어", "English")
+        // LocaleHelper의 인덱스 순서(0: ko, 1: en)와 일치해야 합니다.
+        val languages = listOf(
+            getString(R.string.language_korean),
+            getString(R.string.language_english)
+        )
+
+        // 3. 어댑터 설정
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, languages)
+        spinnerLanguage.adapter = adapter
+
+        // 4. 현재 언어에 맞게 스피너 선택
+        spinnerLanguage.setSelection(LocaleHelper.getLanguageIndex(currentLanguage))
+
+        // 5. 선택 리스너 설정
+        spinnerLanguage.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                // 초기화 시 자동 호출 방지
+                if (!isLanguageInitialized) {
+                    isLanguageInitialized = true
+                    return
+                }
+
+                val selectedLanguage = LocaleHelper.getLanguageFromIndex(position)
+
+                // 선택된 언어가 현재 언어와 다를 경우에만 변경 진행
+                if (selectedLanguage != LocaleHelper.getLanguage(this@SettingsActivity)) {
+                    // 언어 설정 저장 및 Context 업데이트
+                    LocaleHelper.setLocale(this@SettingsActivity, selectedLanguage)
+
+                    // 변경된 언어 리소스를 즉시 적용하기 위해 액티비티 재생성
+                    recreate()
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
     }
 

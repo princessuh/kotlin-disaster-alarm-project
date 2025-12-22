@@ -58,11 +58,11 @@ class ReportHistoryActivity : BaseActivity() {
                         OffsetDateTime.parse(fallback)
                             .format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"))
                     } else {
-                        "시간 없음"
+                        getString(R.string.time_none)
                     }
                 } catch (e2: Exception) {
                     Log.e("TimeFormat", "❌ fallback 파싱 실패: ${report.report_time}", e2)
-                    report.report_time ?: "시간 없음"
+                    report.report_time ?: getString(R.string.time_none)
                 }
             }
 
@@ -90,10 +90,10 @@ class ReportHistoryActivity : BaseActivity() {
 
                 // ✅ 선택된 필터 요약 표시
                 val resultText = buildString {
-                    if (disasters.isNotEmpty()) append("재난: ${disasters.joinToString(", ")}  ")
-                    if (!province.isNullOrBlank()) append("지역: $province $city $district  ")
-                    if (!period.isNullOrBlank()) append("기간: $period")
-                    if (isEmpty()) append("전체 보기")
+                    if (disasters.isNotEmpty()) append("${getString(R.string.filter_disaster, disasters.joinToString(", "))}  ")
+                    if (!province.isNullOrBlank()) append("${getString(R.string.filter_region, "$province $city $district")}  ")
+                    if (!period.isNullOrBlank()) append(getString(R.string.filter_period, period))
+                    if (isEmpty()) append(getString(R.string.filter_view_all))
                 }
                 selectedDisastersTextView.text = resultText
 
@@ -108,9 +108,9 @@ class ReportHistoryActivity : BaseActivity() {
                 // ✅ 기간 계산
                 val now = OffsetDateTime.now()
                 val filterTime = when (period) {
-                    "1개월" -> now.minusMonths(1)
-                    "1주일" -> now.minusWeeks(1)
-                    "1일" -> now.minusDays(1)
+                    getString(R.string.period_1month) -> now.minusMonths(1)
+                    getString(R.string.period_1week) -> now.minusWeeks(1)
+                    getString(R.string.period_1day) -> now.minusDays(1)
                     else -> null // 전체 기간
                 }
 
@@ -164,7 +164,7 @@ class ReportHistoryActivity : BaseActivity() {
         Log.d("ReportHistory", "📌 SharedPreferences user_id = $localUserId")
 
         if (localUserId.isNullOrBlank()) {
-            Toast.makeText(this, "로그인 정보가 없습니다.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.error_no_login_info), Toast.LENGTH_SHORT).show()
             Log.e("ReportHistory", "❌ user_id is null or blank")
             return
         }

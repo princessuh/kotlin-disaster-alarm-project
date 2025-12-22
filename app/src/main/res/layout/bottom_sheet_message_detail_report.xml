@@ -59,7 +59,7 @@
                     android:id="@+id/btn_delete"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="삭제"
+                    android:text="@string/delete"
                     android:textSize="12sp"
                     android:textColor="@color/grey_70"
                     android:paddingHorizontal="6dp" />

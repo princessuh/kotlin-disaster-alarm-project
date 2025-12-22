@@ -15,7 +15,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="지역 선택"
+            android:text="@string/filter_choice_region"
             android:textStyle="bold"
             android:textSize="18sp"
             android:textColor="@color/blue_90" />
@@ -52,14 +52,14 @@
             android:id="@+id/et_text_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="장소 설명을 입력하세요 (예: ○○빌딩 앞)"
+            android:hint="@string/location_description_hint"
             android:inputType="text" />
 
         <!-- ⏰ 시각 선택 -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="재난 발생 시각"
+            android:text="@string/disaster_occurrence_time"
             android:textStyle="bold"
             android:textSize="18sp"
             android:textColor="@color/blue_90"
@@ -69,7 +69,7 @@
             android:id="@+id/tv_selected_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="날짜를 선택하세요"
+            android:text="@string/select_date"
             android:padding="12dp"
             android:background="#EEEEEE"
             android:layout_marginTop="12dp" />
@@ -78,7 +78,7 @@
             android:id="@+id/tv_selected_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="시간을 선택하세요"
+            android:text="@string/select_time"
             android:padding="12dp"
             android:background="#EEEEEE"
             android:layout_marginTop="8dp" />
@@ -88,7 +88,7 @@
             android:id="@+id/btn_confirm_location_time"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:text="선택 완료"
+            android:text="@string/confirm"
             android:textColor="@color/white"
             android:backgroundTint="@color/blue_60"
             app:cornerRadius="24dp"

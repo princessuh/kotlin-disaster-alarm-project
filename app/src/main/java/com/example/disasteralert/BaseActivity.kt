@@ -1,5 +1,6 @@
 package com.example.disasteralert
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -14,6 +15,10 @@ open class BaseActivity : AppCompatActivity() {
 
     companion object {
         private const val TAG = "BaseActivity"
+    }
+
+    override fun attachBaseContext(newBase: Context?) {
+        super.attachBaseContext(newBase?.let { LocaleHelper.onAttach(it) })
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

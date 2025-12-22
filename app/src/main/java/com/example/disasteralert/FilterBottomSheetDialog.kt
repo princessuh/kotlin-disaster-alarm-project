@@ -232,12 +232,30 @@ class FilterBottomSheetDialog(
             chipGroupDetail.removeAllViews()
             if (isChecked) {
                 val chipLabels = when (cb.id) {
-                    R.id.cb_typhoon -> listOf("태풍", "호우", "홍수", "강풍", "대설")
-                    R.id.cb_weather -> listOf("폭염", "한파")
-                    R.id.cb_earthquake -> listOf("지진")
-                    R.id.cb_epidemic -> listOf("감염병")
-                    R.id.cb_fire -> listOf("산불", "일일화재")
-                    R.id.cb_fine_dust -> listOf("미세먼지")
+                    R.id.cb_typhoon -> listOf(
+                        getString(R.string.disaster_typhoon),      // 태풍
+                        getString(R.string.disaster_heavy_rain),   // 호우
+                        getString(R.string.disaster_flood),        // 홍수
+                        getString(R.string.disaster_strong_wind),  // 강풍
+                        getString(R.string.disaster_heavy_snow)    // 대설
+                    )
+                    R.id.cb_weather -> listOf(
+                        getString(R.string.disaster_heat_wave),    // 폭염
+                        getString(R.string.disaster_cold_wave)     // 한파
+                    )
+                    R.id.cb_earthquake -> listOf(
+                        getString(R.string.disaster_earthquake)    // 지진
+                    )
+                    R.id.cb_epidemic -> listOf(
+                        getString(R.string.epidemic)               // 감염병
+                    )
+                    R.id.cb_fire -> listOf(
+                        getString(R.string.disaster_wildfire),     // 산불
+                        getString(R.string.disaster_fire)          // 화재 (일일화재)
+                    )
+                    R.id.cb_fine_dust -> listOf(
+                        getString(R.string.disaster_fine_dust)     // 미세먼지
+                    )
                     else -> emptyList()
                 }
 

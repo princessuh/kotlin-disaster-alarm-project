@@ -66,7 +66,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:text="내 위치"
+        android:text="@string/my_location"
         app:layout_constraintBottom_toTopOf="@id/info_panel"
         app:layout_constraintStart_toStartOf="parent" />
 
